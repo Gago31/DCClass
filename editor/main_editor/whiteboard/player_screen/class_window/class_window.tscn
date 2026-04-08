@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c340c4al7fg2r"]
+[gd_scene format=3 uid="uid://c340c4al7fg2r"]
 
 [ext_resource type="Script" uid="uid://cgsis7ghldo0n" path="res://editor/main_editor/whiteboard/player_screen/class_window/class_window.gd" id="1_q48er"]
 [ext_resource type="Script" uid="uid://cnp5mp84uvknc" path="res://editor/main_editor/whiteboard/player_screen/class_window/whiteboard.gd" id="2_ebiip"]
@@ -12,7 +12,7 @@ region = Rect2(50, 150, 50, 50)
 atlas = ExtResource("3_jqomu")
 region = Rect2(350, 350, 50, 50)
 
-[node name="ClassWindow" type="Control"]
+[node name="ClassWindow" type="Control" unique_id=225664527]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_q48er")
 
-[node name="LeftSplit" type="HSplitContainer" parent="."]
+[node name="LeftSplit" type="HSplitContainer" parent="." unique_id=1244737134]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -31,27 +31,28 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+split_offsets = PackedInt32Array(200)
 split_offset = 200
 
-[node name="RightSplit" type="HSplitContainer" parent="LeftSplit"]
+[node name="RightSplit" type="HSplitContainer" parent="LeftSplit" unique_id=1449132212]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="BottomSplit" type="VSplitContainer" parent="LeftSplit/RightSplit"]
+[node name="BottomSplit" type="VSplitContainer" parent="LeftSplit/RightSplit" unique_id=1695682460]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 dragger_visibility = 1
 
-[node name="Whiteboard" type="Control" parent="LeftSplit/RightSplit/BottomSplit"]
+[node name="Whiteboard" type="Control" parent="LeftSplit/RightSplit/BottomSplit" unique_id=1393762601]
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("2_ebiip")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="LeftSplit/RightSplit/BottomSplit/Whiteboard"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="LeftSplit/RightSplit/BottomSplit/Whiteboard" unique_id=1498988373]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -59,69 +60,68 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="LeftSplit/RightSplit/BottomSplit/Whiteboard/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="LeftSplit/RightSplit/BottomSplit/Whiteboard/SubViewportContainer" unique_id=210094406]
 unique_name_in_owner = true
 disable_3d = true
 handle_input_locally = false
 size = Vector2i(1280, 604)
 render_target_update_mode = 4
 
-[node name="BottomPanel" type="PanelContainer" parent="LeftSplit/RightSplit/BottomSplit"]
+[node name="BottomPanel" type="PanelContainer" parent="LeftSplit/RightSplit/BottomSplit" unique_id=884434107]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel" unique_id=19361940]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer" unique_id=547028028]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="TimeControl" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer"]
+[node name="TimeControl" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer" unique_id=1125593837]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="TimeCurrent" type="Label" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl"]
+[node name="TimeCurrent" type="Label" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=932823264]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Time Initial / Time Final"
 
-[node name="TimeSlider" type="HSlider" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl"]
+[node name="TimeSlider" type="HSlider" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=25037539]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 step = 0.01
 scrollable = false
 
-[node name="DebouncerTimer" type="Timer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl"]
+[node name="DebouncerTimer" type="Timer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=2109446831]
 unique_name_in_owner = true
 wait_time = 0.1
 one_shot = true
 
-[node name="ControlRow" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer"]
+[node name="ControlRow" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer" unique_id=305847657]
 layout_mode = 2
 alignment = 1
 
-[node name="CameraZoom" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow"]
+[node name="CameraZoom" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=1511900834]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ZoomButton" type="TextureButton" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom"]
+[node name="ZoomButton" type="TextureButton" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=757593890]
 unique_name_in_owner = true
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_uioh1")
 
-[node name="ZoomSlider" type="HSlider" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom"]
+[node name="ZoomSlider" type="HSlider" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=184085393]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -132,21 +132,21 @@ max_value = 3.0
 step = 0.1
 value = 1.0
 
-[node name="Spacer3" type="Control" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow"]
+[node name="Spacer3" type="Control" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=2025742826]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PlaybackControls" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow"]
+[node name="PlaybackControls" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=1966645280]
 layout_mode = 2
 alignment = 1
 
-[node name="StopButton" type="Button" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/PlaybackControls"]
+[node name="StopButton" type="Button" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/PlaybackControls" unique_id=1561410035]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"PlayerIconButton"
 icon = SubResource("AtlasTexture_mcb8p")
 
-[node name="Spacer2" type="Control" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow"]
+[node name="Spacer2" type="Control" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=150323129]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0

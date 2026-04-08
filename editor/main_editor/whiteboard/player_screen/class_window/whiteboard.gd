@@ -59,6 +59,7 @@ func _ready() -> void:
 	_bus.drag_toggled.connect(_on_node_drag_enabled)
 	_bus.resize_toggled.connect(_on_node_resize_enabled)
 	_bus_core.current_node_changed.connect(_current_node_changed)
+	_bus_core.subtitles_updated.connect(_on_subtitles_updated)
 	_bus.class_node_selected.connect(_on_class_node_selected)
 	_bus.clear_selection.connect(_clear_selection)
 
@@ -545,4 +546,6 @@ func _new_line() -> Line2D:
 func _current_node_changed(node: ClassNode) -> void:
 	_current_node = node
 	_bus.clear_selection.emit()
-	
+
+func _on_subtitles_updated(text: String) -> void:
+	$MarginContainer/Subtitles.parse_bbcode(text)

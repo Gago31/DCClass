@@ -8,12 +8,16 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="DCClass"
 config/version="0.2"
 run/main_scene="uid://dmdj1fy3hd6q7"
-config/features=PackedStringArray("4.5", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 run/max_fps=120
 config/icon="uid://dsgbxa6x62b5m"
 run/main_scene.dcclass-editor="uid://d3ahyg18n5ed2"
@@ -52,6 +56,10 @@ display_server/driver.macos="macos"
 window/handheld/orientation=4
 window/stretch/scale.android=2.0
 whiteboard/size=Vector2i(2400, 1274)
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/video_toolkit/plugin.cfg")
 
 [file_customization]
 

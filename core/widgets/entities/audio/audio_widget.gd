@@ -67,7 +67,7 @@ func crossfade(from: AudioWidget, _seek_time: float = -1):
 			crossfade_tween.tween_property(from.audio, "volume_db", fade_out_db, crossfade_duration)
 			
 			# stop audio after fade out
-			crossfade_tween.tween_callback(from.stop_after_fade).set_delay(crossfade_duration)
+			crossfade_tween.tween_callback(from.stop_after_fade.bind(from)).set_delay(crossfade_duration)
 		
 		crossfade_tween.tween_property(audio, "volume_db", fade_in_db, crossfade_duration)
 	

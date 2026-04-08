@@ -1,9 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bkt85dfs5q52u"]
+[gd_scene format=3 uid="uid://bkt85dfs5q52u"]
 
 [ext_resource type="Script" uid="uid://c63f4j1umyt6q" path="res://editor/main_editor/control_panel/control_panel.gd" id="1_1n5vg"]
 [ext_resource type="Script" uid="uid://cqighbl4pvak0" path="res://editor/utils/tree_manager.gd" id="2_vyrmg"]
+[ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="3_8c1hf"]
 
-[node name="Control Panel" type="MarginContainer"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_trjv5"]
+atlas = ExtResource("3_8c1hf")
+region = Rect2(200, 250, 50, 50)
+
+[node name="Control Panel" type="MarginContainer" unique_id=1056228574]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,17 +22,17 @@ theme_override_constants/margin_bottom = 20
 script = ExtResource("1_1n5vg")
 metadata/_tab_index = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=424354054]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=832524518]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="HBoxContainerAdd" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="HBoxContainerAdd" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=568406761]
 layout_mode = 2
 
-[node name="EditMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/HBoxContainerAdd"]
+[node name="EditMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/HBoxContainerAdd" unique_id=1362568015]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Edit"
@@ -48,11 +53,11 @@ popup/item_4/separator = true
 popup/item_5/text = "Delete"
 popup/item_5/id = 4
 
-[node name="InsertMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/HBoxContainerAdd"]
+[node name="InsertMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/HBoxContainerAdd" unique_id=493285497]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Insert"
-item_count = 8
+item_count = 9
 popup/item_0/text = "Add Group"
 popup/item_0/id = 1
 popup/item_1/text = "Push Group"
@@ -69,47 +74,49 @@ popup/item_6/text = "Push Slide"
 popup/item_6/id = 7
 popup/item_7/text = "Add Image"
 popup/item_7/id = 8
+popup/item_8/text = "Add Video"
+popup/item_8/id = 9
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer" unique_id=1527272184]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HBoxContainerControl" type="HBoxContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="HBoxContainerControl" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=187808462]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ResizeButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="ResizeButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=2103487309]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Resize"
 
-[node name="DragButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="DragButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=329281913]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Drag"
 
-[node name="AudioButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="AudioButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=1248573066]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Audio"
 
-[node name="PenButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="PenButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=1260051921]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Pen"
 
-[node name="PenThicknessContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="PenThicknessContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=2046301407]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PenThicknessLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer"]
+[node name="PenThicknessLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=1288559471]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Thickness"
 horizontal_alignment = 1
 
-[node name="PenThicknessSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer"]
+[node name="PenThicknessSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=152533038]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -118,35 +125,35 @@ min_value = 3.0
 max_value = 40.0
 value = 3.0
 
-[node name="PenColorContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="PenColorContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=1979543517]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ColorPickerLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer"]
+[node name="ColorPickerLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=1624843006]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "Color"
 horizontal_alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=469385742]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Color Selected"
 color = Color(1, 1, 1, 1)
 
-[node name="DetachButton" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl"]
+[node name="DetachButton" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=2102941294]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Detach Whiteboard"
 
-[node name="IndexClass" type="PanelContainer" parent="VBoxContainer"]
+[node name="IndexClass" type="PanelContainer" parent="VBoxContainer" unique_id=620122109]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="IndexTree" type="Tree" parent="VBoxContainer/IndexClass"]
+[node name="IndexTree" type="Tree" parent="VBoxContainer/IndexClass" unique_id=269725524]
 unique_name_in_owner = true
 layout_mode = 2
 hide_root = true
@@ -154,12 +161,23 @@ select_mode = 2
 script = ExtResource("2_vyrmg")
 metadata/_custom_type_script = "uid://cqighbl4pvak0"
 
-[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-visible = false
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1121578482]
 layout_mode = 2
 
-[node name="TextEdit" type="TextEdit" parent="VBoxContainer/PanelContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 200)
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer" unique_id=1701162787]
 layout_mode = 2
-text = "Placeholder."
+
+[node name="SubtitlesBox" type="TextEdit" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=1564864679]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter subtitles"
+drag_and_drop_selection_enabled = false
+wrap_mode = 1
+scroll_fit_content_width = true
+
+[node name="ConfirmSubtitles" type="Button" parent="VBoxContainer/PanelContainer/HBoxContainer" unique_id=130929452]
+unique_name_in_owner = true
+layout_mode = 2
+icon = SubResource("AtlasTexture_trjv5")

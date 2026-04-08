@@ -30,6 +30,8 @@ var _pen_thickness_timer: Timer
 var _pending_pen_thickness: float = 3.0
 
 var resources_class: ResourcesClassEditor
+@onready var subtitles_box: TextEdit = %SubtitlesBox
+@onready var confirm_subtitles: Button = %ConfirmSubtitles
 
 var _current_node: ClassNode
 var _class_index: ClassIndex
@@ -89,6 +91,8 @@ func _ready() -> void:
 	pen_color_picker.color_changed.connect(_on_color_picker_changed)
 	pen_color_picker.get_popup().connect("popup_hide", _on_color_picker_closed)
 	
+	confirm_subtitles.pressed.connect(_on_confirm_subtitles)
+
 # Setup the control panel with the current resources class
 func _setup():
 	resources_class = PersistenceEditor.resources_class
@@ -211,6 +215,10 @@ func _on_menu_btn_insert(id: int) -> void:
 		_push_slide()
 	if id == 8:
 		_add_image()
+	if id == 9:
+		_add_video()
+	#if id == 10:
+		#_add_subtitles()
 
 func _disabled_toggle_insert_button(active: bool) -> void:
 	menu_btn_insert.disabled = active
@@ -322,6 +330,24 @@ func _add_image() -> void:
 	if DisplayServer.has_feature(DisplayServer.FEATURE_NATIVE_DIALOG):
 		DisplayServer.file_dialog_show("Open File", "", "", false, DisplayServer.FILE_DIALOG_MODE_OPEN_FILE, ["*.png,*.jpg,*.svg,*.bmp"], _on_image_selected)
 
+func _add_video() -> void:
+	if DisplayServer.has_feature(DisplayServer.FEATURE_NATIVE_DIALOG):
+		DisplayServer.file_dialog_show("Open File", "", "", false, DisplayServer.FILE_DIALOG_MODE_OPEN_FILE, ["*.mp4,*.mkv,*.webm,*.m4a"], _on_video_selected)
+
+func _on_confirm_subtitles() -> void:
+	var text := subtitles_box.text
+	var entity_subtitle := SubtitleEntity.new()
+	var subtitle_data := {
+		"text": text 
+	}
+	entity_subtitle.load_data(subtitle_data)
+	_bus.add_class_leaf_entity.emit(entity_subtitle, [{
+		"position:x": 0,
+		"position:y": 0,
+		"property_type": "PositionEntityProperty"
+	}])
+	subtitles_box.clear()
+
 func _on_image_selected(status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
 	if status == false:
 		return
@@ -341,6 +367,60 @@ func _on_image_selected(status: bool, selected_paths: PackedStringArray, _select
 								}
 							])
 
+func _on_video_selected(status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
+	if status == false:
+		return
+	var path := selected_paths[0]
+
+	var entity_video := VideoEntity.new()
+	var tmp_path := entity_video.save_resource(path)
+	
+	# TODO: convert video, wait for thread completion and assign the video
+	var converted_path := start_video_conversion(entity_video, tmp_path)
+	prints("Converted path", converted_path)
+	var video_data := {
+		"video_path": "resources/videos/%s" % converted_path 
+	}
+	entity_video.load_data(video_data)
+	_bus.emit_signal("add_class_leaf_entity", entity_video, [
+		{
+			"position:x": 0,
+			"position:y": 0,
+			"property_type": "PositionEntityProperty"
+		}
+	])
+
+func start_video_conversion(entity: VideoEntity, input_video_path: String) -> String:
+	print("Loading file ", input_video_path)
+	var file_path := input_video_path.split("/")[-1]
+	var file_name := "".join(file_path.split(".").slice(0, -1))
+	var output_name := '%s.webm' % file_name
+	#var output_path := "converted/%s" % output_name
+	var output_path := "user://tmp/class_editor/resources/videos/%s" % output_name
+	
+	prints("Output file:", output_name)
+	var output = []
+	var command_args := [
+		"-i", ProjectSettings.globalize_path(input_video_path), 
+		"-y", 
+		"-vcodec", "libsvtav1",
+		"-acodec", "libopus",
+		"-crf", 35,
+		"-vf", "scale=-2:480", #"scale=-1:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,setsar=1"
+		"-preset", 6,
+		"-g", 300,
+		"-svtav1-params", "tune=0",
+		ProjectSettings.globalize_path(output_path)
+	]
+	var thread_notifier := ThreadNotifier.new()
+	add_child(thread_notifier)
+	thread_notifier.thread_finished.connect(_on_video_converted.bind(output_path))
+	thread_notifier.thread_finished.connect(entity._on_video_converted.bind(output_path))
+	thread_notifier.run_thread(OS.execute.bind("ffmpeg", command_args, output))
+	return output_name
+
+func _on_video_converted(_result: Variant, output_path: String) -> void:
+	pass
 
 # func _add_zoom():
 	# var entity_zoom = ZoomEntity.new()

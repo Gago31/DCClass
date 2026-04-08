@@ -15,3 +15,5 @@ signal stop_widget()
 
 # Emitted when the pause_widget call to pause the playback. In this case, is equal to stop_widget.
 signal pause_playback_widget()
+
+signal subtitles_updated(text: String)
