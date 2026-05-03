@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cgvc74n6rdute"]
+
+[ext_resource type="Script" uid="uid://b16ioe0x3jk84" path="res://core/widgets/entities/operations/subtitle_widget.gd" id="1_8s88w"]
+
+[node name="SubtitleWidget" type="Node2D" unique_id=226558559]
+script = ExtResource("1_8s88w")

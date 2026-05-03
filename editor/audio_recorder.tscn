@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b8b7b7inj4sva"]
+
+[ext_resource type="Script" uid="uid://cmtkyg0tf5jml" path="res://editor/main_editor/audio_record.gd" id="1_arhw3"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_gdxi0"]
+
+[node name="AudioRecorder" type="Node" unique_id=1105569056]
+script = ExtResource("1_arhw3")
+
+[node name="AudioRecordStream" type="AudioStreamPlayer" parent="." unique_id=1171472854]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamMicrophone_gdxi0")
+autoplay = true
+bus = &"ClassRecord"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=808482890]
+unique_name_in_owner = true

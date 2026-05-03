@@ -1,4 +1,3 @@
-@tool
 # 1. class name: fill the class name
 class_name PenColorEntity
 extends Entity
@@ -25,6 +24,11 @@ extends Entity
 
 func _init() -> void:
 	entity_id = "PenColor"
+
+func get_widget() -> PackedScene:
+	return preload("uid://cpfenn5p8def4")
+
+# Deletes this entity.:
 
 # 11. virtual methods: define other virtual methos here
 
@@ -57,6 +61,42 @@ func load_data(data: Dictionary) -> void:
 					 color_data.get("b", 1.0), 
 					 color_data.get("a", 1.0))
 					
+
+func _on_value_updated_from_editor(item: TreeItem) -> void:
+	var new_color := item.get_custom_bg_color(1)
+	color = new_color
+
+func config_editor_tree_item(item: TreeItem) -> void:
+	item.set_text(0, "Pen Color")
+	item.set_cell_mode(1, TreeItem.CELL_MODE_CUSTOM)
+	#item.set_button_color(1, 1, color)
+	#var texture = AtlasTexture.new()
+	#var texturen = 
+	#texture.atlas = preload("uid://jws2w5wpfvw7")
+	#texture.region.position = Vector2(0, 0)
+	#texture.region.size = Vector2(50, 50)
+	#item.add_button(1, texture, 0)
+	item.set_custom_as_button(1, true)
+	#item.set_button(1, 1, ColorPickerButton.new())
+	#item.set_
+	var stylebox := StyleBoxFlat.new()
+	#stylebox.set_content_margin_all(4)
+	stylebox.bg_color = color
+	stylebox.set_border_width_all(4)
+	stylebox.border_color = Color.BLACK
+	item.set_custom_stylebox(1, stylebox)
+	#item.set_custom_draw_callback(1, _on_editor_button_pressed)
+	#item.set_custom_bg_color(1, color)
+	#item.set_custom_as_button(1, true)
+	#item.set_button_color(1, 0, color)
+
+func _on_editor_button_pressed() -> void:
+	#var popup := Pop
+	#var color_picker := ColorPicker.new()
+	#print((item.get_custom_stylebox(1) as StyleBoxFlat).bg_color)
+	pass
+	
+
 
 # 13. private methods: define all private methods here, use _ as preffix
 

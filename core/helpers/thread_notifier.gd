@@ -11,6 +11,7 @@ signal thread_finished(result: Variant)
 
 var thread: Thread
 var auto_delete: bool
+var _output = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -23,6 +24,8 @@ func _process(_delta: float) -> void:
 	if not thread.is_alive():
 		print("Thread finished")
 		var res = thread.wait_to_finish()
+		prints("Output:", _output)
+		prints("Response:", res)
 		thread_finished.emit(res)
 		if auto_delete:
 			queue_free()

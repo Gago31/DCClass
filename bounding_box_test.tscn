@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dhh0wnsb08n54"]
+
+[ext_resource type="Script" uid="uid://co84yv7j6xmx1" path="res://bounding_box_test.gd" id="1_oyu2l"]
+[ext_resource type="PackedScene" uid="uid://n1s02t8kd0hl" path="res://core/widgets/selection_area.tscn" id="2_u6o2g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u6o2g"]
+size = Vector2(728, 448)
+
+[node name="SubViewportContainer" type="SubViewportContainer" unique_id=764209890]
+offset_right = 760.0
+offset_bottom = 480.0
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=628564546]
+disable_3d = true
+handle_input_locally = false
+physics_object_picking = true
+size = Vector2i(759, 512)
+render_target_update_mode = 4
+
+[node name="Node2D" type="Node2D" parent="SubViewport" unique_id=133021047]
+process_mode = 4
+script = ExtResource("1_oyu2l")
+
+[node name="Line2D" type="Line2D" parent="SubViewport/Node2D" unique_id=425516729]
+position = Vector2(-17, 53)
+points = PackedVector2Array(43, 8, 354, -24, 483, 121, 758, -26, 513, 403, 145, 249)
+joint_mode = 2
+antialiased = true
+
+[node name="SelectionArea" parent="SubViewport/Node2D" unique_id=290224752 instance=ExtResource("2_u6o2g")]
+unique_name_in_owner = true
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" parent="SubViewport/Node2D/SelectionArea" index="0" unique_id=1582830394]
+position = Vector2(388, 240)
+shape = SubResource("RectangleShape2D_u6o2g")
+
+[editable path="SubViewport/Node2D/SelectionArea"]

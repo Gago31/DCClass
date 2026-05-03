@@ -40,50 +40,58 @@ region = Rect2(0, 300, 50, 50)
 atlas = ExtResource("3_yra4r")
 region = Rect2(300, 150, 50, 50)
 
-[node name="VideoWidget" type="Control" unique_id=2010019229]
-layout_mode = 3
-anchors_preset = 0
-theme = ExtResource("1_qdhaw")
+[node name="VideoWidget" type="Node2D" unique_id=1197465786]
 script = ExtResource("2_yra4r")
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1827360577]
+[node name="VideoWidget" type="Control" parent="." unique_id=2010019229]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 1
+theme = ExtResource("1_qdhaw")
+
+[node name="PanelContainer" type="PanelContainer" parent="VideoWidget" unique_id=1827360577]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1763671098]
+[node name="VBoxContainer" type="VBoxContainer" parent="VideoWidget/PanelContainer" unique_id=1763671098]
 layout_mode = 2
 
-[node name="ConvertingPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer" unique_id=1253307719]
+[node name="ConvertingPanel" type="PanelContainer" parent="VideoWidget/PanelContainer/VBoxContainer" unique_id=1253307719]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(854, 480)
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_qdhaw")
 
-[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/ConvertingPanel" unique_id=1343182364]
+[node name="CenterContainer" type="CenterContainer" parent="VideoWidget/PanelContainer/VBoxContainer/ConvertingPanel" unique_id=1343182364]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ConvertingPanel/CenterContainer" unique_id=1100966805]
+[node name="Label" type="Label" parent="VideoWidget/PanelContainer/VBoxContainer/ConvertingPanel/CenterContainer" unique_id=1100966805]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Convirtiendo..."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VideoPlayer" type="VideoStreamPlayerAv1" parent="PanelContainer/VBoxContainer" unique_id=416877483]
+[node name="VideoPlayer" type="VideoStreamPlayerAv1" parent="VideoWidget/PanelContainer/VBoxContainer" unique_id=416877483]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(854, 480)
 layout_mode = 2
+mouse_filter = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer" unique_id=996516165]
+[node name="PanelContainer" type="PanelContainer" parent="VideoWidget/PanelContainer/VBoxContainer" unique_id=996516165]
+visible = false
 layout_mode = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_je6sv")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer" unique_id=1443753158]
+[node name="VBoxContainer" type="VBoxContainer" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer" unique_id=1443753158]
 layout_mode = 2
 
-[node name="VideoSlider" type="HSlider" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1002285115]
+[node name="VideoSlider" type="HSlider" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1002285115]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -91,18 +99,18 @@ size_flags_vertical = 1
 editable = false
 scrollable = false
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=246564755]
+[node name="MarginContainer" type="MarginContainer" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=246564755]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=1913433749]
+[node name="HBoxContainer" type="HBoxContainer" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=1913433749]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="Play" type="Button" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=605605500]
+[node name="Play" type="Button" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=605605500]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -111,12 +119,12 @@ disabled = true
 icon = SubResource("AtlasTexture_yra4r")
 icon_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2064845226]
+[node name="HBoxContainer" type="HBoxContainer" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=2064845226]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_constants/separation = 4
 
-[node name="Mute" type="Button" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1322958571]
+[node name="Mute" type="Button" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=1322958571]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 64)
 layout_mode = 2
@@ -125,7 +133,7 @@ icon = SubResource("AtlasTexture_8bglj")
 flat = true
 icon_alignment = 1
 
-[node name="AudioSlider" type="HSlider" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=890741533]
+[node name="AudioSlider" type="HSlider" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/HBoxContainer" unique_id=890741533]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -133,7 +141,7 @@ size_flags_vertical = 1
 value = 100.0
 rounded = true
 
-[node name="Fullscreen" type="Button" parent="PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=37008764]
+[node name="Fullscreen" type="Button" parent="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer" unique_id=37008764]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -141,3 +149,5 @@ size_flags_horizontal = 8
 theme_override_font_sizes/font_size = 20
 icon = SubResource("AtlasTexture_bvjrg")
 icon_alignment = 1
+
+[connection signal="pressed" from="VideoWidget/PanelContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer/HBoxContainer/Play" to="." method="_on_play_pressed"]

@@ -1,9 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://dyh75vkj58pw3"]
+[gd_scene format=3 uid="uid://dyh75vkj58pw3"]
 
 [ext_resource type="Texture2D" uid="uid://dciqdluyqxc3b" path="res://assets/sprites/widgets/antialliased_line.png" id="1_6eqjo"]
+[ext_resource type="Script" uid="uid://bc6qv8hqfy0j6" path="res://core/widgets/entities/visual/line_widget.gd" id="1_imv02"]
 
-[node name="Line" type="Line2D"]
-width = 5.0
+[node name="LineWidget" type="Node2D" unique_id=1141707611]
+script = ExtResource("1_imv02")
+play_mode = 1
+
+[node name="Line" type="Line2D" parent="." unique_id=410227110]
+unique_name_in_owner = true
+width = 3.0
 texture = ExtResource("1_6eqjo")
 texture_mode = 1
 joint_mode = 2

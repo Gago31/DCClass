@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b8pjlem1nqjal"]
+
+[ext_resource type="Script" uid="uid://cwjfpmrevpw7b" path="res://core/widgets/entities/operations/pen_thickness_widget.gd" id="1_pwsol"]
+
+[node name="PenThicknessWidget" type="Node2D" unique_id=1382652028]
+script = ExtResource("1_pwsol")

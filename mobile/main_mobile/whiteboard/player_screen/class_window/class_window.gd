@@ -1,8 +1,8 @@
 class_name ClassWindowMobile
 extends Control
 
-@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
-@onready var _bus: MobileEventBus = Engine.get_singleton(&"MobileSignals")
+#@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
+#@onready var _bus: MobileEventBus = Engine.get_singleton(&"MobileSignals")
 
 #region Whiteboard
 
@@ -59,13 +59,13 @@ var is_stopped: bool = true
 # When stopped, the current  visual widget will be stopped and show his final state.
 func _toggle_playback_stop() -> void:
 	if is_stopped:
-		PersistenceMobile._epilog(PersistenceMobile.Status.PLAYING)
-		_bus.seek_play.emit()
+		#PersistenceMobile._epilog(PersistenceMobile.Status.PLAYING)
+		#_bus.seek_play.emit()
 		return
 	
-	_bus_core.stop_widget.emit()
-	get_tree().call_group(&"widget_playing", "stop")
-	PersistenceMobile._epilog(PersistenceMobile.Status.STOPPED)
+	#_bus_core.stop_widget.emit()
+	#get_tree().call_group(&"widget_playing", "stop")
+	#PersistenceMobile._epilog(PersistenceMobile.Status.STOPPED)
 	
 # 0: playing, 1: stopped
 # This is used to update the stup_button icon/state.
@@ -182,7 +182,7 @@ var was_playing: bool = false
 
 # Setup the time slider and label based on the complete duration of the class.
 func _setup_timeline():
-	final_time = PersistenceMobile.resources_class.root_tree_structure._node_controller._compute_class_duration()
+	#final_time = PersistenceMobile.resources_class.root_tree_structure._node_controller._compute_class_duration()
 	time_slider.max_value = final_time
 	time_slider.value = 0.0
 	
@@ -222,19 +222,19 @@ func _update_time_control():
 
 # Seek the time slider by the current node given.
 func _seek_time_slide(_current_node: ClassNode):
-	current_time = PersistenceMobile.resources_class.root_tree_structure._node_controller._compute_current_time(_current_node._node_controller)
+	#current_time = PersistenceMobile.resources_class.root_tree_structure._node_controller._compute_current_time(_current_node._node_controller)
 	_update_time_control()
 
 # Begin to drag the time slider.
 func _on_time_slider_drag_started() -> void:
 	time_slider_drag = true
-	if PersistenceMobile._status == PersistenceMobile.Status.PLAYING:
-		was_playing = true
-	else:
-		was_playing = false
-	_bus_core.stop_widget.emit()
-	get_tree().call_group(&"widget_playing", "stop")
-	PersistenceMobile._epilog(PersistenceMobile.Status.STOPPED)
+	#if PersistenceMobile._status == PersistenceMobile.Status.PLAYING:
+		#was_playing = true
+	#else:
+		#was_playing = false
+	#_bus_core.stop_widget.emit()
+	#get_tree().call_group(&"widget_playing", "stop")
+	#PersistenceMobile._epilog(PersistenceMobile.Status.STOPPED)
 
 # Ended to drag the time slider.
 func _on_time_slider_drag_ended(value_changed: bool) -> void:
@@ -242,8 +242,8 @@ func _on_time_slider_drag_ended(value_changed: bool) -> void:
 	debouncer_timer.start()
 	await debouncer_timer.timeout
 	if was_playing:
-		PersistenceMobile._epilog(PersistenceMobile.Status.PLAYING)
-		_bus.seek_play.emit()
+		#PersistenceMobile._epilog(PersistenceMobile.Status.PLAYING)
+		#_bus.seek_play.emit()
 		return
 
 # When the value changed of the time slider, we update the class by the current time.
@@ -253,16 +253,16 @@ func _on_time_slider_value_changed(value: float) -> void:
 		debouncer_timer.start()
 
 # Trigger when the debouncer timer timeout.
-func _on_debouncer_timer_timeout() -> void:
-	_update_timer_slider_by_time()
+#func _on_debouncer_timer_timeout() -> void:
+	#_update_timer_slider_by_time()
 
 # Update the timer slider and the current node by the time slider value.
-func _update_timer_slider_by_time():
-	var seeked_node: NodeController = PersistenceMobile.resources_class.root_tree_structure._node_controller._seek_node_time(time_slider.value)
-	_bus_core.current_node_changed.emit(seeked_node._class_node)
-	_bus.seek_node.emit(seeked_node._class_node)
-	if !time_slider_drag:
-		_seek_time_slide(PersistenceMobile.resources_class._current_node)
+#func _update_timer_slider_by_time():
+	#var seeked_node: NodeController = PersistenceMobile.resources_class.root_tree_structure._node_controller._seek_node_time(time_slider.value)
+	#_bus_core.current_node_changed.emit(seeked_node._class_node)
+	#_bus.seek_node.emit(seeked_node._class_node)
+	#if !time_slider_drag:
+		#_seek_time_slide(PersistenceMobile.resources_class._current_node)
 
 #endregion
 
@@ -282,8 +282,8 @@ func _ready():
 		get_tree().process_frame.connect(_zoom_reset, CONNECT_ONE_SHOT)
 		
 	stop_button.pressed.connect(_toggle_playback_stop)
-	_bus.disabled_toggle_stop_button.connect(_disabled_toggle_stop_button)
-	_bus.status_playback_stop.connect(_status_playback_stop)
+	#_bus.disabled_toggle_stop_button.connect(_disabled_toggle_stop_button)
+	#_bus.status_playback_stop.connect(_status_playback_stop)
 	
 	center_camera_button.pressed.connect(func (): ClassUIMobile.context.camera.user_controlled = false)
 	
@@ -294,16 +294,16 @@ func _ready():
 	
 	_volume_controls()
 	
-	_bus.setup_timeline.connect(_setup_timeline)
-	_bus.seek_time_slide.connect(_seek_time_slide)
+	#_bus.setup_timeline.connect(_setup_timeline)
+	#_bus.seek_time_slide.connect(_seek_time_slide)
 	
 	
 	time_slider.drag_started.connect(_on_time_slider_drag_started)
 	time_slider.value_changed.connect(_on_time_slider_value_changed)
-	debouncer_timer.timeout.connect(_on_debouncer_timer_timeout)
+	#debouncer_timer.timeout.connect(_on_debouncer_timer_timeout)
 	time_slider.drag_ended.connect(_on_time_slider_drag_ended)
 	
-	_bus.update_timer_slider_by_time.connect(_update_timer_slider_by_time)
+	#_bus.update_timer_slider_by_time.connect(_update_timer_slider_by_time)
 	
 
 func _process(_delta: float):

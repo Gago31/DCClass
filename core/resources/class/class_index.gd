@@ -1,4 +1,3 @@
-@tool
 # 1. class name: fill the class name
 class_name ClassIndex
 extends Resource
@@ -58,19 +57,19 @@ func serialize() -> Dictionary:
 	return data
 
 # Deserialize a ClassIndex from a Dictionary. Useful to load the index.json
-static func deserialize(data: Dictionary) -> ClassIndex:
-	var instance = ClassIndex.new()
-	instance.metadata = ClassMetadata.deserialize(data["metadata"])
-
-	var data_entities = data["entities"]
-	instance.entities_last_uid = data_entities["last_uid"]
-	for entity_data in data_entities["entities_array"]:
-		var entity = Entity.deserialize(entity_data)
-		instance.entities[entity.get_entity_id()] = entity
-	
-	ClassLeaf.entities = instance.entities
-	instance.tree_structure = ClassNode.deserialize(data["tree_structure"])
-	return instance
+#static func deserialize(data: Dictionary) -> ClassIndex:
+	#var instance = ClassIndex.new()
+	#instance.metadata = ClassMetadata.deserialize(data["metadata"])
+#
+	#var data_entities = data["entities"]
+	#instance.entities_last_uid = data_entities["last_uid"]
+	##for entity_data in data_entities["entities_array"]:
+		##var entity = Entity.deserialize(entity_data)
+		##instance.entities[entity.get_entity_id()] = entity
+	##
+	#ClassLeaf.entities = instance.entities
+	#instance.tree_structure = ClassNode.deserialize(data["tree_structure"])
+	#return instance
 
 # 13. private methods: define all private methods here, use _ as preffix
 

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://qkunlp2hjux0"]
+
+[ext_resource type="Script" uid="uid://banx0u1vj1sia" path="res://core/widgets/node_controllers/class_root_widget.gd" id="1_xavkb"]
+
+[node name="ClassRootWidget" type="Node2D" unique_id=1192170768]
+script = ExtResource("1_xavkb")

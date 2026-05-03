@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdspal4chhhh5"]
+[gd_scene format=3 uid="uid://bdspal4chhhh5"]
 
 [ext_resource type="Script" uid="uid://dcygg8obq6n6n" path="res://editor/main_editor/file/file.gd" id="1_4uh8j"]
 
-[node name="File" type="MarginContainer"]
+[node name="File" type="MarginContainer" unique_id=1274065682]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,160 +14,171 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_4uh8j")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=374585444]
 layout_mode = 2
 alignment = 1
 
-[node name="Form" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Form" type="HBoxContainer" parent="VBoxContainer" unique_id=819891686]
 layout_mode = 2
 alignment = 1
 
-[node name="ClassInfo" type="VBoxContainer" parent="VBoxContainer/Form"]
+[node name="ClassInfo" type="VBoxContainer" parent="VBoxContainer/Form" unique_id=1262997802]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxContainer/Form/ClassInfo"]
+[node name="Title" type="Label" parent="VBoxContainer/Form/ClassInfo" unique_id=315730198]
 layout_mode = 2
 text = "Class Info"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Form/ClassInfo"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Form/ClassInfo" unique_id=2035885358]
 layout_mode = 2
 columns = 2
 
-[node name="NameLabel" type="Label" parent="VBoxContainer/Form/ClassInfo/GridContainer"]
+[node name="NameLabel" type="Label" parent="VBoxContainer/Form/ClassInfo/GridContainer" unique_id=723601851]
 layout_mode = 2
 text = "Name:"
 
-[node name="Name" type="LineEdit" parent="VBoxContainer/Form/ClassInfo/GridContainer"]
+[node name="Name" type="LineEdit" parent="VBoxContainer/Form/ClassInfo/GridContainer" unique_id=1393703803]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DescriptionLabel" type="Label" parent="VBoxContainer/Form/ClassInfo/GridContainer"]
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer/Form/ClassInfo/GridContainer" unique_id=1427835264]
 layout_mode = 2
 text = "Description:
  
  "
 
-[node name="Description" type="TextEdit" parent="VBoxContainer/Form/ClassInfo/GridContainer"]
+[node name="Description" type="TextEdit" parent="VBoxContainer/Form/ClassInfo/GridContainer" unique_id=606983477]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CourseLabel" type="Label" parent="VBoxContainer/Form/ClassInfo/GridContainer"]
+[node name="CourseLabel" type="Label" parent="VBoxContainer/Form/ClassInfo/GridContainer" unique_id=1969457156]
 layout_mode = 2
 text = "Course:"
 
-[node name="Course" type="LineEdit" parent="VBoxContainer/Form/ClassInfo/GridContainer"]
+[node name="Course" type="LineEdit" parent="VBoxContainer/Form/ClassInfo/GridContainer" unique_id=154880291]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Form"]
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/Form" unique_id=1328861910]
 layout_mode = 2
 
-[node name="AuthorInfo" type="VBoxContainer" parent="VBoxContainer/Form"]
+[node name="AuthorInfo" type="VBoxContainer" parent="VBoxContainer/Form" unique_id=1548666143]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxContainer/Form/AuthorInfo"]
+[node name="Title" type="Label" parent="VBoxContainer/Form/AuthorInfo" unique_id=457328595]
 layout_mode = 2
 text = "Author Info"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Form/AuthorInfo"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Form/AuthorInfo" unique_id=2014381019]
 layout_mode = 2
 columns = 2
 
-[node name="NameLabel" type="Label" parent="VBoxContainer/Form/AuthorInfo/GridContainer"]
+[node name="NameLabel" type="Label" parent="VBoxContainer/Form/AuthorInfo/GridContainer" unique_id=1769110911]
 layout_mode = 2
 text = "Name:"
 
-[node name="AuthorName" type="LineEdit" parent="VBoxContainer/Form/AuthorInfo/GridContainer"]
+[node name="AuthorName" type="LineEdit" parent="VBoxContainer/Form/AuthorInfo/GridContainer" unique_id=1398903776]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DescriptionLabel" type="Label" parent="VBoxContainer/Form/AuthorInfo/GridContainer"]
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer/Form/AuthorInfo/GridContainer" unique_id=1203681697]
 layout_mode = 2
 text = "Description:
  
  "
 
-[node name="AuthorDescription" type="TextEdit" parent="VBoxContainer/Form/AuthorInfo/GridContainer"]
+[node name="AuthorDescription" type="TextEdit" parent="VBoxContainer/Form/AuthorInfo/GridContainer" unique_id=1488213918]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=547684156]
 layout_mode = 2
 
-[node name="Form2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Form2" type="HBoxContainer" parent="VBoxContainer" unique_id=546927435]
 layout_mode = 2
 
-[node name="LeftSpacer" type="Control" parent="VBoxContainer/Form2"]
+[node name="LeftSpacer" type="Control" parent="VBoxContainer/Form2" unique_id=362898665]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="OtherInfo" type="VBoxContainer" parent="VBoxContainer/Form2"]
+[node name="OtherInfo" type="VBoxContainer" parent="VBoxContainer/Form2" unique_id=1186574760]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="Title" type="Label" parent="VBoxContainer/Form2/OtherInfo"]
+[node name="Title" type="Label" parent="VBoxContainer/Form2/OtherInfo" unique_id=1423865595]
 layout_mode = 2
 text = "File Info"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Form2/OtherInfo"]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/Form2/OtherInfo" unique_id=768065186]
 layout_mode = 2
 columns = 2
 
-[node name="VersionLabel" type="Label" parent="VBoxContainer/Form2/OtherInfo/GridContainer"]
+[node name="VersionLabel" type="Label" parent="VBoxContainer/Form2/OtherInfo/GridContainer" unique_id=1537821523]
 layout_mode = 2
 text = "File version:"
 
-[node name="Version" type="LineEdit" parent="VBoxContainer/Form2/OtherInfo/GridContainer"]
+[node name="Version" type="LineEdit" parent="VBoxContainer/Form2/OtherInfo/GridContainer" unique_id=1852329521]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DateLabel" type="Label" parent="VBoxContainer/Form2/OtherInfo/GridContainer"]
+[node name="DateLabel" type="Label" parent="VBoxContainer/Form2/OtherInfo/GridContainer" unique_id=2027679577]
 layout_mode = 2
 text = "Date:"
 
-[node name="Date" type="LineEdit" parent="VBoxContainer/Form2/OtherInfo/GridContainer"]
+[node name="Date" type="LineEdit" parent="VBoxContainer/Form2/OtherInfo/GridContainer" unique_id=181875550]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LicenseLabel" type="Label" parent="VBoxContainer/Form2/OtherInfo/GridContainer"]
+[node name="LicenseLabel" type="Label" parent="VBoxContainer/Form2/OtherInfo/GridContainer" unique_id=1352729738]
 layout_mode = 2
 text = "License:"
 
-[node name="License" type="LineEdit" parent="VBoxContainer/Form2/OtherInfo/GridContainer"]
+[node name="License" type="LineEdit" parent="VBoxContainer/Form2/OtherInfo/GridContainer" unique_id=787327037]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="RightSpacer" type="Control" parent="VBoxContainer/Form2"]
+[node name="RightSpacer" type="Control" parent="VBoxContainer/Form2" unique_id=998150280]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer" unique_id=108106993]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer" unique_id=186148978]
 layout_mode = 2
 
-[node name="SaveButton" type="Button" parent="VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="SaveButton" type="Button" parent="VBoxContainer/CenterContainer/VBoxContainer" unique_id=1578400689]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
-[node name="ExportButton" type="Button" parent="VBoxContainer/CenterContainer/VBoxContainer"]
+[node name="ExportButton" type="Button" parent="VBoxContainer/CenterContainer/VBoxContainer" unique_id=1480533805]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Export Class"
 
-[node name="ExportFileDialog" type="FileDialog" parent="."]
+[node name="ExportFileDialog" type="FileDialog" parent="." unique_id=599325252]
 unique_name_in_owner = true
 access = 2
 filters = PackedStringArray("*.dcc")
 use_native_dialog = true
+
+[connection signal="text_changed" from="VBoxContainer/Form/ClassInfo/GridContainer/Name" to="." method="_on_name_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form/ClassInfo/GridContainer/Description" to="." method="_on_description_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form/ClassInfo/GridContainer/Course" to="." method="_on_course_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form/AuthorInfo/GridContainer/AuthorName" to="." method="_on_author_name_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form/AuthorInfo/GridContainer/AuthorDescription" to="." method="_on_author_description_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form2/OtherInfo/GridContainer/Version" to="." method="_on_version_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form2/OtherInfo/GridContainer/Date" to="." method="_on_date_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Form2/OtherInfo/GridContainer/License" to="." method="_on_license_text_changed"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer/VBoxContainer/SaveButton" to="." method="save"]
+[connection signal="pressed" from="VBoxContainer/CenterContainer/VBoxContainer/ExportButton" to="." method="export_class"]

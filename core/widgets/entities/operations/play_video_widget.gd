@@ -1,39 +1,60 @@
 class_name PlayVideoWidget
-extends Widget
+extends OperationWidget
 
 
-@export var entity: PlayVideoEntity
+var video_entity: VideoEntity
+var video_widget: VideoWidget
 
 
-func serialize() -> Dictionary:
-	return entity.serialize()
+func setup() -> void:
+	video_entity = get_entity().entity as VideoEntity
+	get_entity().reference_set.connect(_on_reference_changed)
 
-func play(_duration: float, _total_real_time: float, _duration_leaf: float) -> void:
+func _on_started_playing() -> void:
+	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
+	if not video_widget: return
 	# TODO: Get video widget from entity video id
+	print("a")
+	video_widget.reached_target_time.connect(_on_target_reached, CONNECT_ONE_SHOT)
+	video_widget.play_video_until(get_entity().until_position)
 	# Call play until function with entity until position
 	# if until position is 0 set video duration as until position
-	emit_signal("widget_finished")
 
-func compute_duration() -> float:
+func _on_unpaused() -> void:
+	video_widget.play_video()
+
+func _on_paused() -> void:
+	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
+	if not video_widget: return
+	video_widget.pause_video()
+
+func _calculate_duration() -> float:
 	# TODO: Get video widget
 	# Get current playback position
 	# Calculate duration as until_position - playback_position
-	return 0.0
+	return entity.duration
 
-func reset():
-	pass
+func _on_seek() -> void:
+	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
+	if not video_widget: return
+	video_widget.seek_video(get_entity().until_position - play_time)
 
-func stop() -> void:
-	skip_to_end()
-
-func skip_to_end() -> void:
-	# TODO: Stop video and seek to until position
-	emit_signal("widget_finished")
+func _on_skip() -> void:
+	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
+	if not video_widget: return
+	video_widget.seek_video(get_entity().until_position)
 
 func clear():
 	reset()
-	add_to_group(&"widget_cleared")
 
 func unclear():
-	skip_to_end()
-	remove_from_group(&"widget_cleared")
+	jump_to_end()
+
+func get_entity() -> PlayVideoEntity:
+	return entity as PlayVideoEntity
+
+func _on_reference_changed() -> void:
+	video_entity = get_entity().entity as VideoEntity
+
+func _on_target_reached() -> void:
+	finish_playing()

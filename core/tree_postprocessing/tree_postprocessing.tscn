@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ca0ens8jsu8yq"]
+
+[ext_resource type="Script" uid="uid://pekn0kwbrp6s" path="res://core/tree_postprocessing/tree_postprocessing.gd" id="1_ppce4"]
+[ext_resource type="Script" uid="uid://b2nvfoxd60o80" path="res://core/tree_postprocessing/tree_preprocessor_script.gd" id="2_sdpkl"]
+[ext_resource type="Script" uid="uid://cb1bnecsxdruw" path="res://core/tree_postprocessing/postprocessors/video_playback_time_calculator.gd" id="3_h4clp"]
+[ext_resource type="Script" uid="uid://w4fdj7mga28s" path="res://core/tree_postprocessing/postprocessors/seek_timestamps.gd" id="4_h4clp"]
+
+[sub_resource type="Resource" id="Resource_2dxa4"]
+script = ExtResource("3_h4clp")
+metadata/_custom_type_script = "uid://cb1bnecsxdruw"
+
+[sub_resource type="Resource" id="Resource_5oasm"]
+script = ExtResource("4_h4clp")
+metadata/_custom_type_script = "uid://w4fdj7mga28s"
+
+[node name="TreePostprocessing" type="Node" unique_id=1588888408]
+script = ExtResource("1_ppce4")
+postprocessors = Array[ExtResource("2_sdpkl")]([SubResource("Resource_2dxa4"), SubResource("Resource_5oasm")])

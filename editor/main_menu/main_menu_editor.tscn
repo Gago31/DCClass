@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://d3ahyg18n5ed2"]
+[gd_scene format=3 uid="uid://d3ahyg18n5ed2"]
 
 [ext_resource type="Script" uid="uid://bc8ddh7b16amb" path="res://editor/main_menu/main_menu_editor.gd" id="1_00aae"]
 [ext_resource type="PackedScene" uid="uid://c876bpobo68ux" path="res://editor/main_editor/main_editor.tscn" id="2_74nri"]
 
-[node name="MenuEditor" type="Control"]
+[node name="MenuEditor" type="Control" unique_id=73399409]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_00aae")
 editor_screen = ExtResource("2_74nri")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=83734487]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,52 +21,90 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=480644587]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer" unique_id=299255230]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/PanelContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=1383092694]
 layout_mode = 2
 theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="Label" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer2"]
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer2" unique_id=748881887]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "DCClass"
 
-[node name="VSeparator" type="VSeparator" parent="CenterContainer/PanelContainer/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=58005320]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=1219162899]
 layout_mode = 2
 theme_override_constants/margin_left = 100
 theme_override_constants/margin_top = 100
 theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer" unique_id=2041411447]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ButtonCreate" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonCreate" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=1370499432]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Create a new class"
 
-[node name="ButtonLoad" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="ButtonLoadProject" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=728765626]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load a project"
+
+[node name="ButtonLoad" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=56748370]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Load a class"
 
-[node name="SelectFileDialog" type="FileDialog" parent="."]
+[node name="SelectFileDialog" type="FileDialog" parent="." unique_id=45662847]
 unique_name_in_owner = true
 title = "Open a File"
 file_mode = 0
 access = 2
 filters = PackedStringArray("*.dcc")
 use_native_dialog = true
+
+[node name="CreateProjectDialog" type="FileDialog" parent="." unique_id=682219921]
+unique_name_in_owner = true
+title = "Open a Directory"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="LoadProjectDialog" type="FileDialog" parent="." unique_id=1047841099]
+unique_name_in_owner = true
+title = "Open a Directory"
+file_mode = 2
+access = 2
+use_native_dialog = true
+
+[node name="CreateErrorDialog" type="AcceptDialog" parent="." unique_id=343026938]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 1
+force_native = true
+dialog_text = "The project folder must be empty."
+
+[node name="LoadErrorDialog" type="AcceptDialog" parent="." unique_id=1308879657]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 1
+force_native = true
+dialog_text = "Failed to load project. Please select your project's root folder."
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonLoadProject" to="." method="_on_button_load_project_pressed"]
+[connection signal="file_selected" from="SelectFileDialog" to="." method="_on_file_selected"]
+[connection signal="dir_selected" from="CreateProjectDialog" to="." method="_on_create_project_dialog_dir_selected"]
+[connection signal="dir_selected" from="LoadProjectDialog" to="." method="_on_load_project_dialog_dir_selected"]

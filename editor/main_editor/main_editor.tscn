@@ -1,15 +1,23 @@
-[gd_scene load_steps=8 format=3 uid="uid://c876bpobo68ux"]
+[gd_scene format=3 uid="uid://c876bpobo68ux"]
 
 [ext_resource type="Script" uid="uid://bcdfoy8ne6av6" path="res://editor/main_editor/main_editor.gd" id="1_dhey8"]
 [ext_resource type="PackedScene" uid="uid://ctbhart5orqu0" path="res://editor/main_editor/whiteboard/window_whiteboard.tscn" id="2_35r6u"]
 [ext_resource type="PackedScene" uid="uid://bdspal4chhhh5" path="res://editor/main_editor/file/file.tscn" id="3_0im0g"]
 [ext_resource type="PackedScene" uid="uid://bkt85dfs5q52u" path="res://editor/main_editor/control_panel/control_panel.tscn" id="4_4yc00"]
-[ext_resource type="Script" uid="uid://gjjscxmdrlxg" path="res://editor/main_editor/resources_class.gd" id="4_sli3p"]
-[ext_resource type="Script" uid="uid://cmtkyg0tf5jml" path="res://editor/main_editor/audio_record.gd" id="6_gdxi0"]
+[ext_resource type="PackedScene" uid="uid://ca0ens8jsu8yq" path="res://core/tree_postprocessing/tree_postprocessing.tscn" id="5_pxf3b"]
+[ext_resource type="Script" uid="uid://b2nvfoxd60o80" path="res://core/tree_postprocessing/tree_preprocessor_script.gd" id="6_mhl3f"]
+[ext_resource type="Script" uid="uid://cb1bnecsxdruw" path="res://core/tree_postprocessing/postprocessors/video_playback_time_calculator.gd" id="7_ockqd"]
+[ext_resource type="Script" uid="uid://w4fdj7mga28s" path="res://core/tree_postprocessing/postprocessors/seek_timestamps.gd" id="8_ockqd"]
 
-[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_gdxi0"]
+[sub_resource type="Resource" id="Resource_hiwmp"]
+script = ExtResource("7_ockqd")
+metadata/_custom_type_script = "uid://cb1bnecsxdruw"
 
-[node name="EditorScreen" type="Control"]
+[sub_resource type="Resource" id="Resource_hc7s1"]
+script = ExtResource("8_ockqd")
+metadata/_custom_type_script = "uid://w4fdj7mga28s"
+
+[node name="EditorScreen" type="Control" unique_id=265593055]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +27,7 @@ grow_vertical = 2
 script = ExtResource("1_dhey8")
 window_whiteboard = ExtResource("2_35r6u")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1200585386]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,39 +35,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TabContainer" type="TabContainer" parent="PanelContainer"]
+[node name="TabContainer" type="TabContainer" parent="PanelContainer" unique_id=762124282]
 layout_mode = 2
 current_tab = 0
 
-[node name="File" parent="PanelContainer/TabContainer" instance=ExtResource("3_0im0g")]
+[node name="File" parent="PanelContainer/TabContainer" unique_id=1069233294 instance=ExtResource("3_0im0g")]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Control Panel" parent="PanelContainer/TabContainer" instance=ExtResource("4_4yc00")]
+[node name="Control Panel" parent="PanelContainer/TabContainer" unique_id=2015201340 instance=ExtResource("4_4yc00")]
 unique_name_in_owner = true
 visible = false
 clip_contents = true
 layout_mode = 2
 
-[node name="Class" type="Node" parent="."]
+[node name="Class" type="Node" parent="." unique_id=1674128256]
 
-[node name="Resources" type="Node" parent="Class"]
-unique_name_in_owner = true
-script = ExtResource("4_sli3p")
-
-[node name="Controllers" type="Node" parent="Class"]
+[node name="Controllers" type="Node" parent="Class" unique_id=627159]
 unique_name_in_owner = true
 
-[node name="AudioWidgets" type="Node2D" parent="Class"]
+[node name="AudioWidgets" type="Node2D" parent="Class" unique_id=1709407643]
 unique_name_in_owner = true
 
-[node name="AudioRecord" type="Node" parent="Class"]
+[node name="TreePostprocessing" parent="." unique_id=1588888408 instance=ExtResource("5_pxf3b")]
 unique_name_in_owner = true
-script = ExtResource("6_gdxi0")
+preprocessors = Array[ExtResource("6_mhl3f")]([SubResource("Resource_hiwmp"), SubResource("Resource_hc7s1")])
 
-[node name="AudioRecordStream" type="AudioStreamPlayer" parent="Class/AudioRecord"]
-stream = SubResource("AudioStreamMicrophone_gdxi0")
-autoplay = true
-bus = &"ClassRecord"
+[connection signal="updated" from="PanelContainer/TabContainer/Control Panel" to="." method="_on_tree_updated"]

@@ -7,8 +7,8 @@ const OUTLINE_DASHED := true
 const ANTIALLIASED_LINE: Texture2D = preload("uid://dciqdluyqxc3b")
 const DASHED_LINE: Texture2D = preload("uid://by6a3a68vnxs4")
 
-@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
-@onready var _bus: EditorEventBus = Engine.get_singleton(&"EditorSignals")
+#@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
+#@onready var _bus: EditorEventBus = Engine.get_singleton(&"EditorSignals")
 
 var current_node: ClassNode
 var resizing:=false
@@ -22,8 +22,8 @@ var sigs_actives:=false
 var group_outline: Line2D
 
 func _ready() -> void:
-	_bus.status_playback_stop.connect(_status_playback_stop)
-	_bus.resize_toggled.connect(_on_resize_toggled)
+	#_bus.status_playback_stop.connect(_status_playback_stop)
+	#_bus.resize_toggled.connect(_on_resize_toggled)
 	pass
 
 func _on_resize_toggled(active: bool) -> void:
@@ -40,21 +40,21 @@ func _current_node_changed(node) -> void:
 func _status_playback_stop(active: bool) -> void:
 	is_editing_mode = active
 	if active and not sigs_actives: # Connect editor signals
-		_bus_core.current_node_changed.connect(_current_node_changed)
-		_bus.execute_after_rendering.connect(add_widget_outline)
-		_bus.class_node_selected.connect(_on_class_node_selected)
-		_bus.clear_outlines.connect(clear_all_outlines)
-		_bus.show_outlines.connect(add_widget_outline)
-		_bus.clear_selection.connect(_clear_selection)
+		#_bus_core.current_node_changed.connect(_current_node_changed)
+		#_bus.execute_after_rendering.connect(add_widget_outline)
+		#_bus.class_node_selected.connect(_on_class_node_selected)
+		#_bus.clear_outlines.connect(clear_all_outlines)
+		#_bus.show_outlines.connect(add_widget_outline)
+		#_bus.clear_selection.connect(_clear_selection)
 		sigs_actives = true
 	elif not active:
 		clear_all_outlines()
-		_bus_core.current_node_changed.disconnect(_current_node_changed)
-		_bus.execute_after_rendering.disconnect(add_widget_outline)
-		_bus.class_node_selected.disconnect(_on_class_node_selected)
-		_bus.clear_outlines.disconnect(clear_all_outlines)
-		_bus.show_outlines.disconnect(add_widget_outline)
-		_bus.clear_selection.disconnect(_clear_selection)
+		#_bus_core.current_node_changed.disconnect(_current_node_changed)
+		#_bus.execute_after_rendering.disconnect(add_widget_outline)
+		#_bus.class_node_selected.disconnect(_on_class_node_selected)
+		#_bus.clear_outlines.disconnect(clear_all_outlines)
+		#_bus.show_outlines.disconnect(add_widget_outline)
+		#_bus.clear_selection.disconnect(_clear_selection)
 		sigs_actives = false
 
 #region single outline

@@ -4,13 +4,13 @@ extends Node
 # This file is used to manage the resources class in the editor.
 # For example, to parse .dcc file to a ClassIndex, to add new entities, etc.
 
-@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
-@onready var _bus: EditorEventBus = Engine.get_singleton(&"EditorSignals")
+#@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
+#@onready var _bus: EditorEventBus = Engine.get_singleton(&"EditorSignals")
 
 @export var class_index: ClassIndex
 
 # Dictionary that contains the entities of the class.
-var entities: Dictionary
+#var entities: Dictionary
 
 # The root of the tree structure of the class. The node is a ClassNode, it means the resource.
 var root_tree_structure: ClassNode
@@ -26,360 +26,361 @@ var _current_node: ClassNode
 
 
 func _ready():
-	_bus_core.current_node_changed.connect(_current_node_changed)
-	_bus.add_class_leaf_entity.connect(_add_class_leaf_entity)
-	_bus.add_class_leaf.connect(_add_class_leaf)
-	_bus.add_class_group.connect(_add_class_group)
-	_bus.add_class_slide.connect(_add_class_slide)
-	_bus.paste_class_nodes.connect(_paste_class_nodes)
-	_bus.delete_class_nodes.connect(_delete_class_nodes)
-	_bus.make_group.connect(_make_group)
-	NodeController.root_node_controller = root_node_controller
-	NodeController.audio_widgets = audio_widgets
+	#_bus_core.current_node_changed.connect(_current_node_changed)
+	#_bus.add_class_leaf_entity.connect(_add_class_leaf_entity)
+	#_bus.add_class_leaf.connect(_add_class_leaf)
+	#_bus.add_class_group.connect(_add_class_group)
+	#_bus.add_class_slide.connect(_add_class_slide)
+	#_bus.paste_class_nodes.connect(_paste_class_nodes)
+	#_bus.delete_class_nodes.connect(_delete_class_nodes)
+	#_bus.make_group.connect(_make_group)
+	#NodeController.root_node_controller = root_node_controller
+	#NodeController.audio_widgets = audio_widgets
 
 
-	if !_parse():
-		push_error("Error parsing file: " + PersistenceEditor.class_path)
-		return
-	if !_instantiate():
-		push_error("Error instantiating class: " + class_index.name)
-		return
-	print("parse._ready")
+	#if !_parse():
+		#push_error("Error parsing file: " + PersistenceEditor.class_path)
+		#return
+	#if !_instantiate():
+		#push_error("Error instantiating class: " + class_index.name)
+		#return
+	#print("parse._ready")
+	pass
 
 
 func _instantiate() -> bool:
-	entities = class_index.entities
+	#entities = class_index.entities
 	root_tree_structure = class_index.tree_structure
 	root_tree_structure._setup_controller(true)
 	_current_node = root_tree_structure
 	return true
 
-func _current_node_changed(current_node):
-	_current_node = current_node
+#func _current_node_changed(current_node):
+	#_current_node = current_node
 
 
 #region Resources Operations
 
-func _add_class_leaf_entity(entity: Entity, entity_properties) -> void:
-	class_index.entities_last_uid += 1
-	var entity_id: int = class_index.entities_last_uid
-	entity.entity_id = entity_id
-	entities[entity_id] = entity
-	
+#func _add_class_leaf_entity(entity: Entity, entity_properties) -> void:
+	#class_index.entities_last_uid += 1
+	#var entity_id: int = class_index.entities_last_uid
+	#entity.entity_id = entity_id
+	#entities[entity_id] = entity
+	#
+#
+	#var data_new = {
+		#"type": "ClassLeaf",
+		#"entity_id": entity_id,
+		#"entity_properties": entity_properties
+	#}
+	#var class_node = ClassLeaf.deserialize(data_new)
+	#class_node._setup_controller(true)
+	#
+#
+	#if _current_node is ClassGroup or _current_node is ClassSlide:
+		#class_node.set_parent(_current_node)
+		#var _current_class_group_childrens = _current_node._childrens
+		#var index_current = _current_class_group_childrens.find(_current_node)
+		#_current_class_group_childrens.insert(index_current + 1, class_node)
+		#
+#
+	#if _current_node is ClassLeaf:
+		#var parent_node = _current_node._parent
+		#if parent_node is ClassGroup or parent_node is ClassSlide:
+			#class_node.set_parent(parent_node)
+			#var _current_class_group_childrens = parent_node._childrens
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+	#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(class_node)
+	#_bus.seek_node.emit(class_node)
 
-	var data_new = {
-		"type": "ClassLeaf",
-		"entity_id": entity_id,
-		"entity_properties": entity_properties
-	}
-	var class_node = ClassLeaf.deserialize(data_new)
-	class_node._setup_controller(true)
-	
 
-	if _current_node is ClassGroup or _current_node is ClassSlide:
-		class_node.set_parent(_current_node)
-		var _current_class_group_childrens = _current_node._childrens
-		var index_current = _current_class_group_childrens.find(_current_node)
-		_current_class_group_childrens.insert(index_current + 1, class_node)
-		
-
-	if _current_node is ClassLeaf:
-		var parent_node = _current_node._parent
-		if parent_node is ClassGroup or parent_node is ClassSlide:
-			class_node.set_parent(parent_node)
-			var _current_class_group_childrens = parent_node._childrens
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-	
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(class_node)
-	_bus.seek_node.emit(class_node)
-
-
-func _add_class_leaf(class_node: ClassNode) -> void:
-	class_node._setup_controller(true)
-	if _current_node is ClassGroup or _current_node is ClassSlide:
-		class_node.set_parent(_current_node)
-		var _current_class_group_childrens = _current_node._childrens
-		var index_current = _current_class_group_childrens.find(_current_node)
-		_current_class_group_childrens.insert(index_current + 1, class_node)
-
-		
-	if _current_node is ClassLeaf:
-		var parent_node = _current_node._parent
-		if parent_node is ClassGroup or parent_node is ClassSlide:
-			class_node.set_parent(parent_node)
-			var _current_class_group_childrens = parent_node._childrens
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(class_node)
-	_bus.seek_node.emit(class_node)
+#func _add_class_leaf(class_node: ClassNode) -> void:
+	#class_node._setup_controller(true)
+	#if _current_node is ClassGroup or _current_node is ClassSlide:
+		#class_node.set_parent(_current_node)
+		#var _current_class_group_childrens = _current_node._childrens
+		#var index_current = _current_class_group_childrens.find(_current_node)
+		#_current_class_group_childrens.insert(index_current + 1, class_node)
+#
+		#
+	#if _current_node is ClassLeaf:
+		#var parent_node = _current_node._parent
+		#if parent_node is ClassGroup or parent_node is ClassSlide:
+			#class_node.set_parent(parent_node)
+			#var _current_class_group_childrens = parent_node._childrens
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(class_node)
+	#_bus.seek_node.emit(class_node)
 
 
 # Add a group after the current node. In case of being the current node being a group, it will follow the next logic:
 # back -> indicates how the group is added. 
 # If true, the group is added at the begin
 # if false, the group is added at the end.
-func _add_class_group(class_node: ClassNode, back: bool) -> void:
-	class_node._setup_controller(true)
-	if _current_node is ClassLeaf:
-		var parent_node = _current_node._parent
-		if parent_node is ClassGroup or parent_node is ClassSlide:
-			class_node.set_parent(parent_node)
-			var _current_class_group_childrens = parent_node._childrens
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-
-	if _current_node is ClassGroup or _current_node is ClassSlide:
-		class_node.set_parent(_current_node)
-		var _current_class_group_childrens = _current_node._childrens
-		if back:
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-		else:
-			var index_current = _current_class_group_childrens.size()
-			_current_class_group_childrens.insert(index_current, class_node)
-	
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(class_node)
+#func _add_class_group(class_node: ClassNode, back: bool) -> void:
+	#class_node._setup_controller(true)
+	#if _current_node is ClassLeaf:
+		#var parent_node = _current_node._parent
+		#if parent_node is ClassGroup or parent_node is ClassSlide:
+			#class_node.set_parent(parent_node)
+			#var _current_class_group_childrens = parent_node._childrens
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+#
+	#if _current_node is ClassGroup or _current_node is ClassSlide:
+		#class_node.set_parent(_current_node)
+		#var _current_class_group_childrens = _current_node._childrens
+		#if back:
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+		#else:
+			#var index_current = _current_class_group_childrens.size()
+			#_current_class_group_childrens.insert(index_current, class_node)
+	#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(class_node)
 
 # Insert a class_node at the same level of the current node.
-func _insert_class_group(class_node: ClassNode) -> void:
-	class_node._setup_controller(true)
-	if _current_node is ClassLeaf:
-		var parent_node = _current_node._parent
-		if parent_node is ClassGroup or parent_node is ClassSlide:
-			class_node.set_parent(parent_node)
-			var _current_class_group_childrens = parent_node._childrens
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-
-	if _current_node is ClassGroup or _current_node is ClassSlide:
-		var _current_class_group_childrens
-		if _current_node._parent == null: # We are at the root level.
-			class_node.set_parent(root_tree_structure)
-			_current_class_group_childrens = _current_node._childrens
-		else:
-			class_node.set_parent(_current_node._parent)
-			_current_class_group_childrens = _current_node._parent._childrens
-
-		var index_current = _current_class_group_childrens.find(_current_node)
-		_current_class_group_childrens.insert(index_current + 1, class_node)
-
-	
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(class_node)
+#func _insert_class_group(class_node: ClassNode) -> void:
+	#class_node._setup_controller(true)
+	#if _current_node is ClassLeaf:
+		#var parent_node = _current_node._parent
+		#if parent_node is ClassGroup or parent_node is ClassSlide:
+			#class_node.set_parent(parent_node)
+			#var _current_class_group_childrens = parent_node._childrens
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+#
+	#if _current_node is ClassGroup or _current_node is ClassSlide:
+		#var _current_class_group_childrens
+		#if _current_node._parent == null: # We are at the root level.
+			#class_node.set_parent(root_tree_structure)
+			#_current_class_group_childrens = _current_node._childrens
+		#else:
+			#class_node.set_parent(_current_node._parent)
+			#_current_class_group_childrens = _current_node._parent._childrens
+#
+		#var index_current = _current_class_group_childrens.find(_current_node)
+		#_current_class_group_childrens.insert(index_current + 1, class_node)
+#
+	#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(class_node)
 
 #region Slide
-
-func _add_class_slide(class_node: ClassNode, back: bool) -> void:
-	class_node._setup_controller(true)
-	if _current_node is ClassLeaf:
-		var parent_node = _current_node._parent
-		if parent_node is ClassGroup or parent_node is ClassSlide:
-			class_node.set_parent(parent_node)
-			var _current_class_group_childrens = parent_node._childrens
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-
-	if _current_node is ClassGroup or _current_node is ClassSlide:
-		class_node.set_parent(_current_node)
-		var _current_class_group_childrens = _current_node._childrens
-		if back:
-			var index_current = _current_class_group_childrens.find(_current_node)
-			_current_class_group_childrens.insert(index_current + 1, class_node)
-		else:
-			var index_current = _current_class_group_childrens.size()
-			_current_class_group_childrens.insert(index_current, class_node)
-	
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(class_node)
+#
+#func _add_class_slide(class_node: ClassNode, back: bool) -> void:
+	#class_node._setup_controller(true)
+	#if _current_node is ClassLeaf:
+		#var parent_node = _current_node._parent
+		#if parent_node is ClassGroup or parent_node is ClassSlide:
+			#class_node.set_parent(parent_node)
+			#var _current_class_group_childrens = parent_node._childrens
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+#
+	#if _current_node is ClassGroup or _current_node is ClassSlide:
+		#class_node.set_parent(_current_node)
+		#var _current_class_group_childrens = _current_node._childrens
+		#if back:
+			#var index_current = _current_class_group_childrens.find(_current_node)
+			#_current_class_group_childrens.insert(index_current + 1, class_node)
+		#else:
+			#var index_current = _current_class_group_childrens.size()
+			#_current_class_group_childrens.insert(index_current, class_node)
+	#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(class_node)
 
 #endregion
 
-func _paste_class_nodes() -> void:
-	var nodes_paste: Array[ClassNode] = PersistenceEditor.clipboard
-	
-	var node_group_parent: ClassNode = _current_node
-
-	for node in nodes_paste:
-		if node is ClassLeaf:
-			class_index.entities_last_uid += 1
-			var entity_id: int = class_index.entities_last_uid
-			node.entity_id = entity_id
-			node.entity.entity_id = entity_id
-			node.entity.tmp_to_persistent()
-			entities[entity_id] = node.entity
-
-			node._node_controller._add_child_root()
-
-			if _current_node is ClassGroup or _current_node is ClassSlide:
-				node.set_parent(_current_node)
-				var _current_class_group_childrens = _current_node._childrens
-				var index_current = _current_class_group_childrens.find(_current_node)
-				_current_class_group_childrens.insert(index_current + 1, node)
-
-
-			if _current_node is ClassLeaf:
-				var parent_node = _current_node._parent
-				if parent_node is ClassGroup or parent_node is ClassSlide:
-					node.set_parent(parent_node)
-					var _current_class_group_childrens = parent_node._childrens
-					var index_current = _current_class_group_childrens.find(_current_node)
-					_current_class_group_childrens.insert(index_current + 1, node)
-
-			
-			_current_node = node
-			
-			
-		elif node is ClassGroup or node is ClassSlide:
-			if _current_node == node_group_parent:
-				_add_class_group(node, true)
-			elif _current_node._parent == node_group_parent:
-				_insert_class_group(node)
-			else:
-				_current_node = _current_node._parent
-				_insert_class_group(node)
-
-
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(_current_node)
-	_bus.seek_node.emit(_current_node)
-	PersistenceEditor.clipboard = []
+#func _paste_class_nodes() -> void:
+	#var nodes_paste: Array[ClassNode] = PersistenceEditor.clipboard
+	#
+	#var node_group_parent: ClassNode = _current_node
+#
+	#for node in nodes_paste:
+		#if node is ClassLeaf:
+			#class_index.entities_last_uid += 1
+			#var entity_id: int = class_index.entities_last_uid
+			#node.entity_id = entity_id
+			#node.entity.entity_id = entity_id
+			#node.entity.tmp_to_persistent()
+			#entities[entity_id] = node.entity
+#
+			#node._node_controller._add_child_root()
+#
+			#if _current_node is ClassGroup or _current_node is ClassSlide:
+				#node.set_parent(_current_node)
+				#var _current_class_group_childrens = _current_node._childrens
+				#var index_current = _current_class_group_childrens.find(_current_node)
+				#_current_class_group_childrens.insert(index_current + 1, node)
+#
+#
+			#if _current_node is ClassLeaf:
+				#var parent_node = _current_node._parent
+				#if parent_node is ClassGroup or parent_node is ClassSlide:
+					#node.set_parent(parent_node)
+					#var _current_class_group_childrens = parent_node._childrens
+					#var index_current = _current_class_group_childrens.find(_current_node)
+					#_current_class_group_childrens.insert(index_current + 1, node)
+#
+			#
+			#_current_node = node
+			#
+			#
+		#elif node is ClassGroup or node is ClassSlide:
+			#if _current_node == node_group_parent:
+				#_add_class_group(node, true)
+			#elif _current_node._parent == node_group_parent:
+				#_insert_class_group(node)
+			#else:
+				#_current_node = _current_node._parent
+				#_insert_class_group(node)
+#
+#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(_current_node)
+	#_bus.seek_node.emit(_current_node)
+	#PersistenceEditor.clipboard = []
 
 # Delete nodes from the class structure/tree.
-func _delete_class_nodes(nodes_del: Array[ClassNode]):
-	var first: ClassNode = nodes_del[0]
-	var parent_group: ClassNode
-	# : ClassGroup = first._parent
-	if first._parent is ClassGroup:
-		parent_group = first._parent as ClassGroup
-	elif first._parent is ClassSlide:
-		parent_group = first._parent as ClassSlide
-
-	# first_current is used to determine the previous node of the deleted nodes.
-	var first_current = parent_group._node_controller.get_previous([parent_group._node_controller, first._node_controller])
-	if first_current[0] == null: # We are at the root level.
-		first_current[0] = root_tree_structure._node_controller
-
-
-	for node in nodes_del:
-		node.self_delete()
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(first_current[0]._class_node)
-	_bus.seek_node.emit(first_current[0]._class_node)
-
+#func _delete_class_nodes(nodes_del: Array[ClassNode]):
+	#var first: ClassNode = nodes_del[0]
+	#var parent_group: ClassNode
+	## : ClassGroup = first._parent
+	#if first._parent is ClassGroup:
+		#parent_group = first._parent as ClassGroup
+	#elif first._parent is ClassSlide:
+		#parent_group = first._parent as ClassSlide
+#
+	## first_current is used to determine the previous node of the deleted nodes.
+	#var first_current = parent_group._node_controller.get_previous([parent_group._node_controller, first._node_controller])
+	#if first_current[0] == null: # We are at the root level.
+		#first_current[0] = root_tree_structure._node_controller
+#
+#
+	#for node in nodes_del:
+		#node.self_delete()
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(first_current[0]._class_node)
+	#_bus.seek_node.emit(first_current[0]._class_node)
+#
 
 # Make a group from the selected nodes in the clipboard.
-func _make_group():
-	# The first node in the clipboard is used to determine where the group will be created.
-	var first = PersistenceEditor.clipboard[0]
-
-	# The parent group is to check if a new group is needed, because we only allow to create groups at the same level.
-	var parent_group: ClassGroup = first._parent
-
-	if parent_group == null:
-		push_error("Error: The clipboard does not contain a valid first node.")
-		return
-	
-	# first_current is used to determine the previous node of the new group.
-	var first_current = parent_group._node_controller.get_previous([parent_group._node_controller, first._node_controller])
-	if first_current[0] == null: # We are at the root level.
-		first_current[0] = root_tree_structure._node_controller
-
-	# Case: We are the first element in the parent group, so the previous is the parent of all elements!
-	if first_current[0] == parent_group.get_parent_controller():
-		first_current[0] = parent_group._node_controller
-
-
-	var data_new = {
-		"name": "Group",
-		"type": "ClassGroup",
-		"childrens": []
-	}
-	var class_node = ClassGroup.deserialize(data_new)
-	
-	PersistenceEditor.resources_class._current_node = first_current[0]._class_node
-	
-	#Case: The previous node is a group that is not the parent, so we have to insert the new group after this node.
-	if first_current[0] != parent_group._node_controller and first_current[0] is GroupController:
-		_insert_class_group(class_node)
-	
-	else: #We are the parent of all the elements, so we use the normal add group.
-		_add_class_group(class_node, true)
-	
-	for node in PersistenceEditor.clipboard:
-		if node in parent_group._childrens:
-			node._parent = class_node
-			parent_group._childrens.erase(node)
-			class_node.add_child(node)
-
-	_bus.update_treeindex.emit()
-	_bus_core.current_node_changed.emit(first_current[0]._class_node)
-	_bus.seek_node.emit(first_current[0]._class_node)
+#func _make_group():
+	## The first node in the clipboard is used to determine where the group will be created.
+	#var first = PersistenceEditor.clipboard[0]
+#
+	## The parent group is to check if a new group is needed, because we only allow to create groups at the same level.
+	#var parent_group: ClassGroup = first._parent
+#
+	#if parent_group == null:
+		#push_error("Error: The clipboard does not contain a valid first node.")
+		#return
+	#
+	## first_current is used to determine the previous node of the new group.
+	#var first_current = parent_group._node_controller.get_previous([parent_group._node_controller, first._node_controller])
+	#if first_current[0] == null: # We are at the root level.
+		#first_current[0] = root_tree_structure._node_controller
+#
+	## Case: We are the first element in the parent group, so the previous is the parent of all elements!
+	#if first_current[0] == parent_group.get_parent_controller():
+		#first_current[0] = parent_group._node_controller
+#
+#
+	#var data_new = {
+		#"name": "Group",
+		#"type": "ClassGroup",
+		#"childrens": []
+	#}
+	#var class_node = ClassGroup.deserialize(data_new)
+	#
+	#PersistenceEditor.resources_class._current_node = first_current[0]._class_node
+	#
+	##Case: The previous node is a group that is not the parent, so we have to insert the new group after this node.
+	#if first_current[0] != parent_group._node_controller and first_current[0] is GroupController:
+		#_insert_class_group(class_node)
+	#
+	#else: #We are the parent of all the elements, so we use the normal add group.
+		#_add_class_group(class_node, true)
+	#
+	#for node in PersistenceEditor.clipboard:
+		#if node in parent_group._childrens:
+			#node._parent = class_node
+			#parent_group._childrens.erase(node)
+			#class_node.add_child(node)
+#
+	#_bus.update_treeindex.emit()
+	#_bus_core.current_node_changed.emit(first_current[0]._class_node)
+	#_bus.seek_node.emit(first_current[0]._class_node)
 
 #endregion
 
 #region Parse the class file.
 
 # Parse the class file.
-func _parse() -> bool:
-	return _parse_decompress_tmp()
+#func _parse() -> bool:
+	#return _parse_decompress_tmp()
 
 
 # Parse the class file, but in the process keep the zip file compressed.
 # This is intended to be used only for reproducing the class.
-var zip_file: ZIPReader
-func _parse_keep_compressed() -> bool:
-	var zip_path: String = PersistenceEditor.file_path
-	
-	zip_file = ZIPReader.new()
-	Widget.zip_file = zip_file
-	print("File: " + zip_path)
-	var err := zip_file.open(zip_path)
-	if err != OK:
-		push_error("Error %d opening file: " % err)
-		return false
-	if !zip_file.file_exists("index.json"):
-		push_error("Error: index.json not found in zip file")
-		return false
-	
-	var index_string := zip_file.read_file("index.json").get_string_from_utf8()
-
-	var index = JSON.parse_string(index_string)
-	if index == null or typeof(index) != TYPE_DICTIONARY:
-		return false
-	class_index = ClassIndex.deserialize(index)
-
-	return class_index != null
+#var zip_file: ZIPReader
+#func _parse_keep_compressed() -> bool:
+	#var zip_path: String = PersistenceEditor.file_path
+	#
+	#zip_file = ZIPReader.new()
+	#Widget.zip_file = zip_file
+	#print("File: " + zip_path)
+	#var err := zip_file.open(zip_path)
+	#if err != OK:
+		#push_error("Error %d opening file: " % err)
+		#return false
+	#if !zip_file.file_exists("index.json"):
+		#push_error("Error: index.json not found in zip file")
+		#return false
+	#
+	#var index_string := zip_file.read_file("index.json").get_string_from_utf8()
+#
+	#var index = JSON.parse_string(index_string)
+	#if index == null or typeof(index) != TYPE_DICTIONARY:
+		#return false
+	#class_index = ClassIndex.deserialize(index)
+#
+	#return class_index != null
 
 
 # Parse the class file, decompressing it to a temporary directory.
 # This is intended to be used only for editing the class.
-func _parse_decompress_tmp():
-	var zip_path: String = PersistenceEditor.file_path
-	var dir_tmp: String = "user://tmp/class_editor/"
-
-	if decompress_zip(zip_path, dir_tmp):
-		print("Temporal Class Path: ", dir_tmp)
-	else:
-		push_error("Error %d opening file: " % zip_path)
-		return false
-	
-	var index_path: String = dir_tmp.path_join("index.json")
-	var file: FileAccess = FileAccess.open(index_path, FileAccess.READ)
-	
-	var index_string: String = file.get_as_text()
-	file.close()
-	
-	var index = JSON.parse_string(index_string)
-	if index == null or typeof(index) != TYPE_DICTIONARY:
-		return false
-	class_index = ClassIndex.deserialize(index)
-	Widget.dir_class = "user://tmp/class_editor/"
-	return class_index != null
+#func _parse_decompress_tmp():
+	#var zip_path: String = PersistenceEditor.file_path
+	#var dir_tmp: String = "user://tmp/class_editor/"
+#
+	#if decompress_zip(zip_path, dir_tmp):
+		#print("Temporal Class Path: ", dir_tmp)
+	#else:
+		#push_error("Error %d opening file: " % zip_path)
+		#return false
+	#
+	#var index_path: String = dir_tmp.path_join("index.json")
+	#var file: FileAccess = FileAccess.open(index_path, FileAccess.READ)
+	#
+	#var index_string: String = file.get_as_text()
+	#file.close()
+	#
+	#var index = JSON.parse_string(index_string)
+	#if index == null or typeof(index) != TYPE_DICTIONARY:
+		#return false
+	#class_index = ClassIndex.deserialize(index)
+	#Widget.dir_class = "user://tmp/class_editor/"
+	#return class_index != null
 
 
 # Decompress a zip file to a temporary directory.

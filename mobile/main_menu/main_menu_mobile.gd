@@ -56,8 +56,8 @@ func _on_file_selected(path: String) -> void:
 	if not path.ends_with(".dcc"):
 		printerr("Invalid file type: ", path)
 		return
-	PersistenceMobile.file_path = path
-	print("Selected file: ", PersistenceMobile.file_path)
+	#PersistenceMobile.file_path = path
+	#print("Selected file: ", PersistenceMobile.file_path)
 	
 	get_tree().change_scene_to_packed(mobile_screen)
 #endregion

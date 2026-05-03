@@ -1,144 +1,112 @@
 class_name LineWidget
-extends Widget
+extends VisualEntityWidget
 
-const scene = preload("res://core/widgets/entities/visual/line_widget.tscn")
 
-@export var entity: LineEntity
-var line: Line2D
 var tween: Tween
 var bound = null
 var _original_bound: Rect2
+var _current_point: int = 0
+var _points: PackedVector2Array
+var _delays: Array[float]
+@onready var line: Line2D = %Line
 
-# Initialize the widget with properties.
-func init(properties: Dictionary) -> void:
-	line = scene.instantiate()
-	add_child(line)
-	if properties.has("position"):
-		position = properties["position"]
-	line.hide()
-	
-	if class_node is ClassLeaf:
-		(class_node as ClassLeaf).property_updated.connect(_on_property_updated)
 
-func serialize() -> Dictionary:
-	return entity.serialize()
+func _while_playing(_delta: float) -> void:
+	_update_points()
 
-# Play the line widget.
-func play(_duration: float, _total_real_time: float, _duration_leaf: float) -> void:
-	line.default_color = Widget.pen_color
-	line.width = Widget.pen_thickness
-	line.show()
-	
-	if tween:
-		tween.kill()
+func setup() -> void:
+	super.setup()
+	var e := get_entity()
+	_points = e.points
+	_delays = []
+	_delays.resize(e.delays.size())
+	var total_delay: float = 0.0
+	for i in range(1, e.delays.size()):
+		_delays[i] = total_delay
+		total_delay += e.delays[i]
+	_current_point = 0
 
-	var pts = entity.points
-	var delays = entity.delays
-	
-	var count = pts.size()
-	if count == 0:
-		return
+func _on_started_playing() -> void:
+	line.default_color = WhiteboardManager.get_pen_color()
+	line.width = WhiteboardManager.get_pen_thickness()
+	show()
 
-	tween = create_tween()
-	tween.set_speed_scale(1 / (_duration / _total_real_time)) # Set the speed scale to match the duration with his respective time.
-	
-	add_to_group("active_line")
-	
-	var center = _points_center(pts)
-	tween.tween_callback(Callable(self, "_notify_center").bind(center))
-	
-	# With the callback of the function "add_points" we add points to the line after each delay.
-	for i in range(count):
-		tween.tween_callback(Callable(self, "_add_points").bind(i))
-		if i < delays.size():
-			tween.tween_interval(delays[i])
+func _on_seek() -> void:
+	_clear_points()
+	_current_point = 0
+	#print("Line: play time = ", play_time)
+	_update_points()
+	show()
 
-	add_to_group(&"playing_widget")
-	_bus_core.current_node_changed.emit(class_node)
-	tween.play()
-	
-	await tween.finished
-	
-	remove_from_group("active_line")
-	remove_from_group(&"widget_playing")
-	add_to_group(&"widget_finished")
+func _update_points() -> void:
+	while play_time >= _delays[_current_point]:
+		line.add_point(_points[_current_point])
+		#_update_bounds()
+		_current_point += 1
+		if _current_point >= _points.size():
+			finish_playing()
+			return
 
-	emit_signal("widget_finished")
+func _clear_points() -> void:
+	line.clear_points()
 
-func _points_center(points: PackedVector2Array) -> Vector2:
-	if points.is_empty():
-		return Vector2.ZERO
-	
-	var sum_x = 0.0
-	var sum_y = 0.0
-		
-	for point in points:
-		sum_x += point.x
-		sum_y += point.y
-		
-	return Vector2(sum_x / points.size(), sum_y / points.size())
+func _on_skip() -> void:
+	#print("Jump to end")
+	_current_point = _points.size() - 1
+	line.points = _points
+	show()
 
-func _notify_center(center: Vector2) -> void:
-	if ClassUIMobile.context and ClassUIMobile.context.camera:
-		var global_center = to_global(center)
-		ClassUIMobile.context.camera.add_recent_content(global_center)
+func _calculate_duration() -> float:
+	#var total_time: float = 0.0
+	#var delays := get_entity().delays
+	if _delays.size() > 0:
+		return _delays[-1]
+	return 0.0
+		#for i in range(_delays.size()):
+			#total_time += _delays[i]
+	#duration = total_time
+	#return duration
+
+func _update_bounds() -> void:
+	bounds = _compute_bounds()
+	selection_area.setup_for_widget(self)
+
+
+#func _points_center(points: PackedVector2Array) -> Vector2:
+	#if points.is_empty():
+		#return Vector2.ZERO
+	#
+	#var sum_x = 0.0
+	#var sum_y = 0.0
+		#
+	#for point in points:
+		#sum_x += point.x
+		#sum_y += point.y
+		#
+	#return Vector2(sum_x / points.size(), sum_y / points.size())
+
+#func _notify_center(center: Vector2) -> void:
+	#if ClassUIMobile.context and ClassUIMobile.context.camera:
+		#var global_center = to_global(center)
+		#ClassUIMobile.context.camera.add_recent_content(global_center)
 
 # Reset the line widget to its initial state.
 # This means hiding the line and clearing its points.
-func reset():
-	if tween:
-		tween.kill()
-	line.hide()
-	line.clear_points()
-	remove_from_group("active_line")
-	remove_from_group(&"widget_playing")
-	remove_from_group(&"widget_finished")
-	emit_signal("widget_finished")
-
-
-func stop() -> void:
-	skip_to_end()
-	
-
-# Skip to the end of the line widget.
-# This means setting the points of the line to the entity's points and showing the line.
-func skip_to_end() -> void:
-	if tween:
-		tween.kill()
-	line.points = entity.points
-	line.default_color = Widget.pen_color
-	line.width = Widget.pen_thickness
-	line.show()
-	remove_from_group("active_line")
-	add_to_group(&"widget_finished")
-	emit_signal("widget_finished")
-
-# Add a point to the line at the specified index of the array of points.
-func _add_points(i: int) -> void:
-	if not line.points.is_empty() and line.points[-1] == entity.points[i]:
-		return # to avoid duplicate points
-	line.add_point(entity.points[i])
+func _on_reset():
+	_current_point = 0
+	#print("Line reset")
+	hide()
+	_clear_points()
 
 # Clear the line widget.
 # This means resetting the line and removing it from the groups.
-func clear():
-	reset()
-	add_to_group(&"widget_cleared")
+#func clear():
+	#reset()
 
 # Unclear the line widget.
 # This means resetting to the visual state.
-func unclear():
-	skip_to_end()
-	remove_from_group(&"widget_cleared")
-
-# Returns the duration of the line in seconds.
-func compute_duration() -> float:
-	var duration: float = 0.0
-	var delays = entity.delays
-	if delays.size() > 0:
-		for i in range(delays.size()):
-			duration += delays[i]
-	return duration
+#func unclear():
+	#jump_to_end()
 
 # Get bounds as Array of Vector2
 func get_rect_bound() -> Rect2:
@@ -148,9 +116,9 @@ func get_rect_bound() -> Rect2:
 
 # Return the boundaries vector that contains the line
 func _compute_bounds() -> Rect2:
-	var points = entity.points
+	var points = get_entity().points
 	if points.is_empty():
-		return Rect2()
+		return Rect2(Vector2.ZERO, Vector2.ZERO)
 	
 	# init with first point
 	var min_x = points[0].x
@@ -166,10 +134,13 @@ func _compute_bounds() -> Rect2:
 		max_y = max(max_y, point.y)
 	
 	# set the vectors
-	var tl = Vector2(min_x, min_y)
-	var br = Vector2(max_x, max_y)
+	#var origin := get_entity().transform.origin + Vector2(min_x, min_y)
+	var origin := Vector2(min_x, min_y)
+	var size := Vector2(max_x - min_x, max_y - min_y)
+	#var tl = Vector2(min_x, min_y)
+	#var br = Vector2(max_x, max_y)
 
-	return Rect2(tl, br - tl)
+	return Rect2(origin, size)
 
 func _on_property_updated(property: EntityProperty) -> void:
 	if property is PositionEntityProperty:
@@ -205,3 +176,11 @@ func _on_property_updated(property: EntityProperty) -> void:
 			
 			# Actualizar el original bound para futuros resizes
 			_original_bound = new_bound
+
+func get_entity() -> LineEntity:
+	return entity as LineEntity
+
+#func seek(time: float, playing: bool = false) -> void:
+	#super.seek(time, playing)
+	#var time_str := "%02f~%02f" % [start_time, end_time]
+	#prints(get_entity().get_editor_name(), "(%s)" % time_str, "seeking to t=", time, ". Play time=", play_time)

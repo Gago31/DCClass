@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://bfyhdkl1lp68k"]
 
-[node name="Image" type="TextureRect"]
+[ext_resource type="Script" uid="uid://c7001r2hfiqli" path="res://core/widgets/entities/visual/image_widget.gd" id="1_rdiks"]
+
+[node name="Node2D" type="Node2D" unique_id=267877933]
+script = ExtResource("1_rdiks")
+
+[node name="Image" type="TextureRect" parent="." unique_id=1145560829]
 visible = false
 offset_right = 300.0
 offset_bottom = 300.0

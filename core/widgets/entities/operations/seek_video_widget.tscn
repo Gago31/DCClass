@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dsgftp3ocdv4d"]
+
+[ext_resource type="Script" uid="uid://83esxmey08g1" path="res://core/widgets/entities/operations/seek_video_widget.gd" id="1_ca6ai"]
+
+[node name="SeekVideoWidget" type="Node2D" unique_id=2090307908]
+script = ExtResource("1_ca6ai")

@@ -26,7 +26,7 @@ func _ready():
 	_bus.seek_play.connect(_seek_play)
 
 func _setup_play():
-	class_index = PersistenceMobile.resources_class.class_index
+	#class_index = PersistenceMobile.resources_class.class_index
 
 	if !_instantiate():
 		push_error("Error instantiating class: " + class_index.name)
@@ -48,7 +48,7 @@ func _instantiate() -> bool:
 
 # To begin the reproduction from the entry point of the class.
 func _seek_play():
-	entry_point = PersistenceMobile.resources_class._current_node._node_controller
+	#entry_point = PersistenceMobile.resources_class._current_node._node_controller
 	entry_point.play_seek()
 
 # To seek a specific node in the class in an instant.
@@ -56,7 +56,7 @@ func _seek_node(node_seek: ClassNode) -> void:
 	get_tree().call_group(&"widget_finished", "clear")
 	var node_seek_controller: NodeController = node_seek._node_controller
 	var last_clear: LeafController = node_seek_controller.get_last_clear()
-	entry_point = PersistenceMobile.resources_class.root_tree_structure._node_controller
+	#entry_point = PersistenceMobile.resources_class.root_tree_structure._node_controller
 	if last_clear != null:
 		entry_point = last_clear
 	entry_point.seek(node_seek_controller, entry_point)

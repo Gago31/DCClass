@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://s6kfhuulr1sp"]
+
+[ext_resource type="Script" uid="uid://cfo4nulk4h8q8" path="res://core/widgets/node_controllers/class_leaf_widget.gd" id="1_ggc3a"]
+
+[node name="ClassLeafWidget" type="Node2D" unique_id=695253099]
+script = ExtResource("1_ggc3a")

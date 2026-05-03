@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=11 format=3 uid="uid://d0w7b4u2df32g"]
+[gd_resource type="Theme" format=3 uid="uid://d0w7b4u2df32g"]
 
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="1_ghvq1"]
 

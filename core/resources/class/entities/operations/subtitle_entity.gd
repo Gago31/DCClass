@@ -1,4 +1,3 @@
-@tool
 class_name SubtitleEntity
 extends Entity
 
@@ -34,17 +33,28 @@ func get_class_name() -> String:
 func get_editor_name() -> String:
 	return "Subtitles: %s" % text
 
-func serialize() -> Dictionary:
-	return {
-		"entity_id": entity_id,
-		"entity_type": get_class_name(),
-		"text": text
-	}
+func get_widget() -> PackedScene:
+	return preload("uid://cgvc74n6rdute")
 
-func load_data(data: Dictionary) -> void:
-	text = data["text"]
-	duration = 0.0
+#func serialize() -> Dictionary:
+	#return {
+		#"entity_id": entity_id,
+		#"entity_type": get_class_name(),
+		#"text": text
+	#}
 
+#func load_data(data: Dictionary) -> void:
+	#text = data["text"]
+	#duration = 0.0
+
+func config_editor_tree_item(item: TreeItem) -> void:
+	item.set_text(0, "Subtitle:")
+	item.set_text(1, text)
+	item.set_editable(1, true)
+
+func _on_value_updated_from_editor(item: TreeItem) -> void:
+	var new_text := item.get_text(1)
+	text = new_text
 
 # 13. private methods: define all private methods here, use _ as preffix
 

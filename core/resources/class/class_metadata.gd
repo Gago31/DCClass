@@ -1,4 +1,3 @@
-@tool
 class_name ClassMetadata
 extends Resource
 
@@ -7,6 +6,11 @@ extends Resource
 ## It contains data of the class, like name, description and course.
 ## It also contains the name and description of the author.
 ## Lastly, it contains data of the class file, like version, date and license.
+
+## DCClass version
+@export_storage var app_version: String:
+	get:
+		return "1.0.0"
 
 ## Class name
 @export var name: String
@@ -29,6 +33,10 @@ extends Resource
 ## Relative path to license file
 @export_file var license: String
 
+
+func _init() -> void:
+	if not date:
+		date = Date.new()
 
 func serialize() -> Dictionary:
 	return {

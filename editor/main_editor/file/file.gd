@@ -1,57 +1,49 @@
 class_name FileEditor
 extends Control
 
-@export var metadata: ClassMetadata
-var editor_signals: EditorEventBus
-var resources_class: ResourcesClassEditor
 
-@onready var btn_export_class: Button = %ExportButton
+signal updated
+
+@export var metadata: ClassMetadata
+#var editor_signals: EditorEventBus
+#var resources_class: ResourcesClassEditor
+@onready var name_input: LineEdit = %Name
+@onready var description: TextEdit = %Description
+@onready var course: LineEdit = %Course
+@onready var author_name: LineEdit = %AuthorName
+@onready var author_description: TextEdit = %AuthorDescription
+@onready var version: LineEdit = %Version
+@onready var date: LineEdit = %Date
+@onready var license: LineEdit = %License
+@onready var save_button: Button = %SaveButton
+@onready var export_button: Button = %ExportButton
+@onready var export_file_dialog: FileDialog = %ExportFileDialog
+
+#@onready var btn_export_class: Button = %ExportButton
 
 func _ready():
-	%SaveButton.pressed.connect(save)
-	btn_export_class.pressed.connect(export_class)
-
-
-func _setup():
-	resources_class = PersistenceEditor.resources_class
-	metadata = resources_class.class_index.metadata
+	metadata = EditorManager.metadata
 	_update()
 
 ## Update the editor to reflect the current metadata.
 func _update():
+	if not metadata: return
 	# Class Info
-	%Name.text = metadata.name
-	%Description.text = metadata.description
-	%Course.text = metadata.course
+	name_input.text = metadata.name
+	description.text = metadata.description
+	course.text = metadata.course
 	# Author info
-	%AuthorName.text = metadata.author_name
-	%AuthorDescription.text = metadata.author_description
+	author_name.text = metadata.author_name
+	author_description.text = metadata.author_description
 	# File info
-	%Version.text = metadata.file_version
-	%Date.text = metadata.date.date
-	%License.text = metadata.license
+	version.text = metadata.file_version
+	date.text = metadata.date.date
+	license.text = metadata.license
 
 ## Save the metadata to the resource.
 func save():
-	var new_metadata = ClassMetadata.new()
-	# Class Info
-	new_metadata.name = %Name.text
-	new_metadata.description = %Description.text
-	new_metadata.course = %Course.text
-	# Author info
-	new_metadata.author_name = %AuthorName.text
-	new_metadata.author_description = %AuthorDescription.text
-	# File info
-	new_metadata.file_version = %Version.text
-	var date = Date.new()
-	date.date = %Date.text
-	new_metadata.date = date
-	new_metadata.license = %License.text
-	# Save
-	metadata = new_metadata
-	resources_class.class_index.metadata = metadata
+	EditorManager.save()
 
-@onready var export_file_dialog: FileDialog = %ExportFileDialog
 
 func _setup_export_dialog() -> void:
 	export_file_dialog.filters = ["*.dcc"]
@@ -63,7 +55,7 @@ func export_class():
 	var path: String = "user://tmp/class_editor/"
 	var path_index: String = path + "index.json"
 	var file := FileAccess.open(path_index, FileAccess.WRITE)
-	file.store_string(JSON.stringify(resources_class.class_index.serialize(), "\t"))
+	#file.store_string(JSON.stringify(resources_class.class_index.serialize(), "\t"))
 	file.close()
 	_setup_export_dialog()
 	export_file_dialog.popup()
@@ -112,3 +104,30 @@ func _add_folder_to_zip(zipper: ZIPPacker, current_dir: String, relative_path: S
 		var new_relative := relative_path + subdir + "/"
 
 		_add_folder_to_zip(zipper, subdir_path, new_relative)
+
+
+func _on_name_text_changed(new_text: String) -> void:
+	metadata.name = new_text
+
+func _on_description_text_changed() -> void:
+	metadata.description = description.text
+
+func _on_course_text_changed(new_text: String) -> void:
+	metadata.course = new_text
+
+func _on_author_name_text_changed(new_text: String) -> void:
+	metadata.author_name = new_text
+
+func _on_author_description_text_changed() -> void:
+	metadata.author_description = author_description.text
+
+func _on_version_text_changed(new_text: String) -> void:
+	metadata.file_version = new_text
+
+func _on_date_text_changed(new_text: String) -> void:
+	var new_date = Date.new()
+	new_date.date = new_text
+	metadata.date = new_date
+
+func _on_license_text_changed(new_text: String) -> void:
+	metadata.license = new_text

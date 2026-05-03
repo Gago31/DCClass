@@ -1,4 +1,3 @@
-@tool
 # 1. class name: fill the class name
 class_name PausePlaybackEntity
 extends Entity
@@ -33,17 +32,51 @@ func get_class_name() -> String:
 func get_editor_name() -> String:
 	return "Pause"
 
+func get_widget() -> PackedScene:
+	return preload("uid://bjangwmut685w")
+
+### Returns a dictionary representation of this entity.
+#func serialize() -> Dictionary:
+	#return {
+		#"entity_id": entity_id,
+		#"entity_type": get_class_name()
+	#}
+#
+### Returns a new instance of this entity type from the given dictionary(.json).
+#static func deserialize(data: Dictionary) -> Entity:
+	#assert(CustomClassDB.class_exists(data["entity_type"]), "Entity type does not exist: " + data["entity_type"])
+	#var instance = CustomClassDB.instantiate(data["entity_type"])
+	#instance.entity_id = data["entity_id"]
+	#instance.load_data(data)
+	#return instance
+
+### Loads data from a dictionary into this entity.
+#func load_data(_data: Dictionary) -> void:
+	#pass
+
+### Returns a temporary copy of this entity.
+#func copy_tmp() -> Entity:
+	#var new_entity: Entity = CustomClassDB.instantiate(get_class_name())
+	#new_entity.load_data(serialize())
+	#return new_entity
+
+# Deletes this entity.:
+
+
 # Serialize to a dictionary format(.json) for saving.
-func serialize() -> Dictionary:
-	return {
-		"entity_id": entity_id,
-		"entity_type": get_class_name(),
-		"duration": duration
-	}
+#func serialize() -> Dictionary:
+	#return {
+		#"entity_id": entity_id,
+		#"entity_type": get_class_name(),
+		#"duration": duration
+	#}
 
 # Load data from a dictionary format(.json) to resource(PausePlaybackEntity).
-func load_data(data: Dictionary) -> void:
-	pass
+#func load_data(data: Dictionary) -> void:
+	#pass
+
+func config_editor_tree_item(item: TreeItem) -> void:
+	item.set_text(0, get_editor_name())
 
 # 12. public methods: define all public methods here
 

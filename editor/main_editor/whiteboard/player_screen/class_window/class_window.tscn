@@ -2,7 +2,18 @@
 
 [ext_resource type="Script" uid="uid://cgsis7ghldo0n" path="res://editor/main_editor/whiteboard/player_screen/class_window/class_window.gd" id="1_q48er"]
 [ext_resource type="Script" uid="uid://cnp5mp84uvknc" path="res://editor/main_editor/whiteboard/player_screen/class_window/whiteboard.gd" id="2_ebiip"]
+[ext_resource type="Resource" uid="uid://sjnr4t8cxq1d" path="res://test_class.tres" id="2_efjkl"]
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="3_jqomu"]
+[ext_resource type="PackedScene" uid="uid://dc4g07pno15rd" path="res://editor/selection_box.tscn" id="4_dghx6"]
+[ext_resource type="PackedScene" uid="uid://njv5m467c4cn" path="res://editor/main_editor/whiteboard/player_screen/background/background.tscn" id="4_pfx3t"]
+[ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="6_q4reb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efjkl"]
+bg_color = Color(0.07284262, 0.072842635, 0.072842576, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_efjkl"]
+atlas = ExtResource("3_jqomu")
+region = Rect2(0, 200, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uioh1"]
 atlas = ExtResource("3_jqomu")
@@ -19,40 +30,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 script = ExtResource("1_q48er")
+test_class = ExtResource("2_efjkl")
 
-[node name="LeftSplit" type="HSplitContainer" parent="." unique_id=1244737134]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1986111757]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-split_offsets = PackedInt32Array(200)
-split_offset = 200
 
-[node name="RightSplit" type="HSplitContainer" parent="LeftSplit" unique_id=1449132212]
+[node name="Whiteboard" type="Control" parent="VBoxContainer" unique_id=1393762601]
 unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-
-[node name="BottomSplit" type="VSplitContainer" parent="LeftSplit/RightSplit" unique_id=1695682460]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-dragger_visibility = 1
-
-[node name="Whiteboard" type="Control" parent="LeftSplit/RightSplit/BottomSplit" unique_id=1393762601]
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("2_ebiip")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="LeftSplit/RightSplit/BottomSplit/Whiteboard" unique_id=1498988373]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Whiteboard" unique_id=1498988373]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -62,66 +58,145 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="LeftSplit/RightSplit/BottomSplit/Whiteboard/SubViewportContainer" unique_id=210094406]
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Whiteboard/SubViewportContainer" unique_id=210094406]
 unique_name_in_owner = true
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(1280, 604)
+size = Vector2i(1280, 612)
 render_target_update_mode = 4
 
-[node name="BottomPanel" type="PanelContainer" parent="LeftSplit/RightSplit/BottomSplit" unique_id=884434107]
+[node name="ParallaxBackground" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=993345449 instance=ExtResource("4_pfx3t")]
+
+[node name="SelectionBox" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=344051990 instance=ExtResource("4_dghx6")]
+unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=1299586417]
+unique_name_in_owner = true
+script = ExtResource("6_q4reb")
+
+[node name="Control" type="HBoxContainer" parent="VBoxContainer/Whiteboard" unique_id=296743734]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 74.0
+grow_vertical = 2
+
+[node name="IndexTreePanel" type="PanelContainer" parent="VBoxContainer/Whiteboard/Control" unique_id=863473927]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_efjkl")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard/Control/IndexTreePanel" unique_id=1725070537]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="IndexTree" type="Tree" parent="VBoxContainer/Whiteboard/Control/IndexTreePanel/MarginContainer" unique_id=730891112]
+unique_name_in_owner = true
+layout_mode = 2
+enable_drag_unfolding = false
+hide_root = true
+auto_tooltip = false
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard/Control" unique_id=1566856790]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="IndexButton" type="Button" parent="VBoxContainer/Whiteboard/Control/MarginContainer" unique_id=2082549032]
+layout_mode = 2
+icon = SubResource("AtlasTexture_efjkl")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard" unique_id=1813186326]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 8
+
+[node name="Subtitles" type="RichTextLabel" parent="VBoxContainer/Whiteboard/MarginContainer" unique_id=469994942]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+text = "Subtitles lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottomPanel" type="PanelContainer" parent="VBoxContainer" unique_id=884434107]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+size_flags_vertical = 8
 
-[node name="MarginContainer" type="MarginContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel" unique_id=19361940]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/BottomPanel" unique_id=19361940]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer" unique_id=547028028]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/BottomPanel/MarginContainer" unique_id=547028028]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="TimeControl" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer" unique_id=1125593837]
+[node name="TimeControl" type="HBoxContainer" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer" unique_id=1125593837]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="TimeCurrent" type="Label" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=932823264]
+[node name="TimeCurrent" type="Label" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=932823264]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Time Initial / Time Final"
 
-[node name="TimeSlider" type="HSlider" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=25037539]
+[node name="TimeSlider" type="HSlider" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=25037539]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 step = 0.01
 scrollable = false
 
-[node name="DebouncerTimer" type="Timer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=2109446831]
+[node name="DebouncerTimer" type="Timer" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/TimeControl" unique_id=2109446831]
 unique_name_in_owner = true
-wait_time = 0.1
+wait_time = 0.3
 one_shot = true
 
-[node name="ControlRow" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer" unique_id=305847657]
+[node name="ControlRow" type="HBoxContainer" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer" unique_id=305847657]
 layout_mode = 2
 alignment = 1
 
-[node name="CameraZoom" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=1511900834]
+[node name="CameraZoom" type="HBoxContainer" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=1511900834]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ZoomButton" type="TextureButton" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=757593890]
+[node name="ZoomButton" type="TextureButton" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=757593890]
 unique_name_in_owner = true
 layout_mode = 2
 texture_normal = SubResource("AtlasTexture_uioh1")
 
-[node name="ZoomSlider" type="HSlider" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=184085393]
+[node name="ZoomSlider" type="HSlider" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=184085393]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -132,21 +207,23 @@ max_value = 3.0
 step = 0.1
 value = 1.0
 
-[node name="Spacer3" type="Control" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=2025742826]
+[node name="Spacer3" type="Control" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=2025742826]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PlaybackControls" type="HBoxContainer" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=1966645280]
+[node name="PlaybackControls" type="HBoxContainer" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=1966645280]
 layout_mode = 2
 alignment = 1
 
-[node name="StopButton" type="Button" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow/PlaybackControls" unique_id=1561410035]
+[node name="StopButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/PlaybackControls" unique_id=1561410035]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"PlayerIconButton"
 icon = SubResource("AtlasTexture_mcb8p")
 
-[node name="Spacer2" type="Control" parent="LeftSplit/RightSplit/BottomSplit/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=150323129]
+[node name="Spacer2" type="Control" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=150323129]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+
+[connection signal="pressed" from="VBoxContainer/Whiteboard/Control/MarginContainer/IndexButton" to="." method="_on_index_button_pressed"]

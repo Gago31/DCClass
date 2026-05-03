@@ -49,32 +49,32 @@ func get_editor_name() -> String:
 	return entity.get_editor_name()
 
 # Serialize to a dictionary format(.json) for saving.
-func serialize() -> Dictionary:
-	return {
-		"type": get_class_name(),
-		"entity_id": entity_id,
-		"entity_properties": entity_properties.map(func(p): return p.serialize()),
-	}
+#func serialize() -> Dictionary:
+	#return {
+		#"type": get_class_name(),
+		#"entity_id": entity_id,
+		#"entity_properties": entity_properties.map(func(p): return p.serialize()),
+	#}
 
 # Deserialize from a dictionary format(.json) to resource(ClassLeaf).
-static func deserialize(data: Dictionary) -> ClassLeaf:
-	var instance: ClassLeaf = ClassLeaf.new()
-	instance.entity_id = data["entity_id"]
-	instance.entity = entities[instance.entity_id]
-	for property_data in data["entity_properties"]:
-		instance.entity_properties.append(EntityProperty.deserialize(property_data))
-	return instance
+#static func deserialize(data: Dictionary) -> ClassLeaf:
+	#var instance: ClassLeaf = ClassLeaf.new()
+	#instance.entity_id = data["entity_id"]
+	#instance.entity = entities[instance.entity_id]
+	#for property_data in data["entity_properties"]:
+		#instance.entity_properties.append(EntityProperty.deserialize(property_data))
+	#return instance
 
 # Setup the controller associated with this ClassLeaf.
-func _setup_controller(is_child_root: bool) -> void:
-	var _class: String = get_class_name().replace("Class", "") + "Controller"
-	assert(CustomClassDB.class_exists(_class), "Class " + _class + " does not exist.")
-	var controller: LeafController = CustomClassDB.instantiate(_class)
-
-	_node_controller = controller
-	controller._setup(self)
-	if is_child_root:
-		controller._add_child_root()
+#func _setup_controller(is_child_root: bool) -> void:
+	#var _class: String = get_class_name().replace("Class", "") + "Controller"
+	#assert(CustomClassDB.class_exists(_class), "Class " + _class + " does not exist.")
+	#var controller: LeafController = CustomClassDB.instantiate(_class)
+#
+	#_node_controller = controller
+	#controller._setup(self)
+	#if is_child_root:
+		#controller._add_child_root()
 
 ## Return a dictionary with all the properties of the entity.
 ## Keys with the same name will be overwritten.
@@ -134,6 +134,30 @@ func copy_tmp() -> ClassLeaf:
 	for property in entity_properties:
 		new_leaf.entity_properties.append(property.copy_tmp())
 	return new_leaf
+
+func is_leaf() -> bool:
+	return true
+
+func _setup_editor_tree_item(item: TreeItem) -> void:
+	entity.config_editor_tree_item(item)
+
+func get_printable_data() -> String:
+	return entity.get_editor_name() 
+
+func update_value(item: TreeItem) -> void:
+	entity.update_value(item)
+
+func delete() -> void:
+	entity.delete()
+	deleted.emit()
+
+func _to_string() -> String:
+	return entity.get_editor_name()
+
+func get_widget() -> PackedScene:
+	return preload("uid://s6kfhuulr1sp")
+
+# Serialize to a dictionary format(.json) for saving.:
 
 # 13. private methods: define all private methods here, use _ as preffix
 func _validate():

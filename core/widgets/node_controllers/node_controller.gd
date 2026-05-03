@@ -10,13 +10,13 @@ static var audio_widgets: Node2D # This is the root node for audio widgets.
 
 @export var _class_node: ClassNode
 
-@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
+#@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
 
 # hotfix tmp: should remove editor bus dependancy
-var _bus: EditorEventBus
-func _ready() -> void:
-	if Engine.has_singleton(&"EditorSignals"):
-		_bus = Engine.get_singleton(&"EditorSignals") as EditorEventBus
+#var _bus: EditorEventBus
+#func _ready() -> void:
+	#if Engine.has_singleton(&"EditorSignals"):
+		#_bus = Engine.get_singleton(&"EditorSignals") as EditorEventBus
 
 
 # Add the controller to the root node controller.

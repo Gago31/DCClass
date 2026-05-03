@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c2gmvcijrse7y"]
+
+[ext_resource type="Script" uid="uid://bk00sf3d1puh2" path="res://core/widgets/node_controllers/class_slide_widget.gd" id="1_xgjwj"]
+
+[node name="ClassSlideWidget" type="Node2D" unique_id=535480007]
+script = ExtResource("1_xgjwj")

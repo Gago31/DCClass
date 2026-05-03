@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cpfenn5p8def4"]
+
+[ext_resource type="Script" uid="uid://duovomu12obw8" path="res://core/widgets/entities/operations/pen_color_widget.gd" id="1_02v00"]
+
+[node name="PenColorWidget" type="Node2D" unique_id=1842432599]
+script = ExtResource("1_02v00")

@@ -1,30 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://bwf4trwm5o7s0"]
+[gd_scene format=3 uid="uid://bwf4trwm5o7s0"]
 
 [ext_resource type="Script" uid="uid://2ylxxh8adaef" path="res://editor/main_editor/whiteboard/player_screen/main/main.gd" id="1_j0vtf"]
 [ext_resource type="PackedScene" uid="uid://c340c4al7fg2r" path="res://editor/main_editor/whiteboard/player_screen/class_window/class_window.tscn" id="2_0jrey"]
-[ext_resource type="Script" uid="uid://dcdisdp7ia1o0" path="res://editor/main_editor/whiteboard/player_screen/main/play_class.gd" id="3_swejl"]
-[ext_resource type="PackedScene" uid="uid://njv5m467c4cn" path="res://editor/main_editor/whiteboard/player_screen/background/background.tscn" id="4_w1jmh"]
-[ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="5_5gb6c"]
+[ext_resource type="PackedScene" uid="uid://ca0ens8jsu8yq" path="res://core/tree_postprocessing/tree_postprocessing.tscn" id="6_tk4tt"]
 
-[node name="UI" type="CanvasLayer"]
+[node name="UI" type="CanvasLayer" unique_id=961116239]
 script = ExtResource("1_j0vtf")
 
-[node name="ClassWindow" parent="." instance=ExtResource("2_0jrey")]
+[node name="ClassWindow" parent="." unique_id=106168562 instance=ExtResource("2_0jrey")]
 process_mode = 3
 
-[node name="PlayClass" type="Node2D" parent="."]
+[node name="TreePostprocessing" parent="." unique_id=1588888408 instance=ExtResource("6_tk4tt")]
 unique_name_in_owner = true
-process_mode = 1
-script = ExtResource("3_swejl")
-
-[node name="ParallaxBackground" parent="PlayClass" instance=ExtResource("4_w1jmh")]
-
-[node name="Camera2D" type="Camera2D" parent="PlayClass" node_paths=PackedStringArray("background")]
-process_mode = 3
-script = ExtResource("5_5gb6c")
-background = NodePath("../ParallaxBackground/ParallaxLayer/Background")
-
-[node name="VisualWidgets" type="Node2D" parent="PlayClass"]
-unique_name_in_owner = true
-
-[editable path="PlayClass/ParallaxBackground"]

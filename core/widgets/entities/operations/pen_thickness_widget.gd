@@ -1,49 +1,13 @@
 class_name PenThicknessWidget
-extends Widget
+extends OperationWidget
 
-@export var entity: PenThicknessEntity
 
-func init(_properties: Dictionary) -> void:
-	pass
-
-func serialize() -> Dictionary:
-	return entity.serialize()
-
-# Play the pause operation.
-func play(_duration: float, _total_real_time: float, _duration_leaf: float) -> void:
-	Widget.pen_thickness = entity.thickness
-	
-	add_to_group(&"playing_widget")
-	_bus_core.current_node_changed.emit(class_node)
-	
-	await get_tree().process_frame
-	
-	reset()
-
-# Skip to the end of the pause operation. We omit the operation because the seek operation is to seek to a certain point.
-func play_seek(_duration: float, _total_real_time: float, _duration_leaf: float) -> void:
-	Widget.pen_thickness = entity.thickness
-	
-	add_to_group(&"playing_widget")
-	_bus_core.current_node_changed.emit(class_node)
-	
-	await get_tree().process_frame
-	
-	reset()
-
-func stop() -> void:
-	skip_to_end()
-	
-func reset():
-	remove_from_group(&"widget_playing")
-	add_to_group(&"widget_finished")
-	emit_signal("widget_finished")
+func _on_started_playing() -> void:
+	WhiteboardManager.set_pen_thickness(get_entity().thickness)
+	finish_playing()
 
 func skip_to_end():
-	Widget.pen_thickness = entity.thickness
-	add_to_group(&"widget_finished")
-	emit_signal("widget_finished")
+	_on_started_playing()
 
-# Returns the duration of the operation in seconds.
-func compute_duration() -> float:
-	return 0.0
+func get_entity() -> PenThicknessEntity:
+	return entity as PenThicknessEntity

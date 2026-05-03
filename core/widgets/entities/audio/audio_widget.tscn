@@ -1,8 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://biha46ac5k722"]
+[gd_scene format=3 uid="uid://biha46ac5k722"]
 
 [ext_resource type="Script" uid="uid://d3c6vw6mhlqb7" path="res://core/widgets/entities/audio/audio_widget.gd" id="1_is6cq"]
 
-[node name="AudioWidget" type="Node2D"]
+[node name="AudioWidget" type="Node2D" unique_id=1570878736]
 script = ExtResource("1_is6cq")
+play_mode = 2
 
-[node name="Audio" type="AudioStreamPlayer" parent="."]
+[node name="Audio" type="AudioStreamPlayer" parent="." unique_id=144001423]
+unique_name_in_owner = true
+
+[connection signal="finished" from="Audio" to="." method="_on_audio_finished"]

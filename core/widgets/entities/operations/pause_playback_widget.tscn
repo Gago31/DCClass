@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bjangwmut685w"]
+
+[ext_resource type="Script" uid="uid://bfg581ksm6ytt" path="res://core/widgets/entities/operations/pause_playback_widget.gd" id="1_ugvfh"]
+
+[node name="PausePlaybackWidget" type="Node2D" unique_id=1421987969]
+script = ExtResource("1_ugvfh")

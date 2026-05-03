@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b8obtgkbi1jwp"]
+
+[ext_resource type="Script" uid="uid://dwx63f26jos10" path="res://core/widgets/entities/operations/clear_widget.gd" id="1_w5wn4"]
+
+[node name="ClearWidget" type="Node2D" unique_id=1431937651]
+script = ExtResource("1_w5wn4")

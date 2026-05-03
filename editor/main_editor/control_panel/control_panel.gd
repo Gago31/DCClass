@@ -224,30 +224,30 @@ func _disabled_toggle_insert_button(active: bool) -> void:
 	menu_btn_insert.disabled = active
 
 # Add a new group at the beginning of the current node
-func _add_group() -> void:
-	var data_new = {
-		"name": "Group",
-		"type": "ClassGroup",
-		"childrens": []
-	}
-	var class_node = ClassGroup.deserialize(data_new)
-	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
-	_bus.add_class_group.emit(class_node, true)
+#func _add_group() -> void:
+	#var data_new = {
+		#"name": "Group",
+		#"type": "ClassGroup",
+		#"childrens": []
+	#}
+	#var class_node = ClassGroup.deserialize(data_new)
+	#var first = tree_manager.get_next_selected(null)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#_bus.add_class_group.emit(class_node, true)
 
 # Push a new group to the end of the current node
-func _push_group() -> void:
-	var data_new = {
-		"name": "Group",
-		"type": "ClassGroup",
-		"childrens": []
-	}
-	var class_node = ClassGroup.deserialize(data_new)
-	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
-	_bus.add_class_group.emit(class_node, false)
+#func _push_group() -> void:
+	#var data_new = {
+		#"name": "Group",
+		#"type": "ClassGroup",
+		#"childrens": []
+	#}
+	#var class_node = ClassGroup.deserialize(data_new)
+	#var first = tree_manager.get_next_selected(null)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#_bus.add_class_group.emit(class_node, false)
 
 func _make_group() -> void:
 	var first = tree_manager.get_next_selected(null)
@@ -379,7 +379,7 @@ func _on_video_selected(status: bool, selected_paths: PackedStringArray, _select
 	var converted_path := start_video_conversion(entity_video, tmp_path)
 	prints("Converted path", converted_path)
 	var video_data := {
-		"video_path": "resources/videos/%s" % converted_path 
+		"video_path": "resources/video/%s" % converted_path 
 	}
 	entity_video.load_data(video_data)
 	_bus.emit_signal("add_class_leaf_entity", entity_video, [

@@ -25,9 +25,9 @@ var user_controlled: bool = false:
 
 @onready var whiteboard_size: Vector2 = ProjectSettings.get_setting("display/whiteboard/size") as Vector2
 
-func _enter_tree():
-	if is_instance_valid(ClassUIEditor.context):
-		ClassUIEditor.context.camera = self
+#func _enter_tree():
+	#if is_instance_valid(ClassUIEditor.context):
+		#ClassUIEditor.context.camera = self
 
 func set_speed_scale(_speed: float) -> void:
 	time_scale = 1.0 / _speed

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dmb6dskn667n5"]
+
+[ext_resource type="Script" uid="uid://ca1gmqme4n2y3" path="res://core/whiteboard_manager.gd" id="1_3umm2"]
+[ext_resource type="PackedScene" uid="uid://bwf4trwm5o7s0" path="res://editor/main_editor/whiteboard/player_screen/main/main.tscn" id="2_rm1nl"]
+
+[node name="WhiteboardManager" type="Node" unique_id=1196576191]
+script = ExtResource("1_3umm2")
+whiteboard_scene = ExtResource("2_rm1nl")

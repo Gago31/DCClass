@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://n1s02t8kd0hl"]
+
+[ext_resource type="Script" uid="uid://djj80uo2xowe4" path="res://core/widgets/selection_area.gd" id="1_obvgi"]
+
+[node name="SelectionArea" type="Area2D" unique_id=290224752]
+process_mode = 3
+disable_mode = 2
+collision_mask = 0
+input_pickable = false
+script = ExtResource("1_obvgi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1582830394]
+unique_name_in_owner = true
+
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

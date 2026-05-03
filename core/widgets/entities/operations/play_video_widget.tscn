@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c572m5e2lx7pw"]
+
+[ext_resource type="Script" uid="uid://tyfuhq5b7o5l" path="res://core/widgets/entities/operations/play_video_widget.gd" id="1_veb6f"]
+
+[node name="PlayVideoWidget" type="Node2D" unique_id=1787054510]
+script = ExtResource("1_veb6f")
+play_mode = 3

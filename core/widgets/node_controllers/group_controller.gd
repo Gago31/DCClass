@@ -32,14 +32,14 @@ func play_tree(__duration: float = 0.0, __total_real_time: float = 0.0, last_chi
 		
 		# We are in the the last node of the tree so we wait for the last audio to finish
 		var audio_current_playing = get_tree().get_nodes_in_group("audio_playing")
-		if audio_current_playing.size() > 0:
-			var sigs: Array[Signal] = [audio_current_playing[0].audio.finished, _bus_core.stop_widget]
-			var state = SignalsCore.await_any_once(sigs)
-			if !state._done:
-				await state.completed
-				if state._signal_source == _bus_core.stop_widget:
-					return
-		_bus_core.tree_play_finished.emit()
+		#if audio_current_playing.size() > 0:
+			#var sigs: Array[Signal] = [audio_current_playing[0].audio.finished, _bus_core.stop_widget]
+			#var state = SignalsCore.await_any_once(sigs)
+			#if !state._done:
+				#await state.completed
+				#if state._signal_source == _bus_core.stop_widget:
+					#return
+		#_bus_core.tree_play_finished.emit()
 		return
 	
 	# Play the next child after the last_child
@@ -61,7 +61,7 @@ func play_seek(last_child: NodeController = null) -> void:
 			parent.play_seek(self)
 			return
 		#We are the root
-		_bus_core.tree_play_finished.emit()
+		#_bus_core.tree_play_finished.emit()
 		return
 	
 	var next_child_to_play = _childrens[index + 1]._node_controller
@@ -76,9 +76,9 @@ func seek(node_seek: NodeController, last_child: NodeController = null) -> void:
 		current.skip_to_end()
 		if current == node_seek:
 			# hotfix tmp: should remove editor bus dependancy
-			if !is_instance_valid(_bus):
-				return
-			_bus.emit_signal("execute_after_rendering")
+			#if !is_instance_valid(_bus):
+				#return
+			#_bus.emit_signal("execute_after_rendering")
 			return
 		current_node = current.get_next(current_node, true)
 		current = current_node[0]

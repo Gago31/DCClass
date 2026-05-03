@@ -1,31 +1,17 @@
 class_name SubtitleWidget
-extends Widget
+extends OperationWidget
 
 
-@export var entity: SubtitleEntity
+func _on_started_playing() -> void:
+	WhiteboardManager.update_subtitles(entity.text)
+	finish_playing()
 
+func _on_skip() -> void:
+	print("Skip subtitles: " + entity.text)
+	WhiteboardManager.update_subtitles(entity.text)
 
-func serialize() -> Dictionary:
-	return entity.serialize()
+func _on_unpaused() -> void:
+	finish_playing()
 
-func play(_duration: float, _total_real_time: float, _duration_leaf: float) -> void:
-	_bus_core.subtitles_updated.emit(entity.text)
-	emit_signal("widget_finished")
-
-func reset():
-	pass
-
-func stop() -> void:
-	skip_to_end()
-
-func skip_to_end() -> void:
-	_bus_core.subtitles_updated.emit(entity.text)
-	emit_signal("widget_finished")
-
-func clear():
-	reset()
-	add_to_group(&"widget_cleared")
-
-func unclear():
-	skip_to_end()
-	remove_from_group(&"widget_cleared")
+func get_entity() -> SubtitleEntity:
+	return entity as SubtitleEntity
