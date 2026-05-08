@@ -140,7 +140,6 @@ func config_editor_tree_item(item: TreeItem) -> void:
 	var seconds := int(duration) % 60
 	var time_string := "%02d:%02d" % [minutes, seconds]
 	item.set_text(1, "Duration: %s" % time_string)
-	#item.set_text(1, "%d" % duration)
 
 # 13. private methods: define all private methods here, use _ as preffix
 

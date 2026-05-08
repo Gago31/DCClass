@@ -2,6 +2,9 @@
 class_name ImageEntity
 extends VisualEntity
 
+
+signal conversion_finished(err: bool)
+
 # 2. docs: use docstring (##) to generate docs for this file
 ## An [Entity] that holds a reference to an image file.
 
@@ -63,11 +66,18 @@ func get_widget() -> PackedScene:
 func get_resource_path() -> String:
 	return "images/%s" % image_path
 
+func get_image_path() -> String:
+	return "%s/images/%s" % [EditorManager.get_assets_path(), image_path]
+
+
 func compute_duration() -> float:
 	return 0.0 
 
 func config_editor_tree_item(item: TreeItem) -> void:
 	item.set_text(0, get_editor_name())
+
+func _on_image_converted(_result: Variant, _path: String) -> void:
+	conversion_finished.emit(true)
 
 # 13. private methods: define all private methods here, use _ as preffix
 

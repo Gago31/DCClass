@@ -99,15 +99,6 @@ func _toggle_playback_stop() -> void:
 	elif class_root.is_finished():
 		#class_root.reset()
 		class_root.play()
-	
-	#if is_stopped:
-		#PersistenceEditor._epilog(PersistenceEditor.Status.PLAYING)
-		#_bus.seek_play.emit()
-		#return
-	
-	#_bus_core.stop_widget.emit()
-	#get_tree().call_group(&"widget_playing", "stop")
-	#PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
 
 func _update_play_button() -> void:
 	stop_button.icon = pause_icon if class_root.is_playing() else play_icon
@@ -213,31 +204,19 @@ func _ready():
 	class_root.child_added.connect(_on_tree_modified)
 	class_root.updated.connect(_on_tree_modified)
 	class_root.playtime_changed.connect(_update_time_control)
-	#if !is_instance_valid(ClassUIEditor.context):
-		#printerr("ClassUIEditor context is not valid")
-	#else:
 	get_tree().process_frame.connect(_zoom_reset, CONNECT_ONE_SHOT)
 	
 	stop_button.pressed.connect(_toggle_playback_stop)
-	
-	#_bus.disabled_toggle_stop_button.connect(_disabled_toggle_stop_button)
-	#_bus.status_playback_stop.connect(_status_playback_stop)
 	
 	zoom_slider.value_changed.connect(_zoom_slider_value_selected)
 	zoom_button.pressed.connect(_zoom_reset)
 	
 	_setup_timeline() # To set the ti & tf
-	#_bus.setup_timeline.connect(_setup_timeline)
-	#_bus.seek_time_slide.connect(_seek_time_slide)
-	
-	
+
 	time_slider.drag_started.connect(_on_time_slider_drag_started)
 	time_slider.value_changed.connect(_on_time_slider_value_changed)
 	debouncer_timer.timeout.connect(_on_debouncer_timer_timeout)
 	time_slider.drag_ended.connect(_on_time_slider_drag_ended)
-	
-	#_bus.update_timer_slider_by_time.connect(_update_timer_slider_by_time)
-	
 
 func _process(_delta: float):
 	_update_zoom_slider_value()

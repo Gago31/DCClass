@@ -140,8 +140,10 @@ func _add_pen_thickness(thickness: float) -> void:
 
 func add_image(path: String) -> void:
 	var entity := ImageEntity.new()
-	var tmp_path := entity.save_resource(path)
-	entity.image_path = tmp_path
+	#var tmp_path := entity.save_resource(path)
+	var converted_path := start_image_conversion(entity, path)
+	prints("Converted path", converted_path)
+	entity.image_path = converted_path
 	_add_entity(entity)
 
 func add_video(path: String) -> void:
@@ -187,6 +189,10 @@ func _on_video_selected(status: bool, selected_paths: PackedStringArray, _select
 
 func start_video_conversion(entity: VideoEntity, input_video_path: String) -> String:
 	return EditorManager.convert_video(entity, input_video_path)
+
+func start_image_conversion(entity: ImageEntity, input_image_path: String) -> String:
+	return EditorManager.convert_image(entity, input_image_path)
+
 
 func _on_confirm_subtitles() -> void:
 	var text := subtitles_box.text

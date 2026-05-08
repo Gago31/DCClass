@@ -78,7 +78,9 @@ func _rectify_class_node(item: TreeItem) -> void:
 func _on_node_added(node: ClassNode, parent: ClassGroup, index: int) -> void:
 	parent.add_child(node, index)
 	updated.emit()
-	var widget := WhiteboardManager.get_root_widget().search_widget_by_class_node(node)
+	var root_widget := WhiteboardManager.get_root_widget()
+	if not root_widget: return
+	var widget := root_widget.search_widget_by_class_node(node)
 	WhiteboardManager.get_root_widget().jump_to_widget(widget)
 
 func _group_selected(item: TreeItem) -> void:

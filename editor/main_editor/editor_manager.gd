@@ -265,6 +265,26 @@ func convert_video(entity: VideoEntity, input_path: String) -> String:
 	video_index += 1
 	return output_name
 
+func convert_image(entity: ImageEntity, input_path: String) -> String:
+	print("Loading file ", input_path)
+	var extension := input_path.split(".")[-1]
+	var output_name := "%02d.%s" % [video_index, extension]
+	var output_path := "%s/images/%s" % [get_assets_path(), output_name]
+	prints("Input path:", )
+	prints("Output path:", output_path)
+	var command_args := [
+		"-i", input_path, 
+		"-y",
+		output_path
+	]
+	var thread_notifier := ThreadNotifier.new()
+	add_child(thread_notifier)
+	thread_notifier.thread_finished.connect(entity._on_image_converted.bind(output_path))
+	#thread_notifier.thread_finished.connect()
+	thread_notifier.run_thread(OS.execute.bind("ffmpeg", command_args, thread_notifier._output))
+	image_index += 1
+	return output_name
+
 func get_temp_path() -> String:
 	return _temp_dir.get_current_dir()
 
@@ -282,3 +302,7 @@ func load_audio(file_name: String) -> AudioStreamOggVorbis:
 func video_exists(video_name: String) -> bool:
 	var video_path := get_assets_path() + "/video/" + video_name
 	return FileAccess.file_exists(video_path)
+
+func image_exists(image_name: String) -> bool:
+	var image_path := get_assets_path() + "/images/" + image_name
+	return FileAccess.file_exists(image_path)
