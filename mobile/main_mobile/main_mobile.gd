@@ -13,8 +13,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	PersistenceMobile.core_signals = core_signals
-	PersistenceMobile.mobile_signals = mobile_signals
-	PersistenceMobile.resources_class = resources_class
-	PersistenceMobile._setup()
+	#PersistenceMobile.core_signals = core_signals
+	#PersistenceMobile.mobile_signals = mobile_signals
+	#PersistenceMobile.resources_class = resources_class
+	#PersistenceMobile._setup()
 	UI._setup()

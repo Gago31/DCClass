@@ -3,10 +3,135 @@
 [ext_resource type="Script" uid="uid://chdvlucbsrdn0" path="res://editor/main_editor/editor_ui.gd" id="1_8c1hf"]
 [ext_resource type="Resource" uid="uid://sjnr4t8cxq1d" path="res://test_class.tres" id="2_trjv5"]
 [ext_resource type="Script" uid="uid://cqighbl4pvak0" path="res://editor/utils/tree_manager.gd" id="2_vyrmg"]
+[ext_resource type="Texture2D" uid="uid://dk0dj4fesyur" path="res://assets/sprites/ui/pen_sizes.png" id="3_2omcq"]
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="3_8c1hf"]
+[ext_resource type="Texture2D" uid="uid://o6w8p0jepmvn" path="res://assets/sprites/ui/pen_sizes_2.png" id="4_0gpha"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_8c1hf"]
 allow_unpress = true
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_0gpha"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04d5a"]
+atlas = ExtResource("3_2omcq")
+region = Rect2(0, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qd7se"]
+atlas = ExtResource("3_2omcq")
+region = Rect2(15, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3c3sn"]
+atlas = ExtResource("3_2omcq")
+region = Rect2(30, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cb4vn"]
+atlas = ExtResource("3_2omcq")
+region = Rect2(45, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mexuc"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3yjun"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 32, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mmepp"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 64, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upcgy"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 96, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exwmu"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 128, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrg0m"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 160, 64, 32)
+
+[sub_resource type="Gradient" id="Gradient_0gpha"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_04d5a"]
+gradient = SubResource("Gradient_0gpha")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_qd7se"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3c3sn"]
+gradient = SubResource("Gradient_qd7se")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_cb4vn"]
+colors = PackedColorArray(0, 0, 1, 1, 0, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mexuc"]
+gradient = SubResource("Gradient_cb4vn")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_3yjun"]
+colors = PackedColorArray(0, 1, 0, 1, 0, 1, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mmepp"]
+gradient = SubResource("Gradient_3yjun")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_upcgy"]
+colors = PackedColorArray(1, 1, 0, 1, 1, 1, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_exwmu"]
+gradient = SubResource("Gradient_upcgy")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_yrg0m"]
+colors = PackedColorArray(1, 0, 1, 1, 1, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ubctx"]
+gradient = SubResource("Gradient_yrg0m")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_vhh48"]
+colors = PackedColorArray(1, 0.5019608, 0, 1, 1, 0.5019608, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5x687"]
+gradient = SubResource("Gradient_vhh48")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_dwj02"]
+colors = PackedColorArray(0, 1, 1, 1, 0, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7e51v"]
+gradient = SubResource("Gradient_dwj02")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_r0fa3"]
+colors = PackedColorArray(0.5014065, 0.50140655, 0.50140643, 1, 0.5019608, 0.5019608, 0.5019608, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0i43y"]
+gradient = SubResource("Gradient_r0fa3")
+width = 32
+height = 32
+
+[sub_resource type="Gradient" id="Gradient_75e8j"]
+offsets = PackedFloat32Array(0, 0.15873016, 0.34126985, 0.51984125, 0.68650794, 0.8373016, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 0.5019608, 0, 1, 1, 1, 0.24705882, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dt5dy"]
+gradient = SubResource("Gradient_75e8j")
+width = 32
+height = 32
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_trjv5"]
 atlas = ExtResource("3_8c1hf")
@@ -131,12 +256,76 @@ horizontal_alignment = 1
 
 [node name="PenThicknessSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=152533038]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 4
 min_value = 3.0
 max_value = 40.0
 value = 3.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=1560476340]
+visible = false
+layout_mode = 2
+
+[node name="PenThicknessS" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=790395142]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_0gpha")
+icon = SubResource("AtlasTexture_04d5a")
+icon_alignment = 1
+
+[node name="PenThicknessM" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=922720000]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_0gpha")
+icon = SubResource("AtlasTexture_qd7se")
+icon_alignment = 1
+
+[node name="PenThicknessL" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=2042580496]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_0gpha")
+icon = SubResource("AtlasTexture_3c3sn")
+icon_alignment = 1
+
+[node name="PenThicknessXL" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=1852875783]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_0gpha")
+icon = SubResource("AtlasTexture_cb4vn")
+icon_alignment = 1
+
+[node name="PenThicknessOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=191751171]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+selected = 1
+item_count = 6
+popup/item_0/icon = SubResource("AtlasTexture_mexuc")
+popup/item_0/id = 0
+popup/item_1/icon = SubResource("AtlasTexture_3yjun")
+popup/item_1/id = 1
+popup/item_2/icon = SubResource("AtlasTexture_mmepp")
+popup/item_2/id = 2
+popup/item_3/icon = SubResource("AtlasTexture_upcgy")
+popup/item_3/id = 3
+popup/item_4/icon = SubResource("AtlasTexture_exwmu")
+popup/item_4/id = 4
+popup/item_5/icon = SubResource("AtlasTexture_yrg0m")
+popup/item_5/id = 5
 
 [node name="PenColorContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=1979543517]
 layout_mode = 2
@@ -149,12 +338,38 @@ horizontal_alignment = 1
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=469385742]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 text = "Color Selected"
 color = Color(1, 1, 1, 1)
 edit_alpha = false
 edit_intensity = false
+
+[node name="PenColorOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=216889024]
+layout_mode = 2
+selected = 0
+item_count = 10
+popup/item_0/icon = SubResource("GradientTexture2D_04d5a")
+popup/item_0/id = 0
+popup/item_1/icon = SubResource("GradientTexture2D_3c3sn")
+popup/item_1/id = 1
+popup/item_2/icon = SubResource("GradientTexture2D_mexuc")
+popup/item_2/id = 2
+popup/item_3/icon = SubResource("GradientTexture2D_mmepp")
+popup/item_3/id = 3
+popup/item_4/icon = SubResource("GradientTexture2D_exwmu")
+popup/item_4/id = 4
+popup/item_5/icon = SubResource("GradientTexture2D_ubctx")
+popup/item_5/id = 5
+popup/item_6/icon = SubResource("GradientTexture2D_5x687")
+popup/item_6/id = 6
+popup/item_7/icon = SubResource("GradientTexture2D_7e51v")
+popup/item_7/id = 7
+popup/item_8/icon = SubResource("GradientTexture2D_0i43y")
+popup/item_8/id = 8
+popup/item_9/icon = SubResource("GradientTexture2D_dt5dy")
+popup/item_9/id = 9
 
 [node name="DetachButton" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=2102941294]
 layout_mode = 2
@@ -194,14 +409,46 @@ scroll_fit_content_width = true
 layout_mode = 2
 icon = SubResource("AtlasTexture_trjv5")
 
+[node name="CustomColorPopup" type="Popup" parent="." unique_id=402743755]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Custom pen color"
+initial_position = 1
+size = Vector2i(330, 534)
+
+[node name="PanelContainer" type="PanelContainer" parent="CustomColorPopup" unique_id=221532633]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CustomColorPopup/PanelContainer" unique_id=1816963718]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ColorPicker" type="ColorPicker" parent="CustomColorPopup/PanelContainer/MarginContainer" unique_id=828710921]
+unique_name_in_owner = true
+layout_mode = 2
+edit_alpha = false
+edit_intensity = false
+can_add_swatches = false
+color_modes_visible = false
+
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/SelectButton" to="." method="_on_select_button_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/ResizeButton" to="." method="_on_button_resize_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/DragButton" to="." method="_on_button_drag_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/AudioButton" to="." method="_on_toggle_audio_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenButton" to="." method="_on_button_pen_toggled"]
 [connection signal="drag_ended" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/PenThicknessSlider" to="." method="_on_thickness_slider_changed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessS" to="." method="_on_pen_thickness_s_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessM" to="." method="_on_pen_thickness_m_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessL" to="." method="_on_pen_thickness_l_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessXL" to="." method="_on_pen_thickness_xl_toggled"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/PenThicknessOptions" to="." method="_on_pen_thickness_options_item_selected"]
 [connection signal="color_changed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_changed"]
 [connection signal="popup_closed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_closed"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/PenColorOptions" to="." method="_on_pen_color_options_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/DetachButton" to="." method="_on_button_detach_pressed"]
 [connection signal="button_clicked" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_button_clicked"]
 [connection signal="item_activated" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_item_activated"]
@@ -210,6 +457,6 @@ icon = SubResource("AtlasTexture_trjv5")
 [connection signal="node_added" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_node_added"]
 [connection signal="node_selected" from="VBoxContainer/IndexClass/IndexTree" to="." method="_on_index_tree_node_selected"]
 [connection signal="nothing_selected" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_nothing_selected"]
-[connection signal="updated" from="VBoxContainer/IndexClass/IndexTree" to="." method="_on_index_tree_updated"]
 [connection signal="updated" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="rectify_class_tree"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/ConfirmSubtitles" to="." method="_on_confirm_subtitles"]
+[connection signal="popup_hide" from="CustomColorPopup" to="." method="_on_custom_color_popup_hide"]

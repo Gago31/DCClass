@@ -40,26 +40,26 @@ func get_editor_name() -> String:
 	return "Color: " + str(color)
 
 # Serialize to a dictionary format(.json) for saving.
-func serialize() -> Dictionary:
-	return {
-		"entity_id": entity_id,
-		"entity_type": get_class_name(),
-		"color": {
-			"r": color.r,
-			"g": color.g,
-			"b": color.b,
-			"a": color.a
-		}
-	}
-
-# Load data from a dictionary format(.json) to resource(PenColorEntity).
-func load_data(data: Dictionary) -> void:
-	var color_data = data.get("color", {})
-	if color_data:
-		color = Color(color_data.get("r", 1.0), 
-					 color_data.get("g", 1.0), 
-					 color_data.get("b", 1.0), 
-					 color_data.get("a", 1.0))
+#func serialize() -> Dictionary:
+	#return {
+		#"entity_id": entity_id,
+		#"entity_type": get_class_name(),
+		#"color": {
+			#"r": color.r,
+			#"g": color.g,
+			#"b": color.b,
+			#"a": color.a
+		#}
+	#}
+#
+## Load data from a dictionary format(.json) to resource(PenColorEntity).
+#func load_data(data: Dictionary) -> void:
+	#var color_data = data.get("color", {})
+	#if color_data:
+		#color = Color(color_data.get("r", 1.0), 
+					 #color_data.get("g", 1.0), 
+					 #color_data.get("b", 1.0), 
+					 #color_data.get("a", 1.0))
 					
 
 func _on_value_updated_from_editor(item: TreeItem) -> void:

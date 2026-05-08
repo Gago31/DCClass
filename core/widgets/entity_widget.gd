@@ -12,6 +12,7 @@ func get_entity() -> Entity;
 
 func set_entity(value: Entity) -> void:
 	entity = value
+	entity.updated.connect(_on_entity_updated)
 
 func get_play_mode() -> PlayMode:
 	return play_mode
@@ -26,3 +27,7 @@ func play(speed: float = 1.0) -> void:
 		var sync_speed := duration / (end_time - start_time)
 		speed *= sync_speed
 	super.play(speed)
+
+func _on_entity_updated() -> void:
+	duration = -1.0
+	updated.emit()

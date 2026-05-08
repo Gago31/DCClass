@@ -137,7 +137,7 @@ func _get_time_string(total_seconds: float) -> String:
 func _setup_timeline():
 	print("setup timeline")
 	#final_time = PersistenceEditor.resources_class.root_tree_structure._node_controller._compute_class_duration()
-	final_time = class_root.duration
+	final_time = class_root.end_time
 	print(final_time)
 	time_slider.max_value = final_time
 	#time_slider.value = 0.0
@@ -211,6 +211,7 @@ func _ready():
 	build_class_tree(WhiteboardManager.root)
 	build_index_tree(WhiteboardManager.root)
 	class_root.child_added.connect(_on_tree_modified)
+	class_root.updated.connect(_on_tree_modified)
 	class_root.playtime_changed.connect(_update_time_control)
 	#if !is_instance_valid(ClassUIEditor.context):
 		#printerr("ClassUIEditor context is not valid")
@@ -270,7 +271,8 @@ func _set_current_item(item: TreeItem, is_current: bool) -> void:
 	item.set_custom_color(0, Color.LIME_GREEN if is_current else Color.GRAY)
 
 func _on_tree_modified() -> void:
-	WhiteboardManager.reprocess_tree()
+	print("tree modified")
+	#WhiteboardManager.reprocess_tree()
 	_setup_timeline()
 
 func _on_visual_widget_selected(widget: VisualEntityWidget, multi_select: bool, unselectable: bool) -> void:

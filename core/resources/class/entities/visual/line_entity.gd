@@ -20,10 +20,10 @@ extends VisualEntity
 @export var delays: Array[float]
 
 # The color of the line
-@export var pen_color: Color = Color.WHITE
+#@export var pen_color: Color = Color.WHITE
 
 # The thickness of the line
-@export var pen_thickness: float = 3.0
+#@export var pen_thickness: float = 3.0
 
 # TODO: add property variables
 # 7. public variables: define all public variables here

@@ -2,6 +2,9 @@ class_name GlobalWhiteboardManager
 extends Node
 
 
+signal pen_pressed
+signal pen_lifted
+
 @export var whiteboard_scene: PackedScene
 @export var whiteboard_scene_desktop: PackedScene
 @export var whiteboard_scene_mobile: PackedScene
@@ -92,3 +95,9 @@ func set_playing(value: bool) -> void:
 func reprocess_tree() -> void:
 	if not _whiteboard: return
 	_whiteboard.reprocess_tree()
+
+func notify_started_drawing() -> void:
+	pen_pressed.emit()
+
+func notify_stopped_drawing() -> void:
+	pen_lifted.emit()

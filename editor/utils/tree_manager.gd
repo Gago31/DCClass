@@ -56,7 +56,9 @@ func add_node(node: ClassNode, nest := true) -> TreeItem:
 
 func rectify_class_tree() -> void:
 	_rectify_class_node(get_root())
-	print(get_root().get_metadata(0))
+	WhiteboardManager.reprocess_tree()
+	tree_modified.emit()
+	#print(get_root().get_metadata(0))
 	#build(EditorManager.root)
 
 func _rectify_class_node(item: TreeItem) -> void:
@@ -70,10 +72,12 @@ func _rectify_class_node(item: TreeItem) -> void:
 	for child in item.get_children():
 		_rectify_class_node(child)
 		var child_node := child.get_metadata(0) as ClassNode
+		#var index := child.get_index()
 		group.add_child(child_node)
 
 func _on_node_added(node: ClassNode, parent: ClassGroup, index: int) -> void:
 	parent.add_child(node, index)
+	updated.emit()
 	var widget := WhiteboardManager.get_root_widget().search_widget_by_class_node(node)
 	WhiteboardManager.get_root_widget().jump_to_widget(widget)
 
@@ -190,7 +194,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 		item_parent.add_child(dropped_item)
 		dropped_item.move_after(item)
 	updated.emit()
-	print(get_root().get_metadata(0))
+	#print(get_root().get_metadata(0))
 
 #endregion
 
@@ -258,13 +262,23 @@ func _paste() -> void:
 func _delete() -> void:
 	_deselect_children()
 	var selected := get_next_selected(null)
+	var prev := selected.get_prev_in_tree()
+	var prev_node := prev.get_metadata(0) as ClassNode
+	#node_selected.emit(prev.get_metadata(0) as ClassNode)
 	while selected:
 		var node := selected.get_metadata(0) as ClassNode
 		node.delete()
 		var parent := selected.get_parent()
 		parent.remove_child(selected)
+		var next_selected := get_next_selected(selected)
 		selected.free()
+		selected = next_selected
+	var new_prev := find_item_by_node(prev_node)
+	set_current_item(new_prev)
+	#prev.select(0)
+	await get_tree().process_frame
 	updated.emit()
+	_on_item_activated()
 
 #endregion
 
@@ -301,7 +315,8 @@ func _on_item_edited() -> void:
 	var item := get_selected()
 	var node := item.get_metadata(0) as ClassNode
 	node.update_value(item)
-	print(node.get_printable_data())
+	WhiteboardManager.reprocess_tree()
+	#print(node.get_printable_data())
 
 func _on_button_clicked(item: TreeItem, column: int, id: int, mouse_button_index: int) -> void:
 	prints((item.get_metadata(0) as ClassNode).get_printable_data(), column, id, mouse_button_index)
@@ -313,8 +328,11 @@ func _on_item_activated() -> void:
 	node_selected.emit(item.get_metadata(0) as ClassNode)
 
 func set_current_item(item: TreeItem) -> void:
-	print("setting current item")
-	reset_colors()
+	#print("setting current item")
+	#reset_colors()
+	deselect_all()
 	_current_item = item
-	_current_item.set_custom_color(0, Color.GREEN)
+	_current_item.select(0)
+	#_on_item_activated()
+	#_current_item.set_custom_color(0, Color.GREEN)
 	#node_selected.

@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cgvmcjvokx1xf" path="res://core/resources/class/class_organization/class_node.gd" id="1_1dmjn"]
 [ext_resource type="Script" uid="uid://cc3e2v8jrbrd0" path="res://core/resources/class/entities/operations/subtitle_entity.gd" id="2_btfkt"]
 [ext_resource type="Script" uid="uid://dnlnyky4u0vqg" path="res://core/resources/class/entities/audio/audio_entity.gd" id="2_npgj1"]
-[ext_resource type="Script" uid="uid://dyng6otmmxqbv" path="res://core/resources/class/entities/entity_wrapper/entity_property.gd" id="3_npgj1"]
 [ext_resource type="Script" uid="uid://bhmngb101qu4e" path="res://core/resources/class/class_organization/class_leaf.gd" id="4_cbmoy"]
 [ext_resource type="Script" uid="uid://71d7lexgo62h" path="res://core/resources/class/entities/visual/line_entity.gd" id="5_cgcot"]
 [ext_resource type="Script" uid="uid://mhkviqpgbvwl" path="res://core/resources/class/entities/operations/clear_entity.gd" id="6_l8ovg"]

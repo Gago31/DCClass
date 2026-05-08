@@ -30,13 +30,6 @@ extends ClassGroup
 
 # 12. public methods: define all public methods here
 
-func add_child(child: ClassNode, index: int = -1):
-	if index >= 0:
-		children.insert(index, child)
-	else:
-		children.append(child)
-	child_added.emit(child, index)
-
 
 func get_class_name() -> String:
 	return "ClassSlide"

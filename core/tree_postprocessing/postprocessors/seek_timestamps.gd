@@ -6,8 +6,10 @@ var max_time: float = 0.0
 
 
 func reset() -> void:
+	print("Resetting Timestamp postprocessor")
 	current_time = 0.0
 	max_time = 0.0
+	print("Current time: ", current_time, "; Max time: ", max_time)
 
 func is_widget_valid(widget: Widget) -> bool:
 	if widget.get_play_mode() == Widget.PlayMode.SYNC:

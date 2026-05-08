@@ -119,7 +119,7 @@ func _handle_drawing(event: InputEvent) -> void:
 
 		if not _pressed:
 			_pressed = true
-			
+			WhiteboardManager.notify_started_drawing()
 			_line = _new_line()
 			_viewport.add_child(_line)
 			_line.add_point(pos)
@@ -142,6 +142,7 @@ func _handle_drawing(event: InputEvent) -> void:
 				_delays.append(delta_time)
 				_last_time = now
 				_last_point = pos
+			WhiteboardManager.notify_stopped_drawing()
 	elif _pressed:
 		_line.add_point(pos)
 		_pressed = false
@@ -154,8 +155,8 @@ func _handle_drawing(event: InputEvent) -> void:
 
 		var entity := LineEntity.new()
 		entity.points = _line.points
-		entity.pen_color = _pen_color
-		entity.pen_thickness = _pen_thickness
+		#entity.pen_color = _pen_color
+		#entity.pen_thickness = _pen_thickness
 		
 		var _position_origin: Vector2 = _line.points[0]
 		for i in range(entity.points.size()):
@@ -404,6 +405,8 @@ func _finish_drag_selection(reset_selection: bool):
 
 func _new_line() -> Line2D:
 	var l := Line2D.new()
+	_pen_color = WhiteboardManager.get_pen_color()
+	_pen_thickness = WhiteboardManager.get_pen_thickness()
 	l.width = _pen_thickness
 	l.default_color = _pen_color
 	l.begin_cap_mode = Line2D.LINE_CAP_ROUND

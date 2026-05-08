@@ -14,6 +14,7 @@ func setup() -> void:
 	add_child(widget)
 	widget.setup()
 	widget.finished_playing.connect(_on_widget_finished)
+	widget.updated.connect(_on_widget_updated)
 
 func _on_started_playing() -> void:
 	widget.play(_play_speed)
@@ -44,6 +45,11 @@ func get_play_mode() -> PlayMode:
 func _on_widget_finished() -> void:
 	_set_play_state(PlayState.FINISHED)
 	finished_playing.emit()
+
+func _on_widget_updated() -> void:
+	#print("widget updated")
+	duration = -1.0
+	updated.emit()
 
 func get_class_node() -> ClassLeaf:
 	return _node as ClassLeaf

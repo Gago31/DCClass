@@ -95,14 +95,14 @@ func _ready() -> void:
 
 # Setup the control panel with the current resources class
 func _setup():
-	resources_class = PersistenceEditor.resources_class
+	#resources_class = PersistenceEditor.resources_class
 	
 	if not is_instance_valid(resources_class):
 		printerr("ERROR: resources_class is not valid!")
 		# Intenta inicializar PersistenceEditor si es necesario
-		if PersistenceEditor.resources_class == null:
-			printerr("PersistenceEditor.resources_class is null!")
-			return
+		#if PersistenceEditor.resources_class == null:
+			#printerr("PersistenceEditor.resources_class is null!")
+			#return
 	
 	_setup_index_class()
 	_current_node_changed(resources_class._current_node)
@@ -137,14 +137,14 @@ func _copy_to_clipboard() -> void:
 		nodes_copy.append(current.get_metadata(0))
 		current = tree_manager.get_next_selected(current)
 	
-	PersistenceEditor.clipboard.clear()
-	PersistenceEditor.clipboard_clear_files()
+	#PersistenceEditor.clipboard.clear()
+	#PersistenceEditor.clipboard_clear_files()
 
 	for node in nodes_copy:
 		if node is ClassLeaf:
 			var node_copy: ClassNode = node.copy_tmp()
 			node_copy._setup_controller(false)
-			PersistenceEditor.clipboard.append(node_copy)
+			#PersistenceEditor.clipboard.append(node_copy)
 
 		
 		elif node is ClassGroup:
@@ -153,8 +153,8 @@ func _copy_to_clipboard() -> void:
 				"type": "ClassGroup",
 				"childrens": []
 			}
-			var new_node = ClassGroup.deserialize(data_new)
-			PersistenceEditor.clipboard.append(new_node)
+			#var new_node = ClassGroup.deserialize(data_new)
+			#PersistenceEditor.clipboard.append(new_node)
 
 		elif node is ClassSlide:
 			var data_new = {
@@ -162,8 +162,8 @@ func _copy_to_clipboard() -> void:
 				"type": "ClassSlide",
 				"childrens": []
 			}
-			var new_node = ClassSlide.deserialize(data_new)
-			PersistenceEditor.clipboard.append(new_node)
+			#var new_node = ClassSlide.deserialize(data_new)
+			#PersistenceEditor.clipboard.append(new_node)
 
 func _cut_to_clipboard() -> void:
 	_copy_to_clipboard()
@@ -171,10 +171,10 @@ func _cut_to_clipboard() -> void:
 
 func _paste() -> void:
 	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
 	_bus.paste_class_nodes.emit()
-	PersistenceEditor._epilog_events(PersistenceEditor.Events.EDIT_AUDIO)
+	#PersistenceEditor._epilog_events(PersistenceEditor.Events.EDIT_AUDIO)
 
 
 func _delete() -> void:
@@ -189,7 +189,7 @@ func _delete() -> void:
 		current = tree_manager.get_next_selected(current)
 	
 	_bus.delete_class_nodes.emit(nodes_del)
-	PersistenceEditor._epilog_events(PersistenceEditor.Events.EDIT_AUDIO)
+	#PersistenceEditor._epilog_events(PersistenceEditor.Events.EDIT_AUDIO)
 
 	
 #endregion
@@ -199,10 +199,10 @@ func _delete() -> void:
 
 # Handle the insert menu button actions
 func _on_menu_btn_insert(id: int) -> void:
-	if id == 1:
-		_add_group()
-	if id == 2:
-		_push_group()
+	#if id == 1:
+		#_add_group()
+	#if id == 2:
+		#_push_group()
 	if id == 3:
 		_make_group()
 	if id == 4:
@@ -262,11 +262,11 @@ func _make_group() -> void:
 		nodes_to_group.append(current.get_metadata(0))
 		current = tree_manager.get_next_selected(current)
 	
-	PersistenceEditor.clipboard.clear()
-	PersistenceEditor.clipboard_clear_files()
+	#PersistenceEditor.clipboard.clear()
+	#PersistenceEditor.clipboard_clear_files()
 
-	for node in nodes_to_group:
-		PersistenceEditor.clipboard.append(node)
+	#for node in nodes_to_group:
+		#PersistenceEditor.clipboard.append(node)
 	_bus.make_group.emit()
 
 #region Slide
@@ -277,11 +277,11 @@ func _add_slide() -> void:
 		"type": "ClassSlide",
 		"childrens": []
 	}
-	var class_node = ClassSlide.deserialize(data_new)
+	#var class_node = ClassSlide.deserialize(data_new)
 	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
-	_bus.add_class_slide.emit(class_node, true)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#_bus.add_class_slide.emit(class_node, true)
 
 # Push a new slide to the end of the current node
 func _push_slide() -> void:
@@ -290,11 +290,11 @@ func _push_slide() -> void:
 		"type": "ClassSlide",
 		"childrens": []
 	}
-	var class_node = ClassSlide.deserialize(data_new)
+	#var class_node = ClassSlide.deserialize(data_new)
 	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
-	_bus.add_class_slide.emit(class_node, false)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#_bus.add_class_slide.emit(class_node, false)
 	
 #endregion
 
@@ -307,11 +307,11 @@ func _add_clear() -> void:
 		"entity_id": entity_clear.entity_id,
 		"entity_properties": []
 	}
-	var class_node = ClassLeaf.deserialize(data_new)
+	#var class_node = ClassLeaf.deserialize(data_new)
 	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
-	_bus.add_class_leaf.emit(class_node)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#_bus.add_class_leaf.emit(class_node)
 
 func _add_pause() -> void:
 	var entity_pause = PausePlaybackEntity.new()
@@ -320,11 +320,11 @@ func _add_pause() -> void:
 		"entity_id": entity_pause.entity_id,
 		"entity_properties": []
 	}
-	var class_node = ClassLeaf.deserialize(data_new)
+	#var class_node = ClassLeaf.deserialize(data_new)
 	var first = tree_manager.get_next_selected(null)
-	if first != null:
-		PersistenceEditor.resources_class._current_node = first.get_metadata(0)
-	_bus.add_class_leaf.emit(class_node)
+	#if first != null:
+		#PersistenceEditor.resources_class._current_node = first.get_metadata(0)
+	#_bus.add_class_leaf.emit(class_node)
 
 func _add_image() -> void:
 	if DisplayServer.has_feature(DisplayServer.FEATURE_NATIVE_DIALOG):
@@ -439,11 +439,11 @@ func _on_video_converted(_result: Variant, output_path: String) -> void:
 # Toggle audio recording
 func _on_toggle_audio_pressed(active: bool) -> void:
 	_bus.audio_record.emit(active)
-	if active:
-		PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_AUDIO)
-	else:
-		PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
-		PersistenceEditor._epilog_events(PersistenceEditor.Events.EDIT_AUDIO)
+	#if active:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_AUDIO)
+	#else:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
+		#PersistenceEditor._epilog_events(PersistenceEditor.Events.EDIT_AUDIO)
 
 func _disabled_toggle_audio_button(active: bool) -> void:
 	btn_audio.disabled = active
@@ -451,10 +451,10 @@ func _disabled_toggle_audio_button(active: bool) -> void:
 # Toggle pen mode
 func _on_button_pen_toggled(active: bool) -> void:
 	_bus.pen_toggled.emit(active)
-	if active:
-		PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_PEN)
-	else:
-		PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
+	#if active:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_PEN)
+	#else:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
 	
 func _disabled_toggle_pen_button(active: bool) -> void:
 	btn_pen.disabled = active
@@ -466,10 +466,10 @@ func _on_button_detach_pressed() -> void:
 # Toggle drag mode
 func _on_button_drag_toggled(active: bool) -> void:
 	_bus.drag_toggled.emit(active)
-	if active:
-		PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_DRAG)
-	else:
-		PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
+	#if active:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_DRAG)
+	#else:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
 
 func _disabled_toggle_drag_button(active: bool) -> void:
 	btn_drag.disabled = active
@@ -477,10 +477,10 @@ func _disabled_toggle_drag_button(active: bool) -> void:
 # Toggle resize mode
 func _on_button_resize_toggled(active: bool) -> void:
 	_bus.resize_toggled.emit(active)
-	if active:
-		PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_RESIZE)
-	else:
-		PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
+	#if active:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.RECORDING_RESIZE)
+	#else:
+		#PersistenceEditor._epilog(PersistenceEditor.Status.STOPPED)
 
 func _disabled_toggle_resize_button(active: bool) -> void:
 	btn_resize.disabled = active
@@ -517,7 +517,7 @@ func _setup_index_class():
 	var root_tree_structure = _class_index.tree_structure
 	
 	tree_manager.tree_manager_index = tree_manager
-	tree_manager.build(root_tree_structure, entities)
+	#tree_manager.build(root_tree_structure, entities)
 
 # Select an item in the tree and update the current node
 func _on_item_activated() -> void:
@@ -527,7 +527,7 @@ func _on_item_activated() -> void:
 	var node = item.get_metadata(0)
 	_bus_core.current_node_changed.emit(node)
 	_bus.seek_node.emit(node)
-	PersistenceEditor._epilog_events(PersistenceEditor.Events.SEEK_PANEL, [node] )
+	#PersistenceEditor._epilog_events(PersistenceEditor.Events.SEEK_PANEL, [node] )
 	
 func _disabled_toggle_select_item_index(active: bool) -> void:
 	select_item_index_disabled = active
@@ -643,8 +643,8 @@ func _clear_selection():
 	tree_manager.deselect_all()
 
 func _on_pen_thickness_changed():
-	if not is_instance_valid(resources_class):
-		resources_class = PersistenceEditor.resources_class
+	#if not is_instance_valid(resources_class):
+		#resources_class = PersistenceEditor.resources_class
 	if not is_instance_valid(resources_class):
 		printerr("ERROR: Cannot access resources_class in _on_pen_thickness_changed")
 		return
@@ -658,7 +658,7 @@ func _on_pen_thickness_changed():
 
 func _on_pen_color_changed(color: Color) -> void:
 	if not is_instance_valid(resources_class):
-		resources_class = PersistenceEditor.resources_class
+		#resources_class = PersistenceEditor.resources_class
 		if not is_instance_valid(resources_class):
 			printerr("ERROR: Cannot access resources_class in _on_pen_color_changed")
 			return

@@ -1,32 +1,12 @@
 class_name PlayVideoEntity
 extends NodeReferenceEntity
 
-# 2. docs: use docstring (##) to generate docs for this file
-## An [Entity] that holds a reference to an image file.
 
-# 3. signals: define signals here
-
-# 4. enums: define enums here
-
-# 5. constants: define constants here
-
-# 6. export variables: define all export variables in groups here
-var video_id: String = ""
 @export var until_position: float = 0.0
+var video_id: String = ""
 var _tree_item: TreeItem
 var entity: VideoEntity
-# 7. public variables: define all public variables here
 
-# 8. private variables: define all private variables here, use _ as preffix
-
-# 9. onready variables: define all onready variables here
-
-
-# 10. init virtual methods: define _init, _enter_tree and _ready mothods here
-
-# 11. virtual methods: define other virtual methos here
-
-# 12. public methods: define all public methods here
 func _init() -> void:
 	print("Init called")
 	entity_id = "Play Video"
@@ -53,36 +33,44 @@ func get_editor_name() -> String:
 func get_widget() -> PackedScene:
 	return preload("uid://c572m5e2lx7pw")
 
-#func serialize() -> Dictionary:
-	#return {
-		#"entity_id": entity_id,
-		#"entity_type": get_class_name(),
-		#"video_id": video_id,
-		#"until_position": until_position
-	#}
+#func _get_time_string(t: float) -> String:
+	#var total_seconds := snappedf(t, 0.01)
+	#var seconds := fmod(total_seconds, 60)
+	#var total_minutes := int(total_seconds - seconds) / 60
+	#var minutes := total_minutes % 60
+	#var hours := (total_minutes - minutes) / 60
+	#var s := "%02d:%02d:%02.2f" % [hours, minutes, seconds]
+	#return s
 
-#func load_data(data: Dictionary) -> void:
-	#video_id = data["video_id"]
-	#until_position = data["until_position"]
-	#duration = 0.0
+func _set_time_from_string(s: String) -> void:
+	var valid := TimeString.is_valid(s)
+	if not valid:
+		_set_item_time_string()
+		return
+	until_position = TimeString.to_seconds(s)
+	print("Until position: ", until_position)
+	_set_item_time_string()
+
+func _set_item_time_string() -> void:
+	_tree_item.set_text(1, TimeString.from_seconds(until_position))
 
 func config_editor_tree_item(item: TreeItem) -> void:
 	_tree_item = item
 	item.set_text(0, get_editor_name())
-	item.set_cell_mode(1, TreeItem.CELL_MODE_RANGE)
-	item.set_range(1, until_position)
+	#item.set_cell_mode(1, TreeItem.CELL_MODE_RANGE)
+	item.set_cell_mode(1, TreeItem.CELL_MODE_STRING)
+	_set_item_time_string()
+	#item.set_range(1, until_position)
 	item.set_editable(1, entity != null)
 	#if entity:
 		#item.set_range_config(1, 0, entity.duration, 1)
 
 func _on_value_updated_from_editor(item: TreeItem) -> void:
-	var value := item.get_range(1)
-	until_position = value
+	#var value := item.get_range(1)
+	var time_string := item.get_text(1)
+	_set_time_from_string(time_string)
+	#until_position = value
 
 func _is_node_valid(node: ClassNode) -> bool:
 	if not node.is_leaf(): return false
 	return (node as ClassLeaf).entity is VideoEntity
-
-# 13. private methods: define all private methods here, use _ as preffix
-
-# 14. subclasses: define all subclasses here

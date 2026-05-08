@@ -48,8 +48,9 @@ signal finished_playing
 signal paused
 ## Emitted when the widget starts playing from a `PAUSED` state.
 signal resumed
-
-
+## Emitted when a widget is modified from the editor.[br]
+## This signal propagates up the tree until reaching the [ClassRootWidget].
+signal updated
 
 ## The ZIP file containing the widget assets.
 ## Use [method ZIPReader.file_exists] to check if a file exists in the ZIP file.

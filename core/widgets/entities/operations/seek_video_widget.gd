@@ -9,9 +9,11 @@ var video_widget: VideoWidget
 func setup() -> void:
 	video_entity = get_entity().entity as VideoEntity
 	get_entity().reference_set.connect(_on_reference_changed)
+	await get_tree().process_frame
+	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
 
 func _on_started_playing() -> void:
-	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
+	#video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
 	if not video_widget: 
 		print("No widget lmao")
 		return
@@ -22,9 +24,9 @@ func compute_duration() -> float:
 	return 0.0
 
 func _on_skip() -> void:
-	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
+	#video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
 	if not video_widget: return
-	video_widget.seek_video(get_entity().seek_position)
+	video_widget.seek_video_deferred(get_entity().seek_position)
 
 func clear():
 	reset()

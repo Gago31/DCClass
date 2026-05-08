@@ -12,10 +12,14 @@ var _current_node: ClassNodeWidget
 func setup() -> void:
 	var node := get_class_node()
 	node.child_added.connect(_on_child_added)
+	node.child_deleted.connect(_on_child_deleted)
 	node.children_cleared.connect(_on_children_cleared)
+	WhiteboardManager.push_context()
 	
 	for class_node in get_class_node().children:
 		_build_child(class_node)
+	
+	WhiteboardManager.pop_context()
 
 func _build_child(child: ClassNode, index: int = -1) -> ClassNodeWidget:
 	var node := child.get_widget().instantiate() as ClassNodeWidget
@@ -24,16 +28,17 @@ func _build_child(child: ClassNode, index: int = -1) -> ClassNodeWidget:
 	if index >= 0:
 		move_child(node, index)
 	node.setup()
+	node.updated.connect(_on_child_updated)
 	return node
 
 func _on_started_playing() -> void:
 	#show()
-	WhiteboardManager.push_context()
+	#WhiteboardManager.push_context()
 	_play_next()
 
 func _on_finished_playing() -> void:
 	if is_seeking(): return
-	WhiteboardManager.pop_context()
+	#WhiteboardManager.pop_context()
 
 func _on_paused() -> void:
 	if not _current_node: return
@@ -56,7 +61,7 @@ func seek(time: float, playing: bool = false) -> void:
 	super.seek(time, playing)
 	_disconnect_current()
 	_current_node = null
-	WhiteboardManager.push_context()
+	#WhiteboardManager.push_context()
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.seek(time, playing)
 	for child in get_children() as Array[ClassNodeWidget]:
@@ -141,7 +146,7 @@ func _unpause(speed: float = 1.0) -> void:
 	for child in get_children() as Array[ClassNodeWidget]:
 		if child.is_paused():
 			child.play(speed)
-	if _current_node.is_finished():
+	if _current_node and _current_node.is_finished():
 		_play_next()
 	#_current_node.play(speed)
 
@@ -198,12 +203,20 @@ func _on_child_finished_playing() -> void:
 
 func _on_child_added(child: ClassNode, index: int) -> void:
 	var node := _build_child(child, index)
-	node.jump_to_end()
+	#node.jump_to_end()
 	child_added.emit()
+
+func _on_child_deleted(child: ClassNode) -> void:
+	for widget in get_children() as Array[ClassNodeWidget]:
+		if widget.get_class_node() == child:
+			#widget.queue_free()
+			widget.free()
+			break
 
 func _on_children_cleared() -> void:
 	for child in get_children():
-		child.queue_free()
+		#child.queue_free()
+		child.free()
 
 func search_widget_by_entity(value: Entity) -> Widget:
 	for child in get_children() as Array[ClassNodeWidget]:
@@ -265,3 +278,8 @@ func jump_to_widget(target_widget: Widget) -> bool:
 	play_time = duration
 	_set_play_state(PlayState.FINISHED)
 	return false
+
+func _on_child_updated() -> void:
+	#print("child updated")
+	duration = -1.0
+	updated.emit()

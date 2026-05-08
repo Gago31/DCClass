@@ -16,23 +16,109 @@ func _while_playing(_delta: float) -> void:
 
 func setup() -> void:
 	super.setup()
-	var e := get_entity()
-	_points = e.points
-	_delays = []
-	_delays.resize(e.delays.size())
-	var total_delay: float = 0.0
-	for i in range(1, e.delays.size()):
-		_delays[i] = total_delay
-		total_delay += e.delays[i]
+	#var e := get_entity()
+	_set_width_and_color()
+	_load_point_data(0)
+	#_points = e.points
+	#_delays = []
+	#_delays.resize(e.delays.size())
+	#var total_delay: float = 0.0
+	#for i in range(1, e.delays.size()):
+		#_delays[i] = total_delay
+		#total_delay += e.delays[i]
 	_current_point = 0
 
-func _on_started_playing() -> void:
+func _smooth_curve(points: PackedVector2Array) -> PackedVector2Array:
+	var temp: PackedVector2Array = []
+	temp.append(points[0])
+	for i in points.size() - 1:
+		var p0 := points[i]
+		var p1 := points[i + 1]
+		var q := p0 * 0.75 + p1 * 0.25
+		var r := p0 * 0.25 + p1 * 0.75
+		temp.append(q)
+		temp.append(r)
+	temp.append(points[points.size() - 1])
+	return temp
+
+func _expand_delays(delays: Array[float]) -> Array[float]:
+	var temp: Array[float] = []
+	var n := delays.size()
+	temp.resize(n * 2)
+	for i in n - 1:
+		temp[2 * i] = delays[i]
+		temp[2 * i + 1] = (delays[i] + delays[i + 1]) * 0.5
+	temp[2 * n - 1] = delays[n - 1]
+	return temp
+
+func _load_point_data(smoothing: int = 0) -> void:
+	var e := get_entity()
+	var n := e.points.size()
+	# Trust me
+	#var final_size := (2 ** smoothing) * (n - 1) + 1
+	var total_delay := 0.0
+	_points = []
+	_delays = []
+	_points.resize(n)
+	_delays.resize(n)
+	
+	for i in n:
+		_points[i] = e.points[i]
+		if i == 0: continue
+		_delays[i] = total_delay
+		total_delay += e.delays[i]
+	
+	for i in smoothing:
+		print("smoothing ", i)
+		var p = _smooth_curve(_points)
+		var d = _expand_delays(_delays)
+		_points = p
+		_delays = d
+	
+	#e.points
+	#_points.resize(final_size)
+	#_delays.resize(final_size)
+	
+	#var skip := 2 ** smoothing - 1
+	## 0 -> 0 | 0 - 1 - 2 - 3 - 4
+	## 1 -> 1 | 0 - 2 - 4 - 6 - 8
+	## 2 -> 3 | 0 - 4 - 8 - 12 - 16
+	## 3 -> 7 | 0 - 8 - 16 - 24 - 32
+	#for i in n:
+		#_points[i + i * skip] = e.points[i]
+		#if i == 0: continue
+		#_delays[i + i * skip] = total_delay
+		#total_delay += e.delays[i]
+	#
+	#for s in smoothing + 1:
+		#skip = 2 ** (smoothing - s) - 1
+		#for i in range(0, final_size - 1, skip + 1):
+			##var im := (2 * i + 1) * (skip + 1) / 2
+			#var im := (2 * i + skip + 1) / 2
+			##var p1 := _points[i * (skip + 1)]
+			#var p1 := _points[i]
+			##var p2 := _points[(i + 1) * (skip + 1)]
+			#var p2 := _points[i + skip + 1]
+			#var pm := (p1 + p2) * 0.5
+			#_points[im] = pm
+			##var d1 := _delays[i * (skip + 1)]
+			#var d1 := _delays[i]
+			##var d2 := _delays[(i + 1) * (skip + 1)]
+			#var d2 := _delays[i + skip + 1]
+			#var dm := (d1 + d2) * 0.5
+			#_delays[im] = dm
+
+func _set_width_and_color() -> void:
 	line.default_color = WhiteboardManager.get_pen_color()
 	line.width = WhiteboardManager.get_pen_thickness()
+
+func _on_started_playing() -> void:
+	#_set_width_and_color()
 	show()
 
 func _on_seek() -> void:
 	_clear_points()
+	#_set_width_and_color()
 	_current_point = 0
 	#print("Line: play time = ", play_time)
 	_update_points()

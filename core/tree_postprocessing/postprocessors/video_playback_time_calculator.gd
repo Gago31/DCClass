@@ -5,6 +5,8 @@ var video_positions: Dictionary[VideoEntity, float] = {}
 
 func reset() -> void:
 	video_positions.clear()
+	print("Resetting video playback postprocessor")
+	print("Video data: ", video_positions)
 
 func is_widget_valid(widget) -> bool:
 	return widget is VideoWidget or \

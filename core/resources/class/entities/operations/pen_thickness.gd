@@ -52,7 +52,7 @@ func get_widget() -> PackedScene:
 func config_editor_tree_item(item: TreeItem) -> void:
 	item.set_text(0, "Thickness")
 	item.set_cell_mode(1, TreeItem.CELL_MODE_RANGE)
-	item.set_range_config(1, 3, 40, 1)
+	item.set_range_config(1, 1, 64, 1)
 	item.set_range(1, thickness)
 	item.set_editable(1, true)
 

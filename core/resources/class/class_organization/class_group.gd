@@ -8,6 +8,7 @@ extends ClassNode
 
 # 3. signals: define signals here
 signal child_added(child: ClassNode, index: int)
+signal child_deleted(child: ClassNode)
 signal children_cleared
 
 # 4. enums: define enums here
@@ -37,6 +38,8 @@ func add_child(child: ClassNode, index: int = -1):
 		children.insert(index, child)
 	else:
 		children.append(child)
+	if not child.deleted.is_connected(_on_child_deleted):
+		child.deleted.connect(_on_child_deleted.bind(child))
 	child_added.emit(child, index)
 
 func get_class_name():
@@ -125,6 +128,10 @@ func _to_string() -> String:
 
 func get_widget() -> PackedScene:
 	return preload("uid://bghrrlga67xx4")
+
+func _on_child_deleted(child: ClassNode) -> void:
+	children.erase(child)
+	child_deleted.emit(child)
 
 # Serialize to a dictionary format(.json) for saving.:
 

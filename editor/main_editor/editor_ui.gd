@@ -5,6 +5,15 @@ extends Control
 signal updated
 signal widget_selected(widget: Widget)
 
+enum PenThickness {
+	XS = 1,
+	S = 3,
+	M = 5,
+	L = 8,
+	XL = 16,
+	XXL = 32
+}
+
 @export var test_class: ClassRoot
 
 @onready var menu_btn_edit: MenuButton = %EditMenuButton
@@ -22,6 +31,8 @@ var _pending_pen_color: Color = Color.WHITE
 var _pending_pen_thickness: float = 3.0
 
 @onready var subtitles_box: TextEdit = %SubtitlesBox
+@onready var custom_color_popup: Popup = %CustomColorPopup
+@onready var color_picker: ColorPicker = %ColorPicker
 
 #var _current_node: ClassNode
 #var _class_index: ClassIndex
@@ -35,31 +46,13 @@ var _pen_thickness_changed_first: bool = false
 
 func _ready() -> void:
 	EditorManager.set_editor_ui(self)
-	#_bus_core.current_node_changed.connect(_current_node_changed)
-	#_bus.update_treeindex.connect(_setup_index_class)
-
+	#WhiteboardManager.pen_pressed.connect(_on_pen_started_drawing)
+	#WhiteboardManager.pen_lifted.connect(_on_pen_stopped_drawing)
 	menu_btn_edit.get_popup().id_pressed.connect(_on_menu_btn_edit)
 	menu_btn_insert.get_popup().id_pressed.connect(_on_menu_btn_insert)
-	
-	#tree_manager.item_activated.connect(_on_item_activated)
-	
-	# Node selection
-	#tree_manager.item_collapsed.connect(_on_item_collapse)
-	#tree_manager.multi_selected.connect(_on_multi_selected)
-	
-	#_bus.execute_after_rendering.connect(_execute_after_rendering)
-	#_bus.clear_selection.connect(_clear_selection)
-	#_bus.whiteboard_nodes_selected.connect(_whiteboard_nodes_selection)
-	
-	#for i in 5:
-		##var item := TreeItem.new()
-		#var item := tree_manager.create_item()
-		#item.set_text(0, "Item %d" % i)
-	
 	tree_manager.build(EditorManager.root)
 	#if test_class:
 		#tree_manager.build(test_class)
-
 
 # Setup the control panel with the current resources class
 func _setup():
@@ -133,6 +126,16 @@ func _add_clear() -> void:
 
 func _add_pause() -> void:
 	var entity = PausePlaybackEntity.new()
+	_add_entity(entity)
+
+func _add_pen_color(color: Color) -> void:
+	var entity := PenColorEntity.new()
+	entity.color = color
+	_add_entity(entity)
+
+func _add_pen_thickness(thickness: float) -> void:
+	var entity := PenThicknessEntity.new()
+	entity.thickness = thickness
 	_add_entity(entity)
 
 func add_image(path: String) -> void:
@@ -347,24 +350,27 @@ func _on_multi_selected(item: TreeItem, column: int, selected: bool):
 func _clear_selection():
 	tree_manager.deselect_all()
 
-func _on_pen_thickness_changed():
-	var entity := PenThicknessEntity.new()
-	entity.thickness = _pending_pen_thickness
-	_add_entity(entity)
-
-func _on_pen_color_changed(color: Color) -> void:
-	var entity := PenColorEntity.new()
-	entity.color = color
-	_add_entity(entity)
+#func _on_pen_thickness_changed():
+	#var entity := PenThicknessEntity.new()
+	#entity.thickness = _pending_pen_thickness
+	#_add_entity(entity)
+#
+#func _on_pen_color_changed(color: Color) -> void:
+	#var entity := PenColorEntity.new()
+	#entity.color = color
+	#_add_entity(entity)
 
 func _on_color_picker_changed(color: Color) -> void:
-	_pending_pen_color = color
-	_pen_color_changed = true
-	_pen_color_changed_first = true
+	#_pending_pen_color = color
+	WhiteboardManager.set_pen_color(color)
+	_add_pen_color(WhiteboardManager.get_pen_color())
+	#_pen_color_changed = true
+	#_pen_color_changed_first = true
 	
 func _on_color_picker_closed() -> void:
 	if _pen_color_changed:
-		_on_pen_color_changed(_pending_pen_color)
+		_add_pen_color(WhiteboardManager.get_pen_color())
+		#_on_pen_color_changed(_pending_pen_color)
 		_pen_color_changed = false
 	
 func _on_thickness_slider_changed(changed: bool) -> void:
@@ -372,20 +378,24 @@ func _on_thickness_slider_changed(changed: bool) -> void:
 	_pending_pen_thickness = pen_thickness_slider.value
 	_pen_thickness_changed_first = true
 
-func _on_pen_started_drawing() -> void:
-	if _first_stroke:
-		if _pen_color_changed_first and !_pen_thickness_changed_first:
-			EditorManager.add_pen_thickness_change(_pending_pen_thickness)
-		
-		if _pen_thickness_changed_first and !_pen_color_changed_first:
-			EditorManager.add_pen_color_change(pen_color_picker.color)
+#func _on_pen_started_drawing() -> void:
+	#if _first_stroke:
+		#if _pen_color_changed_first and !_pen_thickness_changed_first:
+			#_add_pen_thickness(WhiteboardManager.get_pen_thickness())
+			##EditorManager.add_pen_thickness_change(_pending_pen_thickness)
+		#if _pen_thickness_changed_first and !_pen_color_changed_first:
+			#_add_pen_color(WhiteboardManager.get_pen_color())
+			##EditorManager.add_pen_color_change(pen_color_picker.color)
+		#if !_pen_thickness_changed_first and !_pen_color_changed_first:
+			##EditorManager.add_pen_color_change(pen_color_picker.color)
+			##EditorManager.add_pen_thickness_change(_pending_pen_thickness)
+			#_add_pen_color(WhiteboardManager.get_pen_color())
+			#_add_pen_thickness(WhiteboardManager.get_pen_thickness())
+		#_first_stroke = false
 
-		if !_pen_thickness_changed_first and !_pen_color_changed_first:
-			EditorManager.add_pen_color_change(pen_color_picker.color)
-			EditorManager.add_pen_thickness_change(_pending_pen_thickness)
+func _on_pen_stopped_drawing() -> void:
+	_first_stroke = true
 
-		_first_stroke = false
-		
 #endregion
 
 
@@ -398,3 +408,51 @@ func _on_index_tree_node_selected(node: ClassNode) -> void:
 
 func _on_index_tree_updated() -> void:
 	updated.emit()
+
+func _change_pen_thickness(thickness: PenThickness) -> void:
+	WhiteboardManager.set_pen_thickness(thickness)
+	_add_pen_thickness(thickness)
+	#_pen_thickness_changed_first = true
+
+func _on_pen_thickness_s_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		_change_pen_thickness(PenThickness.S)
+
+func _on_pen_thickness_m_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		_change_pen_thickness(PenThickness.M)
+
+func _on_pen_thickness_l_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		_change_pen_thickness(PenThickness.L)
+
+func _on_pen_thickness_xl_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		_change_pen_thickness(PenThickness.XL)
+
+
+func _on_pen_thickness_options_item_selected(index: int) -> void:
+	match index:
+		0: _change_pen_thickness(PenThickness.XS)
+		1: _change_pen_thickness(PenThickness.S)
+		2: _change_pen_thickness(PenThickness.M)
+		3: _change_pen_thickness(PenThickness.L)
+		4: _change_pen_thickness(PenThickness.XL)
+		5: _change_pen_thickness(PenThickness.XXL)
+
+
+func _on_pen_color_options_item_selected(index: int) -> void:
+	match index:
+		0: _on_color_picker_changed(Color.WHITE)
+		1: _on_color_picker_changed(Color.RED)
+		2: _on_color_picker_changed(Color.BLUE)
+		3: _on_color_picker_changed(Color.LIME)
+		4: _on_color_picker_changed(Color.YELLOW)
+		5: _on_color_picker_changed(Color.FUCHSIA)
+		6: _on_color_picker_changed(Color.ORANGE)
+		7: _on_color_picker_changed(Color.AQUA)
+		8: _on_color_picker_changed(Color.WEB_GRAY)
+		9: custom_color_popup.popup()
+
+func _on_custom_color_popup_hide() -> void:
+	_on_color_picker_changed(color_picker.color)

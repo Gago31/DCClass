@@ -32,15 +32,31 @@ func get_widget() -> PackedScene:
 func config_editor_tree_item(item: TreeItem) -> void:
 	_tree_item = item
 	item.set_text(0, get_editor_name())
-	item.set_cell_mode(1, TreeItem.CELL_MODE_RANGE)
-	item.set_range(1, seek_position)
+	#item.set_cell_mode(1, TreeItem.CELL_MODE_RANGE)
+	item.set_cell_mode(1, TreeItem.CELL_MODE_STRING)
+	_set_item_time_string()
+	#item.set_range(1, seek_position)
 	item.set_editable(1, entity != null)
 	#if entity:
 		#item.set_range_config(1, 0, entity.duration, 1)
 
 func _on_value_updated_from_editor(item: TreeItem) -> void:
-	var value := item.get_range(1)
-	seek_position = value
+	#var value := item.get_range(1)
+	#seek_position = value
+	var time_string := item.get_text(1)
+	_set_time_from_string(time_string)
+
+func _set_time_from_string(s: String) -> void:
+	var valid := TimeString.is_valid(s)
+	if not valid:
+		_set_item_time_string()
+		return
+	seek_position = TimeString.to_seconds(s)
+	print("Seek position: ", seek_position)
+	_set_item_time_string()
+
+func _set_item_time_string() -> void:
+	_tree_item.set_text(1, TimeString.from_seconds(seek_position))
 
 func _is_node_valid(node: ClassNode) -> bool:
 	if not node.is_leaf(): return false
