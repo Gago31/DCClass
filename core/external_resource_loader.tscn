@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dn6iavhp7alb5"]
+
+[ext_resource type="Script" uid="uid://cwmqxn442r6dk" path="res://core/external_resource_loader.gd" id="1_13qdw"]
+
+[node name="ExternalResourceLoader" type="Node" unique_id=1741297059]
+script = ExtResource("1_13qdw")
+is_editor = true

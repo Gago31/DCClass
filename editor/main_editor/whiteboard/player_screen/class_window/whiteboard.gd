@@ -115,7 +115,7 @@ func _handle_drawing(event: InputEvent) -> void:
 	var pos: Vector2 = _viewport.get_camera_2d().get_global_mouse_position()
 	
 	if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-		var now = Time.get_ticks_msec() / 1000.0
+		var now := Time.get_ticks_msec() / 1000.0
 
 		if not _pressed:
 			_pressed = true
@@ -126,7 +126,7 @@ func _handle_drawing(event: InputEvent) -> void:
 			_last_point = pos
 			
 			_delays.clear()
-			var delta_time = now - _last_time
+			var delta_time := now - _last_time
 			if delta_time > 10:
 				delta_time = 10
 			_delays.append(delta_time)
@@ -136,7 +136,7 @@ func _handle_drawing(event: InputEvent) -> void:
 
 			if _last_point.distance_squared_to(pos) > SQUARED_THRESHOLD:
 				_line.add_point(pos)
-				var delta_time = now - _last_time
+				var delta_time := now - _last_time
 				if delta_time > 5:
 					delta_time = 5
 				_delays.append(delta_time)
@@ -147,17 +147,15 @@ func _handle_drawing(event: InputEvent) -> void:
 		_line.add_point(pos)
 		_pressed = false
 
-		var now = Time.get_ticks_msec() / 1000.0
-		var delta_time = now - _last_time
+		var now := Time.get_ticks_msec() / 1000.0
+		var delta_time := now - _last_time
 		if delta_time > 10:
 			delta_time = 10
 		_delays.append(delta_time)
 
 		var entity := LineEntity.new()
 		entity.points = _line.points
-		#entity.pen_color = _pen_color
-		#entity.pen_thickness = _pen_thickness
-		
+
 		var _position_origin: Vector2 = _line.points[0]
 		for i in range(entity.points.size()):
 			entity.points[i] -= _position_origin
@@ -168,7 +166,7 @@ func _handle_drawing(event: InputEvent) -> void:
 		
 		EditorManager.add_entity(entity)
 		
-		var parent = _line.get_parent()
+		var parent := _line.get_parent()
 		
 		parent.remove_child(_line)
 		_line.queue_free()
@@ -181,10 +179,10 @@ func _handle_screen_dragging(event: InputEvent) -> void:
 	#_handle_widget_selection(event)
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		#get_viewport().set_input_as_handled()
+		get_viewport().set_input_as_handled()
 		_dragging = event.is_pressed()
 	elif event is InputEventMouseMotion and _dragging:
-		#get_viewport().set_input_as_handled()
+		get_viewport().set_input_as_handled()
 
 		camera.user_controlled = true
 		camera.position -= event.relative
@@ -200,16 +198,11 @@ func _handle_widget_selection(event: InputEvent) -> void:
 	if event.is_action_pressed("multi_select"):
 		print("multi select active")
 		_multi_select_active = true
-		_viewport.physics_object_picking = false
+		#_viewport.physics_object_picking = false
 	elif event.is_action_released("multi_select"):
 		print("multi select inactive")
-		_viewport.physics_object_picking = true
-		_multi_select_active = false
-		
-	#if _multi_select_active:
 		#_viewport.physics_object_picking = true
-	#else:
-		#_viewport.physics_object_picking = false
+		_multi_select_active = false
 	_handle_drag_selection(event)
 
 #region properties handling

@@ -47,13 +47,13 @@ func _ready():
 	#print("parse._ready")
 	pass
 
-
-func _instantiate() -> bool:
-	#entities = class_index.entities
-	root_tree_structure = class_index.tree_structure
-	root_tree_structure._setup_controller(true)
-	_current_node = root_tree_structure
-	return true
+#
+#func _instantiate() -> bool:
+	##entities = class_index.entities
+	#root_tree_structure = class_index.tree_structure
+	#root_tree_structure._setup_controller(true)
+	#_current_node = root_tree_structure
+	#return true
 
 #func _current_node_changed(current_node):
 	#_current_node = current_node

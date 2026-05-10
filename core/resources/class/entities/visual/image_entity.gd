@@ -15,7 +15,7 @@ signal conversion_finished(err: bool)
 # 5. constants: define constants here
 
 # 6. export variables: define all export variables in groups here
-@export_file() var image_path: String
+@export var image_path: String
 # 7. public variables: define all public variables here
 
 # 8. private variables: define all private variables here, use _ as preffix
@@ -63,12 +63,11 @@ func get_widget() -> PackedScene:
 	#DirAccess.copy_absolute(path, full_path + salted_name)
 	#return path_images + salted_name
 
-func get_resource_path() -> String:
-	return "images/%s" % image_path
+#func get_resource_path() -> String:
+	#return "images/%s" % image_path
 
-func get_image_path() -> String:
-	return "%s/images/%s" % [EditorManager.get_assets_path(), image_path]
-
+#func get_image_path() -> String:
+	#return "%s/images/%s" % [EditorManager.get_assets_path(), image_path]
 
 func compute_duration() -> float:
 	return 0.0 

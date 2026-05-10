@@ -327,7 +327,14 @@ func _on_item_activated() -> void:
 	reset_colors()
 	var item := get_next_selected(null)
 	item.set_custom_color(0, Color.GREEN)
-	node_selected.emit(item.get_metadata(0) as ClassNode)
+	var node := item.get_metadata(0) as ClassNode
+	if node.is_leaf() or not item.collapsed:
+		node_selected.emit(node)
+		return 
+	var group := node as ClassGroup
+	var last_child: ClassNode
+	last_child = group if group.children.is_empty() else group.children[-1]
+	node_selected.emit(last_child)
 
 func set_current_item(item: TreeItem) -> void:
 	#print("setting current item")

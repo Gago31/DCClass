@@ -57,9 +57,22 @@ func _build_index_node(node: ClassNode, parent: TreeItem) -> void:
 	#widget.started_playing.connect(_set_current_item.bind(item, true))
 	#widget.resumed.connect(_set_current_item.bind(item, true))
 	#widget.finished_playing.connect(_set_current_item.bind(item, true))
+	item.set_metadata(0, group_node)
 	item.set_text(0, group_node._name)
 	for child in group_node.children:
 		_build_index_node(child, item)
+
+func _on_index_tree_item_selected() -> void:
+	var selected_item := index_tree.get_selected()
+	var group_node := selected_item.get_metadata(0) as ClassGroup
+	var widget := class_root.search_widget_by_class_node(group_node)
+	class_root.jump_to_widget(widget)
+
+func _gui_input(event: InputEvent) -> void:
+	if event.is_action_pressed("camera_zoom_in"):
+		zoom_slider.value += 0.1
+	elif event.is_action_pressed("camera_zoom_out"):
+		zoom_slider.value -= 0.1
 
 func _update_zoom_slider_value() -> void:
 	#if !is_instance_valid(ClassUIEditor.context) or !is_instance_valid(ClassUIEditor.context.camera):
@@ -116,13 +129,13 @@ func _status_playback_stop(active: bool = is_stopped) -> void:
 func _disabled_toggle_stop_button(active: bool) -> void:
 	stop_button.disabled = active
 
-func _get_time_string(total_seconds: float) -> String:
-	var format_str = "%02d:%02d:%02d"
-	var sec_f = fmod(total_seconds, 60)
-	var min_total = total_seconds / 60
-	var min_f = fmod(min_total, 60)
-	var hour_f = min_total / 60
-	return format_str % [hour_f, min_f, sec_f]
+#func _get_time_string(total_seconds: float) -> String:
+	#var format_str = "%02d:%02d:%02d"
+	#var sec_f = fmod(total_seconds, 60)
+	#var min_total = total_seconds / 60
+	#var min_f = fmod(min_total, 60)
+	#var hour_f = min_total / 60
+	#return format_str % [hour_f, min_f, sec_f]
 
 # Setup the time slider and label based on the complete duration of the class.
 func _setup_timeline():
@@ -133,14 +146,16 @@ func _setup_timeline():
 	time_slider.max_value = final_time
 	#time_slider.value = 0.0
 	time_slider.value = class_root.play_time
-	final_time_str = _get_time_string(final_time)
+	#final_time_str = _get_time_string(final_time)
+	final_time_str = TimeString.from_seconds(final_time, false)
 	_update_time_control()
 
 # Update the time slider and label based on the current time.
 func _update_time_control():
 	current_time = class_root.play_time
 	time_slider.value = current_time
-	var current_time_str = _get_time_string(current_time)
+	#var current_time_str = _get_time_string(current_time)
+	var current_time_str := TimeString.from_seconds(current_time, false)
 	label_time_current.text = current_time_str + " / " + final_time_str
 
 # Seek the time slider by the current node given.
@@ -230,7 +245,7 @@ func _on_index_button_pressed() -> void:
 		create_tween().tween_property(
 			index_tree_panel, 
 			"custom_minimum_size", 
-			Vector2(150, 0), 
+			Vector2(250, 0), 
 			0.2
 		)
 	else:

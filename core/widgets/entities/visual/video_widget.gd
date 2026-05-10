@@ -25,9 +25,9 @@ var until_position: float = 0.0
 
 func setup() -> void:
 	super.setup()
-	_video_path = get_entity().get_video_path()
+	_video_path = ClassResourceLoader.load_video(get_entity().video_path)
 	video_player.file_name = _video_path
-	if EditorManager.video_exists(get_entity().video_path):
+	if ClassResourceLoader.video_exists(get_entity().video_path):
 		_on_video_converted(false)
 	else:
 		get_entity().conversion_finished.connect(_on_video_converted)

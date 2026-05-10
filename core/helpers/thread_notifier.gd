@@ -2,10 +2,10 @@ class_name ThreadNotifier
 extends Node
 
 ## Node for running long processes in a thread and notifying
-## when they finnish running.
+## when they finish running.
 
 
-## Emmits the result of the thread's funciton
+## Emits the result of the thread's funciton
 ## when the thread is no longer alive.
 signal thread_finished(result: Variant)
 

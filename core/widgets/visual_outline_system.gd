@@ -22,8 +22,6 @@ var sigs_actives:=false
 var group_outline: Line2D
 
 func _ready() -> void:
-	#_bus.status_playback_stop.connect(_status_playback_stop)
-	#_bus.resize_toggled.connect(_on_resize_toggled)
 	pass
 
 func _on_resize_toggled(active: bool) -> void:
@@ -35,26 +33,13 @@ func _current_node_changed(node) -> void:
 	clear_all_outlines()
 	add_widget_outline()
 
-
 # Clear all outlines on playing class and reset signal connections
 func _status_playback_stop(active: bool) -> void:
 	is_editing_mode = active
 	if active and not sigs_actives: # Connect editor signals
-		#_bus_core.current_node_changed.connect(_current_node_changed)
-		#_bus.execute_after_rendering.connect(add_widget_outline)
-		#_bus.class_node_selected.connect(_on_class_node_selected)
-		#_bus.clear_outlines.connect(clear_all_outlines)
-		#_bus.show_outlines.connect(add_widget_outline)
-		#_bus.clear_selection.connect(_clear_selection)
 		sigs_actives = true
 	elif not active:
 		clear_all_outlines()
-		#_bus_core.current_node_changed.disconnect(_current_node_changed)
-		#_bus.execute_after_rendering.disconnect(add_widget_outline)
-		#_bus.class_node_selected.disconnect(_on_class_node_selected)
-		#_bus.clear_outlines.disconnect(clear_all_outlines)
-		#_bus.show_outlines.disconnect(add_widget_outline)
-		#_bus.clear_selection.disconnect(_clear_selection)
 		sigs_actives = false
 
 #region single outline
@@ -173,7 +158,6 @@ func _setup_group_outline(rect: Rect2) -> void:
 		group_outline.texture_mode = Line2D.LINE_TEXTURE_TILE
 		group_outline.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 		add_child(group_outline)
-	
 
 #endregion
 

@@ -115,6 +115,8 @@ func play(speed: float = 1.0) -> void:
 			_set_play_state(PlayState.PLAYING)
 			_on_unpaused()
 			resumed.emit()
+		PlayState.FINISHED:
+			finish_playing()
 
 ## Pauses the widget if it is playing.[br]
 ## [color=indian_red][b]You shouldn't override this method.[/b][/color][br]

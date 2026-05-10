@@ -42,6 +42,12 @@ func _on_file_selected(path: String) -> void:
 		return
 	#PersistenceEditor.file_path = path
 	#print("Selected file: ", PersistenceEditor.file_path)
+	ClassResourceLoader.is_editor = false
+	ClassResourceLoader.open_dcc_file(path)
+	EditorManager.root = ClassResourceLoader.get_class_tree()
+	WhiteboardManager.root = ClassResourceLoader.get_class_tree()
+	EditorManager.metadata = ClassResourceLoader.get_class_metadata()
+	WhiteboardManager.metadata = ClassResourceLoader.get_class_metadata()
 	
 	get_tree().change_scene_to_packed(editor_screen)
 #endregion

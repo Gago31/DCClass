@@ -42,14 +42,14 @@ func get_editor_name() -> String:
 	return "Audio: " + audio_path
 
 func get_widget() -> PackedScene:
-	return preload("uid://biha46ac5k722")
+	return load("uid://biha46ac5k722")
 
 func _on_audio_converted(_result: Variant) -> void:
 	resource_ready = true
 	audio_converted.emit()
 
-func get_resource_path() -> String:
-	return "audio/%s" % audio_path
+#func get_resource_path() -> String:
+	#return "audio/%s" % audio_path
 
 ### Returns a dictionary representation of this entity.
 #func serialize() -> Dictionary:

@@ -39,11 +39,11 @@ func get_widget() -> PackedScene:
 	return preload("uid://cqqmunsul4k5f")
 
 #TODO: change behavior depending on wether we are on editor or player
-func get_video_path() -> String:
-	return "%s/video/%s" % [EditorManager.get_assets_path(), video_path]
+#func get_video_path() -> String:
+	#return "%s/video/%s" % [EditorManager.get_assets_path(), video_path]
 
-func get_resource_path() -> String:
-	return "video/%s" % video_path
+#func get_resource_path() -> String:
+	#return "video/%s" % video_path
 
 #func serialize() -> Dictionary:
 	#return {

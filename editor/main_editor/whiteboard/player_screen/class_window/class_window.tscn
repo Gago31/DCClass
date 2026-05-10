@@ -100,6 +100,7 @@ layout_mode = 2
 enable_drag_unfolding = false
 hide_root = true
 auto_tooltip = false
+scroll_horizontal_enabled = false
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard/Control" unique_id=1566856790]
 layout_mode = 2
@@ -226,4 +227,5 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
+[connection signal="item_selected" from="VBoxContainer/Whiteboard/Control/IndexTreePanel/MarginContainer/IndexTree" to="." method="_on_index_tree_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Whiteboard/Control/MarginContainer/IndexButton" to="." method="_on_index_button_pressed"]

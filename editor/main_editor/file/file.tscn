@@ -164,7 +164,6 @@ text = "Save"
 [node name="ExportButton" type="Button" parent="VBoxContainer/CenterContainer/VBoxContainer" unique_id=1480533805]
 unique_name_in_owner = true
 layout_mode = 2
-disabled = true
 text = "Export Class"
 
 [node name="ExportFileDialog" type="FileDialog" parent="." unique_id=599325252]

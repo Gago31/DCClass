@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://wse7166srx2l"]
+
+[ext_resource type="Script" uid="uid://dc7a0o0f6462f" path="res://editor/main_editor/editor_manager.gd" id="1_adhs3"]
+[ext_resource type="Script" uid="uid://cseeuasw2qbdk" path="res://editor/tree_preprocessor.gd" id="2_dnvlq"]
+
+[node name="EditorManager" type="Node" unique_id=697266913]
+script = ExtResource("1_adhs3")
+
+[node name="TreePreprocessor" type="Node" parent="." unique_id=772685235]
+script = ExtResource("2_dnvlq")

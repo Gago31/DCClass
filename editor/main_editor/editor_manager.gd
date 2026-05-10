@@ -24,8 +24,6 @@ enum PenMode {
 @export var root: ClassRoot
 
 var current_group: ClassGroup
-var undo_stack: Array[EditorAction]
-var redo_stack: Array[EditorAction]
 var _gui: EditorUI:
 	set=set_editor_ui
 var _project_dir: DirAccess
@@ -35,7 +33,9 @@ var pen_mode: PenMode = PenMode.DISABLED
 var audio_index: int = 1
 var video_index: int = 1
 var image_index: int = 1
-#var editor_tree: TreeManagerEditor
+var zip: ZIPPacker
+@onready var tree_preprocessor: TreePreprocessor = $TreePreprocessor
+
 
 func set_editor_ui(gui: EditorUI) -> void:
 	_gui = gui
@@ -44,33 +44,6 @@ func add_entity(entity: Entity) -> void:
 	if not _gui: return
 	_gui._add_entity(entity)
 
-func add_image(path: String) -> void:
-	var entity := ImageEntity.new()
-	var tmp_path := entity.save_resource(path)
-	entity.image_path = tmp_path
-	#_add_entity(entity)
-
-func add_video(path: String) -> void:
-	var entity := VideoEntity.new()
-	var tmp_path := entity.save_resource(path)
-	
-	# TODO: convert video, wait for thread completion and assign the video
-	#var converted_path := start_video_conversion(entity, tmp_path)
-	var converted_path := ""
-	prints("Converted path", converted_path)
-	entity.video_path = "resources/videos/%s" % converted_path
-	#_add_entity(entity)
-
-
-func add_line() -> void:
-	pass
-
-func undo() -> void:
-	pass
-
-func redo() -> void:
-	pass
-	
 func record_audio() -> void:
 	AudioRecorder.start_recording()
 
@@ -101,7 +74,6 @@ func create_project(dir: String) -> void:
 	_clear_temp_dir()
 	_project_dir.make_dir("temp")
 	_temp_dir = DirAccess.open(_project_dir.get_current_dir() + "/temp")
-	#_temp_dir = 
 	metadata = ClassMetadata.new()
 	root = ClassRoot.new()
 	save()
@@ -150,40 +122,107 @@ func _clear_temp_dir() -> void:
 	_project_dir.remove("temp")
 
 func export_project(path: String) -> void:
-	pass
+	save()
+	zip = ZIPPacker.new()
+	zip.open(path)
+	var used_resources := tree_preprocessor.collect_resources(root)
+	
+	for audio in used_resources.audio:
+		_store_asset("audio", audio)
+	for image in used_resources.images:
+		_store_asset("images", image)
+	for video in used_resources.video:
+		_store_asset("video", video)
+	_store_res("metadata.res")
+	_store_res("class_tree.res")
+	zip.close()
+
+func _store_asset(folder: String, file_name: String) -> void:
+	if not zip: return
+	var asset_path := get_assets_path().path_join(folder).path_join(file_name)
+	var zip_path := "assets/".path_join(folder).path_join(file_name)
+	var data := FileAccess.get_file_as_bytes(asset_path)
+	zip.start_file(zip_path)
+	zip.write_file(data)
+	zip.close_file()
+
+func _store_res(file_name: String) -> void:
+	if not zip: return
+	var path := _project_dir.get_current_dir().path_join(file_name)
+	var data := FileAccess.get_file_as_bytes(path)
+	zip.start_file(file_name)
+	zip.write_file(data)
+	zip.close_file()
+
+#func zip_folder(source_dir: String, zip_path: String) -> Error:
+	#var zipper := ZIPPacker.new()
+	#var err := zipper.open(zip_path)
+	#if err != OK:
+		#push_error("Can't open the file to write:: %s (Error %d)" % [zip_path, err])
+		#return err
+#
+	#_add_folder_to_zip(zipper, source_dir, "")
+	#zipper.close()
+	#return OK
+#
+#func _add_folder_to_zip(zipper: ZIPPacker, current_dir: String, relative_path: String) -> void:
+	#for file_name in DirAccess.get_files_at(current_dir):
+		#var file_path := current_dir.path_join(file_name)
+		#var path_in_zip := relative_path + file_name
+		#
+		#var f := FileAccess.open(file_path, FileAccess.READ)
+		#if f == null:
+			#push_error("Can't open the file to read: %s" % file_path)
+			#continue
+		#var data := f.get_buffer(f.get_length())
+		#f.close()
+#
+		#var err_start := zipper.start_file(path_in_zip)
+		#if err_start != OK:
+			#push_error("Error Zip: %s (Error %d)" % [path_in_zip, err_start])
+			#continue
+#
+		#zipper.write_file(data)
+		#zipper.close_file()
+#
+	#for subdir in DirAccess.get_directories_at(current_dir):
+		#var subdir_path := current_dir.path_join(subdir) + "/"
+		#var new_relative := relative_path + subdir + "/"
+#
+		#_add_folder_to_zip(zipper, subdir_path, new_relative)
 
 # Decompress a zip file to a temporary directory.
-func decompress_zip(__zip_path: String, __dir_tmp: String) -> bool:
-	var reader: ZIPReader = ZIPReader.new()
-	var err = reader.open(__zip_path)
-	if err != OK:
-		return false
-
-	if not __dir_tmp.ends_with("/"):
-		__dir_tmp += "/"
-
-	if DirAccess.dir_exists_absolute(__dir_tmp):
-		_remove_dir_recursively(__dir_tmp)
-
-	DirAccess.make_dir_recursive_absolute(__dir_tmp)
-
-	for internal_path in reader.get_files():
-		var absolute_path := __dir_tmp + internal_path
-		if internal_path.ends_with("/"):
-			DirAccess.make_dir_recursive_absolute(absolute_path)
-			continue
-
-		DirAccess.make_dir_recursive_absolute(absolute_path.get_base_dir())
-
-		var file := FileAccess.open(absolute_path, FileAccess.WRITE)
-		if not file:
-			reader.close()
-			return false
-		file.store_buffer(reader.read_file(internal_path))
-		file.close()
-
-	reader.close()
-	return true
+#func decompress_zip(__zip_path: String, __dir_tmp: String) -> bool:
+	#var reader: ZIPReader = ZIPReader.new()
+	#var err = reader.open(__zip_path)
+	#if err != OK:
+		#return false
+#
+	#if not __dir_tmp.ends_with("/"):
+		#__dir_tmp += "/"
+#
+	#if DirAccess.dir_exists_absolute(__dir_tmp):
+		#_remove_dir_recursively(__dir_tmp)
+#
+	#DirAccess.make_dir_recursive_absolute(__dir_tmp)
+#
+	#for internal_path in reader.get_files():
+		#var absolute_path := __dir_tmp + internal_path
+		#if internal_path.ends_with("/"):
+			#DirAccess.make_dir_recursive_absolute(absolute_path)
+			#continue
+#
+		#DirAccess.make_dir_recursive_absolute(absolute_path.get_base_dir())
+#
+		#var file := FileAccess.open(absolute_path, FileAccess.WRITE)
+		#if not file:
+			#reader.close()
+			#return false
+		#file.store_buffer(reader.read_file(internal_path))
+		#file.close()
+#
+	#reader.close()
+	#return true
 
 # Remove a directory and all its contents recursively.
 # This function is used to clean up temporary directories created during the parsing process.
@@ -200,11 +239,11 @@ func set_pen_mode(value: PenMode) -> void:
 	pen_mode = value
 	pen_mode_changed.emit(pen_mode)
 
-func save_asset(data, folder: String, file_name: String) -> void:
-	pass
-
-func save_asset_temp(data, file_name: String) -> void:
-	pass
+#func save_asset(data, folder: String, file_name: String) -> void:
+	#pass
+#
+#func save_asset_temp(data, file_name: String) -> void:
+	#pass
 
 func save_resource(path: String) -> String:
 	var filename = path.split("/")[-1]
@@ -293,11 +332,26 @@ func get_assets_path() -> String:
 
 func load_audio(file_name: String) -> AudioStreamOggVorbis:
 	var file_path := get_assets_path()+ "/audio/" + file_name
-	var file := FileAccess.open(file_path, FileAccess.READ)
-	if not file: return
-	var data := file.get_buffer(file.get_length())
-	var sound = AudioStreamOggVorbis.load_from_buffer(data)
+	#var file := FileAccess.open(file_path, FileAccess.READ)
+	#if not file: return null
+	#var data := file.get_buffer(file.get_length())
+	var data := FileAccess.get_file_as_bytes(file_path)
+	var sound := AudioStreamOggVorbis.load_from_buffer(data)
 	return sound
+
+func load_image(file_name: String) -> Texture2D:
+	var file_path := get_assets_path()+ "/images/" + file_name
+	#var file := FileAccess.open(file_path, FileAccess.READ)
+	#if not file: return null
+	#var data := file.get_buffer(file.get_length())
+	#var data := FileAccess.get_file_as_bytes(file_path)
+	var image := Image.load_from_file(file_path)
+	var texture := ImageTexture.create_from_image(image)
+	return texture
+
+func load_video(file_name: String) -> String:
+	var file_path := get_assets_path()+ "/video/" + file_name
+	return file_path
 
 func video_exists(video_name: String) -> bool:
 	var video_path := get_assets_path() + "/video/" + video_name
@@ -306,3 +360,7 @@ func video_exists(video_name: String) -> bool:
 func image_exists(image_name: String) -> bool:
 	var image_path := get_assets_path() + "/images/" + image_name
 	return FileAccess.file_exists(image_path)
+
+func audio_exists(file_name: String) -> bool:
+	var file_path := get_assets_path() + "/audio/" + file_name
+	return FileAccess.file_exists(file_path)

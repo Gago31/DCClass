@@ -121,7 +121,7 @@ func get_entity() -> AudioEntity:
 
 func load_audio_stream() -> void:
 	var stream_path := get_entity().audio_path
-	var stream := EditorManager.load_audio(stream_path)
+	var stream := ClassResourceLoader.load_audio(stream_path)
 	audio.stream = stream
 	# Case: Keep data in the .dcc file
 	# This is intended to be used only for reproducing the class.

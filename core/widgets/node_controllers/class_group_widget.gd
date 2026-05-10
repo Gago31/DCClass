@@ -47,7 +47,13 @@ func _on_paused() -> void:
 			child.pause()
 
 func _on_unpaused() -> void:
-	_unpause()
+	for child in get_children() as Array[ClassNodeWidget]:
+		if child.is_paused():
+			child.play(_play_speed)
+	if _current_node and _current_node.is_finished():
+		_play_next()
+	if _current_node and _current_node.is_stopped():
+		_play_current()
 
 func _on_reset() -> void:
 	#hide()
@@ -55,6 +61,7 @@ func _on_reset() -> void:
 	_disconnect_current()
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.reset()
+	_current_node = null
 
 func seek(time: float, playing: bool = false) -> void:
 	unclear()
@@ -70,6 +77,29 @@ func seek(time: float, playing: bool = false) -> void:
 	if _current_node:
 		_connect_current()
 	#show()
+
+func jump_to_widget(target_widget: Widget) -> bool:
+	print("Jump to widget")
+	reset()
+	_disconnect_current()
+	_current_node = null
+	if target_widget == self:
+		return true
+	for child in get_children() as Array[ClassNodeWidget]:
+		var stop_search := child.jump_to_widget(target_widget)
+		if not stop_search: continue
+		if child.is_leaf():
+			play_time = child.end_time - start_time
+		else:
+			play_time = child.start_time + child.play_time - start_time
+		_current_node = child
+		_connect_current()
+		pause()
+		#_set_play_state(PlayState.PAUSED)
+		return true
+	play_time = duration
+	_set_play_state(PlayState.FINISHED)
+	return false
 
 func _on_skip() -> void:
 	show()
@@ -141,15 +171,6 @@ func _calculate_sync_speed(nodes: Array[ClassNodeWidget], reference_time: float)
 		return
 	_sync_speed = total_duration / reference_time
 
-func _unpause(speed: float = 1.0) -> void:
-	#_play_current(speed)
-	for child in get_children() as Array[ClassNodeWidget]:
-		if child.is_paused():
-			child.play(speed)
-	if _current_node and _current_node.is_finished():
-		_play_next()
-	#_current_node.play(speed)
-
 func _connect_current() -> void:
 	if not _current_node: return
 	if _current_node.finished_playing.is_connected(_play_next): return
@@ -195,7 +216,7 @@ func _play_next() -> void:
 	if next_index >= get_child_count():
 		finish_playing()
 		return
-	_current_node = get_child(next_index)
+	_current_node = get_child(next_index) as ClassNodeWidget
 	_play_current()
 
 func _on_child_finished_playing() -> void:
@@ -257,27 +278,6 @@ func unclear() -> void:
 	show()
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.unclear()
-
-func jump_to_widget(target_widget: Widget) -> bool:
-	print("Jump to widget")
-	reset()
-	if target_widget == self:
-		return true
-	for child in get_children() as Array[ClassNodeWidget]:
-		var stop_search := child.jump_to_widget(target_widget)
-		if not stop_search: continue
-		if child.is_leaf():
-			play_time = child.end_time - start_time
-		else:
-			play_time = child.start_time + child.play_time - start_time
-		_current_node = child
-		_connect_current()
-		pause()
-		#_set_play_state(PlayState.PAUSED)
-		return true
-	play_time = duration
-	_set_play_state(PlayState.FINISHED)
-	return false
 
 func _on_child_updated() -> void:
 	#print("child updated")

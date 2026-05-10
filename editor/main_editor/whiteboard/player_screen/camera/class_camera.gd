@@ -37,27 +37,28 @@ func set_speed_scale(_speed: float) -> void:
 func _ready() -> void:
 	_recenter()
 
-func _process(_delta):
-	var zoom_input := Input.get_axis("camera_zoom_out", "camera_zoom_in")
-	if is_zero_approx(zoom_input):
-		return
-	zoom_input = zoom_input * ZOOM_CHANGE_SPEED * time_scale + 1.0
-	zoom *= zoom_input
-	zoom = zoom.clamp(Vector2.ONE * MIN_ZOOM, Vector2.ONE * MAX_ZOOM)
-	update_grid_visibility()
-	return
-	
-	if Input.is_action_just_pressed("camera_recenter") and user_controlled:
-		user_controlled = false
-		return
-	var input := Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
-	if input.is_zero_approx():
-		velocity = velocity.move_toward(Vector2.ZERO, 1.0)
-	else:
-		user_controlled = true
-		velocity = velocity.move_toward(input * KEY_MOVEMENT_SPEED, 0.6)
-	position += velocity * zoom
-
+#func _process(_delta):
+	#var zoom_input := Input.get_axis("camera_zoom_out", "camera_zoom_in")
+	#if is_zero_approx(zoom_input):
+		#return
+	#print("zooming")
+	#zoom_input = zoom_input * ZOOM_CHANGE_SPEED * time_scale + 1.0
+	#zoom *= zoom_input
+	#zoom = zoom.clamp(Vector2.ONE * MIN_ZOOM, Vector2.ONE * MAX_ZOOM)
+	#update_grid_visibility()
+	#return
+	#
+	#if Input.is_action_just_pressed("camera_recenter") and user_controlled:
+		#user_controlled = false
+		#return
+	#var input := Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
+	#if input.is_zero_approx():
+		#velocity = velocity.move_toward(Vector2.ZERO, 1.0)
+	#else:
+		#user_controlled = true
+		#velocity = velocity.move_toward(input * KEY_MOVEMENT_SPEED, 0.6)
+	#position += velocity * zoom
+#
 
 func update_grid_visibility():
 	#background.show_grid = zoom.x > GRID_ZOOM_THRESHOLD
