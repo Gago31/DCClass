@@ -22,8 +22,8 @@ extends Entity
 
 # 10. init virtual methods: define _init, _enter_tree and _ready mothods here
 
-func _init() -> void:
-	entity_id = "Clear"
+#func _init() -> void:
+	#entity_id = "Clear"
 
 # 11. virtual methods: define other virtual methos here
 
@@ -35,12 +35,12 @@ func get_editor_name() -> String:
 	return "Clear"
 
 # Serialize to a dictionary format(.json) for saving.
-func serialize() -> Dictionary:
-	return {
-		"entity_id": entity_id,
-		"entity_type": get_class_name(),
-		"duration": duration
-	}
+#func serialize() -> Dictionary:
+	#return {
+		#"entity_id": entity_id,
+		#"entity_type": get_class_name(),
+		#"duration": duration
+	#}
 
 func get_widget() -> PackedScene:
 	return preload("uid://b8obtgkbi1jwp")
@@ -73,8 +73,8 @@ func get_widget() -> PackedScene:
 # Deletes this entity.:
 
 # Load data from a dictionary format(.json) to resource(ClearEntity).
-func load_data(data: Dictionary) -> void:
-	pass
+#func load_data(data: Dictionary) -> void:
+	#pass
 
 func config_editor_tree_item(item: TreeItem) -> void:
 	item.set_text(0, get_editor_name())

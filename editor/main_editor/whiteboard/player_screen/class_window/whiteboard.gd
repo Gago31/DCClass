@@ -1,56 +1,30 @@
-class_name WhiteboardInputController
-extends Control
+class_name EditorWhiteboardInput
+extends WhiteboardInputDesktop
 
-const WARP_OFFSET := -10
+#const WARP_OFFSET := -10
 const SQUARED_THRESHOLD := 4.0
 
-
-@onready var camera: ClassCameraEditor = %Camera2D
-
-var _dragging: bool = false
-var _warped: bool = false
+#var _dragging: bool = false
+#var _warped: bool = false
 
 # pen
 var _pen_enabled: bool = false
 var _pressed: bool = false
 var _line: Line2D
 var _last_point: Vector2 = Vector2.INF
-
-var _pen_thickness: float = 3.0
-var _pen_color: Color = Color.WHITE
-
-# Node selection
-var _node_drag_enabled: bool = false
-var _current_node: ClassNode
-var _selected_nodes: Array[ClassLeaf]
-var _last_click_time: float = 0.0
-const _DOUBLE_CLICK_TIME: float = 0.2
-# Node dragging
 var _drag_start_pos: Vector2
-# Drag selection
-#var _drag_selection_enabled: bool = false
-#var _drag_selection_start: Vector2
-#var _drag_selection_rect: Rect2
-#var _selection_box: Control
-# Node Resizing
-var _node_resize_enabled: bool = false
 var _scale_origin: Vector2
-# Selection state
-#var _selection_mouse_pressed: bool = false
-#var _selection_start_pos: Vector2
-const _SELECTION_THRESHOLD = 0.5
 var _delays: Array[float] = []
 var _last_time: float = 0.0
 var _selected_widgets: Array[VisualEntityWidget] = []
+var _multi_select_active := false
 
-@onready var _viewport_container: SubViewportContainer = %SubViewportContainer
-@onready var _viewport: SubViewport = %SubViewport
-@onready var subtitles: RichTextLabel = %Subtitles
+#@onready var _viewport: SubViewport = %SubViewport
+#@onready var subtitles: RichTextLabel = %Subtitles
 @onready var _selection_box: SelectionBox = %SelectionBox
+#@onready var camera: ClassCameraEditor = %Camera2D
 
 func _ready() -> void:
-	#_create_selection_box()
-	EditorManager.pen_mode_changed.connect(_on_pen_mode_changed)
 	_selection_box.widgets_selected.connect(_on_widgets_selected)
 
 func _gui_input(event):
@@ -66,48 +40,9 @@ func _gui_input(event):
 		EditorManager.PenMode.RESIZE:
 			_handle_node_resize(event)
 
-func _on_pen_mode_changed(pen_mode: EditorManager.PenMode) -> void:
-	match pen_mode:
-		EditorManager.PenMode.DISABLED:
-			_viewport.physics_object_picking = false
-		EditorManager.PenMode.SELECT:
-			_viewport.physics_object_picking = false
-		EditorManager.PenMode.DRAW:
-			_viewport.physics_object_picking = false
-		EditorManager.PenMode.DRAG:
-			_viewport.physics_object_picking = false
-		EditorManager.PenMode.RESIZE:
-			_viewport.physics_object_picking = false
-
 func _on_pen_toggled(active: bool) -> void:
 	_pen_enabled = active
 	_last_time = Time.get_ticks_msec() / 1000.0
-
-func _on_pen_thickness_changed(thickness: float) -> void:
-	_pen_thickness = thickness
-	
-func _on_pen_color_changed(color: Color) -> void:
-	_pen_color = color
-
-func _on_node_drag_enabled(enabled: bool) -> void:
-	_node_drag_enabled = enabled
-
-func _on_node_resize_enabled(enabled: bool) -> void:
-	_node_resize_enabled = enabled
-
-#func _on_class_node_selected(node: ClassNode, selected: bool) -> void:
-	#if node == _current_node:
-		#return
-	#var controller = node._node_controller
-	#if node is ClassLeaf: # Case ClassLeaf
-		#if selected:
-			#_selected_nodes.append(node)
-		#else:
-			#_selected_nodes.erase(node)
-
-# Callback to deselect all selected nodes
-func _clear_selection():
-	_selected_nodes.clear()
 
 func _handle_drawing(event: InputEvent) -> void:
 	if not event is InputEventMouseMotion: return
@@ -172,36 +107,31 @@ func _handle_drawing(event: InputEvent) -> void:
 		_line.queue_free()
 		_line = null
 
-var _multi_select_active := false
 
-func _handle_screen_dragging(event: InputEvent) -> void:
-	#if not (_pen_enabled or _node_drag_enabled):
-	#_handle_widget_selection(event)
-
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		get_viewport().set_input_as_handled()
-		_dragging = event.is_pressed()
-	elif event is InputEventMouseMotion and _dragging:
-		get_viewport().set_input_as_handled()
-
-		camera.user_controlled = true
-		camera.position -= event.relative
-
-		var mouse_pos: Vector2 = event.global_position
-		var view := get_global_rect().grow(WARP_OFFSET)
-		
-		mouse_pos.x = wrapf(mouse_pos.x, view.position.x, view.end.x)
-		mouse_pos.y = wrapf(mouse_pos.y, view.position.y, view.end.y)
-		Input.warp_mouse(mouse_pos)
+#func _handle_screen_dragging(event: InputEvent) -> void:
+	##if not (_pen_enabled or _node_drag_enabled):
+	##_handle_widget_selection(event)
+#
+	#if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		#get_viewport().set_input_as_handled()
+		#_dragging = event.is_pressed()
+	#elif event is InputEventMouseMotion and _dragging:
+		#get_viewport().set_input_as_handled()
+#
+		#camera.user_controlled = true
+		#camera.position -= event.relative
+#
+		#var mouse_pos: Vector2 = event.global_position
+		#var view := get_global_rect().grow(WARP_OFFSET)
+		#
+		#mouse_pos.x = wrapf(mouse_pos.x, view.position.x, view.end.x)
+		#mouse_pos.y = wrapf(mouse_pos.y, view.position.y, view.end.y)
+		#Input.warp_mouse(mouse_pos)
 
 func _handle_widget_selection(event: InputEvent) -> void:
-	if event.is_action_pressed("multi_select"):
-		print("multi select active")
+	if event.is_action_pressed(&"multi_select"):
 		_multi_select_active = true
-		#_viewport.physics_object_picking = false
-	elif event.is_action_released("multi_select"):
-		print("multi select inactive")
-		#_viewport.physics_object_picking = true
+	elif event.is_action_released(&"multi_select"):
 		_multi_select_active = false
 	_handle_drag_selection(event)
 
@@ -398,21 +328,16 @@ func _finish_drag_selection(reset_selection: bool):
 
 func _new_line() -> Line2D:
 	var l := Line2D.new()
-	_pen_color = WhiteboardManager.get_pen_color()
-	_pen_thickness = WhiteboardManager.get_pen_thickness()
-	l.width = _pen_thickness
-	l.default_color = _pen_color
+	l.width = WhiteboardManager.get_pen_thickness()
+	l.default_color = WhiteboardManager.get_pen_color()
 	l.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	l.end_cap_mode = Line2D.LINE_CAP_ROUND
 	l.joint_mode = Line2D.LINE_JOINT_ROUND
 	l.antialiased = true
 	return l
 
-func _current_node_changed(node: ClassNode) -> void:
-	_current_node = node
-
-func _on_subtitles_updated(text: String) -> void:
-	subtitles.parse_bbcode(text)
+#func _on_subtitles_updated(text: String) -> void:
+	#subtitles.parse_bbcode(text)
 
 func _clear_widget_selection() -> void:
 	for widget in _selected_widgets:

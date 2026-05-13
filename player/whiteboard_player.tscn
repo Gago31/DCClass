@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bb56cn63h2f8v"]
+
+[ext_resource type="Script" uid="uid://b0qebregshndl" path="res://player/whiteboard_player.gd" id="1_u4y48"]
+[ext_resource type="PackedScene" uid="uid://chua3ehkajj2r" path="res://player/player_whiteboard_ui.tscn" id="2_5ifk0"]
+[ext_resource type="PackedScene" uid="uid://ca0ens8jsu8yq" path="res://core/tree_postprocessing/tree_postprocessing.tscn" id="3_27pbq"]
+
+[node name="WhiteboardPlayer" type="CanvasLayer" unique_id=1620591464]
+script = ExtResource("1_u4y48")
+
+[node name="ClassWindow" parent="." unique_id=225664527 instance=ExtResource("2_5ifk0")]
+unique_name_in_owner = true
+
+[node name="TreePostprocessing" parent="." unique_id=1588888408 instance=ExtResource("3_27pbq")]
+unique_name_in_owner = true

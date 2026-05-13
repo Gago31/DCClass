@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://qu518x450dvs"]
+
+[ext_resource type="Script" uid="uid://djor67eg6hxt6" path="res://player/main_menu_player.gd" id="1_kd8ov"]
+[ext_resource type="PackedScene" uid="uid://bb56cn63h2f8v" path="res://player/whiteboard_player.tscn" id="2_ash6g"]
+
+[node name="MenuPlayer" type="Control" unique_id=73399409]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kd8ov")
+whiteboard = ExtResource("2_ash6g")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=83734487]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=480644587]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer" unique_id=299255230]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=1383092694]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer2" unique_id=748881887]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "DCClass"
+
+[node name="VSeparator" type="VSeparator" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=58005320]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=1219162899]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer" unique_id=2041411447]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ButtonLoad" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer" unique_id=56748370]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load a class"
+
+[node name="SelectFileDialog" type="FileDialog" parent="." unique_id=45662847]
+unique_name_in_owner = true
+title = "Open a File"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.dcc")
+use_native_dialog = true
+
+[node name="LoadErrorDialog" type="AcceptDialog" parent="." unique_id=1308879657]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 1
+force_native = true
+dialog_text = "Failed to load project. Please select your project's root folder."
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/HBoxContainer/MarginContainer/VBoxContainer/ButtonLoad" to="." method="_select_file"]
+[connection signal="file_selected" from="SelectFileDialog" to="." method="_on_file_selected"]

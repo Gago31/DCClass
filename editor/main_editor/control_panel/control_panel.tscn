@@ -3,30 +3,11 @@
 [ext_resource type="Script" uid="uid://chdvlucbsrdn0" path="res://editor/main_editor/editor_ui.gd" id="1_8c1hf"]
 [ext_resource type="Resource" uid="uid://sjnr4t8cxq1d" path="res://test_class.tres" id="2_trjv5"]
 [ext_resource type="Script" uid="uid://cqighbl4pvak0" path="res://editor/utils/tree_manager.gd" id="2_vyrmg"]
-[ext_resource type="Texture2D" uid="uid://dk0dj4fesyur" path="res://assets/sprites/ui/pen_sizes.png" id="3_2omcq"]
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="3_8c1hf"]
 [ext_resource type="Texture2D" uid="uid://o6w8p0jepmvn" path="res://assets/sprites/ui/pen_sizes_2.png" id="4_0gpha"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_8c1hf"]
 allow_unpress = true
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_0gpha"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_04d5a"]
-atlas = ExtResource("3_2omcq")
-region = Rect2(0, 0, 15, 15)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qd7se"]
-atlas = ExtResource("3_2omcq")
-region = Rect2(15, 0, 15, 15)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3c3sn"]
-atlas = ExtResource("3_2omcq")
-region = Rect2(30, 0, 15, 15)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cb4vn"]
-atlas = ExtResource("3_2omcq")
-region = Rect2(45, 0, 15, 15)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mexuc"]
 atlas = ExtResource("4_0gpha")
@@ -268,47 +249,6 @@ value = 3.0
 visible = false
 layout_mode = 2
 
-[node name="PenThicknessS" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=790395142]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-toggle_mode = true
-button_pressed = true
-button_group = SubResource("ButtonGroup_0gpha")
-icon = SubResource("AtlasTexture_04d5a")
-icon_alignment = 1
-
-[node name="PenThicknessM" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=922720000]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_0gpha")
-icon = SubResource("AtlasTexture_qd7se")
-icon_alignment = 1
-
-[node name="PenThicknessL" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=2042580496]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_0gpha")
-icon = SubResource("AtlasTexture_3c3sn")
-icon_alignment = 1
-
-[node name="PenThicknessXL" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer" unique_id=1852875783]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
-toggle_mode = true
-button_group = SubResource("ButtonGroup_0gpha")
-icon = SubResource("AtlasTexture_cb4vn")
-icon_alignment = 1
-
 [node name="PenThicknessOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=191751171]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -441,10 +381,6 @@ color_modes_visible = false
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/AudioButton" to="." method="_on_toggle_audio_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenButton" to="." method="_on_button_pen_toggled"]
 [connection signal="drag_ended" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/PenThicknessSlider" to="." method="_on_thickness_slider_changed"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessS" to="." method="_on_pen_thickness_s_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessM" to="." method="_on_pen_thickness_m_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessL" to="." method="_on_pen_thickness_l_toggled"]
-[connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/HBoxContainer/PenThicknessXL" to="." method="_on_pen_thickness_xl_toggled"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/PenThicknessOptions" to="." method="_on_pen_thickness_options_item_selected"]
 [connection signal="color_changed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_changed"]
 [connection signal="popup_closed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_closed"]

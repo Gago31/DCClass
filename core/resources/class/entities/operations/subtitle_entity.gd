@@ -24,8 +24,8 @@ extends Entity
 # 11. virtual methods: define other virtual methos here
 
 # 12. public methods: define all public methods here
-func _init() -> void:
-	entity_id = "Subtitle"
+#func _init() -> void:
+	#entity_id = "Subtitle"
 
 func get_class_name() -> String:
 	return "SubtitleEntity"
@@ -48,13 +48,19 @@ func get_widget() -> PackedScene:
 	#duration = 0.0
 
 func config_editor_tree_item(item: TreeItem) -> void:
+	_tree_item = item
 	item.set_text(0, "Subtitle:")
 	item.set_text(1, text)
-	item.set_editable(1, true)
+	#item.set_editable(1, true)
 
 func _on_value_updated_from_editor(item: TreeItem) -> void:
 	var new_text := item.get_text(1)
 	text = new_text
+
+func set_text(new_text: String) -> void:
+	text = new_text
+	_tree_item.set_text(1, new_text)
+	updated.emit()
 
 # 13. private methods: define all private methods here, use _ as preffix
 

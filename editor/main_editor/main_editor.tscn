@@ -5,17 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://bdspal4chhhh5" path="res://editor/main_editor/file/file.tscn" id="3_0im0g"]
 [ext_resource type="PackedScene" uid="uid://bkt85dfs5q52u" path="res://editor/main_editor/control_panel/control_panel.tscn" id="4_4yc00"]
 [ext_resource type="PackedScene" uid="uid://ca0ens8jsu8yq" path="res://core/tree_postprocessing/tree_postprocessing.tscn" id="5_pxf3b"]
-[ext_resource type="Script" uid="uid://b2nvfoxd60o80" path="res://core/tree_postprocessing/tree_preprocessor_script.gd" id="6_mhl3f"]
-[ext_resource type="Script" uid="uid://cb1bnecsxdruw" path="res://core/tree_postprocessing/postprocessors/video_playback_time_calculator.gd" id="7_ockqd"]
-[ext_resource type="Script" uid="uid://w4fdj7mga28s" path="res://core/tree_postprocessing/postprocessors/seek_timestamps.gd" id="8_ockqd"]
-
-[sub_resource type="Resource" id="Resource_hiwmp"]
-script = ExtResource("7_ockqd")
-metadata/_custom_type_script = "uid://cb1bnecsxdruw"
-
-[sub_resource type="Resource" id="Resource_hc7s1"]
-script = ExtResource("8_ockqd")
-metadata/_custom_type_script = "uid://w4fdj7mga28s"
 
 [node name="EditorScreen" type="Control" unique_id=265593055]
 layout_mode = 3
@@ -51,16 +40,7 @@ visible = false
 clip_contents = true
 layout_mode = 2
 
-[node name="Class" type="Node" parent="." unique_id=1674128256]
-
-[node name="Controllers" type="Node" parent="Class" unique_id=627159]
-unique_name_in_owner = true
-
-[node name="AudioWidgets" type="Node2D" parent="Class" unique_id=1709407643]
-unique_name_in_owner = true
-
 [node name="TreePostprocessing" parent="." unique_id=1588888408 instance=ExtResource("5_pxf3b")]
 unique_name_in_owner = true
-preprocessors = Array[ExtResource("6_mhl3f")]([SubResource("Resource_hiwmp"), SubResource("Resource_hc7s1")])
 
 [connection signal="updated" from="PanelContainer/TabContainer/Control Panel" to="." method="_on_tree_updated"]

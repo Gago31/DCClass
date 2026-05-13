@@ -1,18 +1,24 @@
-[gd_scene format=3 uid="uid://c340c4al7fg2r"]
+[gd_scene format=3 uid="uid://chua3ehkajj2r"]
 
-[ext_resource type="Script" uid="uid://cgsis7ghldo0n" path="res://editor/main_editor/whiteboard/player_screen/class_window/class_window.gd" id="1_q48er"]
-[ext_resource type="Script" uid="uid://cnp5mp84uvknc" path="res://editor/main_editor/whiteboard/player_screen/class_window/whiteboard.gd" id="2_ebiip"]
-[ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="3_jqomu"]
-[ext_resource type="PackedScene" uid="uid://dc4g07pno15rd" path="res://editor/selection_box.tscn" id="4_dghx6"]
-[ext_resource type="PackedScene" uid="uid://njv5m467c4cn" path="res://editor/main_editor/whiteboard/player_screen/background/background.tscn" id="4_pfx3t"]
-[ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="6_q4reb"]
+[ext_resource type="Script" uid="uid://dudfcdw21c7iv" path="res://player/player_whiteboard_ui.gd" id="1_8ma2g"]
+[ext_resource type="Script" uid="uid://dppoh7xugsiss" path="res://core/whiteboard_input_desktop.gd" id="2_la4bq"]
+[ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="5_4yo7g"]
+[ext_resource type="Texture2D" uid="uid://cs5m6p5kwdhoy" path="res://assets/sprites/ui/subtitles.png" id="6_8ma2g"]
+[ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="6_13k2a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efjkl"]
+bg_color = Color(0.07284262, 0.072842635, 0.072842576, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_efjkl"]
+atlas = ExtResource("6_13k2a")
+region = Rect2(0, 200, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uioh1"]
-atlas = ExtResource("3_jqomu")
+atlas = ExtResource("6_13k2a")
 region = Rect2(50, 150, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mcb8p"]
-atlas = ExtResource("3_jqomu")
+atlas = ExtResource("6_13k2a")
 region = Rect2(350, 350, 50, 50)
 
 [node name="ClassWindow" type="Control" unique_id=225664527]
@@ -22,7 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_q48er")
+script = ExtResource("1_8ma2g")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1986111757]
 layout_mode = 1
@@ -37,7 +43,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 size_flags_vertical = 3
-script = ExtResource("2_ebiip")
+script = ExtResource("2_la4bq")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="VBoxContainer/Whiteboard" unique_id=1498988373]
 layout_mode = 1
@@ -55,14 +61,62 @@ handle_input_locally = false
 size = Vector2i(1280, 612)
 render_target_update_mode = 4
 
-[node name="ParallaxBackground" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=993345449 instance=ExtResource("4_pfx3t")]
+[node name="CanvasLayer" type="CanvasLayer" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=1755758519]
+layer = -100
 
-[node name="SelectionBox" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=344051990 instance=ExtResource("4_dghx6")]
-unique_name_in_owner = true
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport/CanvasLayer" unique_id=763574757]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.1, 0.1, 0.1, 1)
 
 [node name="Camera2D" type="Camera2D" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=1299586417]
 unique_name_in_owner = true
-script = ExtResource("6_q4reb")
+script = ExtResource("5_4yo7g")
+
+[node name="Control" type="HBoxContainer" parent="VBoxContainer/Whiteboard" unique_id=296743734]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 74.0
+grow_vertical = 2
+
+[node name="IndexTreePanel" type="PanelContainer" parent="VBoxContainer/Whiteboard/Control" unique_id=863473927]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_efjkl")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard/Control/IndexTreePanel" unique_id=1725070537]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="IndexTree" type="Tree" parent="VBoxContainer/Whiteboard/Control/IndexTreePanel/MarginContainer" unique_id=730891112]
+unique_name_in_owner = true
+layout_mode = 2
+enable_drag_unfolding = false
+hide_root = true
+auto_tooltip = false
+scroll_horizontal_enabled = false
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard/Control" unique_id=1566856790]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="IndexButton" type="Button" parent="VBoxContainer/Whiteboard/Control/MarginContainer" unique_id=2082549032]
+layout_mode = 2
+icon = SubResource("AtlasTexture_efjkl")
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Whiteboard" unique_id=1813186326]
 layout_mode = 1
@@ -175,3 +229,12 @@ icon = SubResource("AtlasTexture_mcb8p")
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
+
+[node name="SubtitlesButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=2094222288]
+layout_mode = 2
+toggle_mode = true
+icon = ExtResource("6_8ma2g")
+
+[connection signal="item_selected" from="VBoxContainer/Whiteboard/Control/IndexTreePanel/MarginContainer/IndexTree" to="." method="_on_index_tree_item_selected"]
+[connection signal="pressed" from="VBoxContainer/Whiteboard/Control/MarginContainer/IndexButton" to="." method="_on_index_button_pressed"]
+[connection signal="toggled" from="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/SubtitlesButton" to="." method="_on_subtitles_button_toggled"]

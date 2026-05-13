@@ -14,7 +14,7 @@ signal pen_lifted
 var _whiteboard: Whiteboard
 var _whiteboard_window: Window
 var _context_stack: Array[WhiteboardContext] = []
-var ui: ClassWindowEditor
+var ui: WhiteboardUI
 
 func _ready() -> void:
 	push_context()
@@ -52,10 +52,10 @@ func update_subtitles(text: String) -> void:
 	_whiteboard.update_subtitles(text)
 
 func search_widget_by_entity(entity: Entity) -> Widget:
-	return _whiteboard.get_class_root_widget().search_widget_by_entity(entity)
+	return get_root_widget().search_widget_by_entity(entity)
 
 func search_widget_by_class_node(node: ClassNode) -> Widget:
-	return _whiteboard.get_class_root_widget().search_widget_by_class_node(node)
+	return get_root_widget().search_widget_by_class_node(node)
 
 func push_context() -> void:
 	var new_context := WhiteboardContext.new()
@@ -84,13 +84,13 @@ func get_pen_thickness() -> float:
 	return _get_context().pen_thickness
 
 func clear_until(widget: Widget) -> void:
-	_whiteboard.get_class_root_widget().clear_until(widget)
+	get_root_widget().clear_until(widget)
 
 func set_playing(value: bool) -> void:
 	if value:
-		_whiteboard.get_class_root_widget().play()
+		get_root_widget().play()
 	else:
-		_whiteboard.get_class_root_widget().pause()
+		get_root_widget().pause()
 
 func reprocess_tree() -> void:
 	if not _whiteboard: return

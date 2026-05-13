@@ -20,7 +20,7 @@ func _setup_editor_tree_item(item: TreeItem) -> void:
 func get_printable_data() -> String:
 	return entity.get_editor_name() 
 
-func update_value(item: TreeItem) -> void:
+func _on_value_updated_from_editor(item: TreeItem) -> void:
 	entity.update_value(item)
 
 func delete() -> void:

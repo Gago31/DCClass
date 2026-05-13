@@ -327,6 +327,7 @@ func _on_item_activated() -> void:
 	reset_colors()
 	var item := get_next_selected(null)
 	item.set_custom_color(0, Color.GREEN)
+	#_current_item = item
 	var node := item.get_metadata(0) as ClassNode
 	if node.is_leaf() or not item.collapsed:
 		node_selected.emit(node)

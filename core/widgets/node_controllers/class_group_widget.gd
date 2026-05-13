@@ -246,7 +246,7 @@ func search_widget_by_entity(value: Entity) -> Widget:
 			return child_res
 	return null
 
-func search_widget_by_class_node(value: ClassNode) -> Widget:
+func search_widget_by_class_node(value: ClassNode) -> ClassNodeWidget:
 	if get_class_node() == value:
 		return self
 	for child in get_children() as Array[ClassNodeWidget]:

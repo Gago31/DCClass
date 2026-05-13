@@ -32,6 +32,9 @@ func _process(_delta: float) -> void:
 		else:
 			process_mode = Node.PROCESS_MODE_DISABLED
 
+## Runs the given `callable` in a separate thread and emits [signal thread_finished]
+## once it finishes. 
+## Any arguments must be passed to the `callable` through [method Callable.bind].
 func run_thread(callable: Callable) -> Error:
 	print("Thread started...")
 	var err := thread.start(callable)

@@ -37,27 +37,3 @@ extends Resource
 func _init() -> void:
 	if not date:
 		date = Date.new()
-
-func serialize() -> Dictionary:
-	return {
-		"name": name,
-		"description": description,
-		"course": course,
-		"author_name": author_name,
-		"author_description": author_description,
-		"file_version": file_version,
-		"date": date.serialize(),
-		"license": license,
-	}
-
-static func deserialize(data: Dictionary) -> ClassMetadata:
-	var instance: ClassMetadata = ClassMetadata.new()
-	instance.name = data["name"]
-	instance.description = data["description"]
-	instance.course = data["course"]
-	instance.author_name = data["author_name"]
-	instance.author_description = data["author_description"]
-	instance.file_version = data["file_version"]
-	instance.date = Date.deserialize(data["date"])
-	instance.license = data["license"]
-	return instance

@@ -100,7 +100,7 @@ func _setup_editor_tree_item(item: TreeItem) -> void:
 func get_printable_data() -> String:
 	return "Slide: %s" % _name
 
-func update_value(item: TreeItem) -> void:
+func _on_value_updated_from_editor(item: TreeItem) -> void:
 	var new_name := item.get_text(1)
 	_name = new_name
 

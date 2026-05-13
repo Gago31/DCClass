@@ -107,7 +107,7 @@ func _setup_editor_tree_item(item: TreeItem) -> void:
 func get_printable_data() -> String:
 	return "Group: %s" % _name
 
-func update_value(item: TreeItem) -> void:
+func _on_value_updated_from_editor(item: TreeItem) -> void:
 	var new_name := item.get_text(1)
 	_name = new_name
 
@@ -136,7 +136,7 @@ func _on_child_deleted(child: ClassNode) -> void:
 # Serialize to a dictionary format(.json) for saving.:
 
 # 13. private methods: define all private methods here, use _ as preffix
-func _validate():
-	pass
+#func _validate():
+	#pass
 	
 # 14. subclasses: define all subclasses here

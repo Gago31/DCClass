@@ -21,8 +21,8 @@ extends Entity
 
 
 # 10. init virtual methods: define _init, _enter_tree and _ready mothods here
-func _init() -> void:
-	entity_id = "PausePlayback"
+#func _init() -> void:
+	#entity_id = "PausePlayback"
 
 
 # 11. virtual methods: define other virtual methos here

@@ -16,33 +16,21 @@ enum PenThickness {
 
 @export var test_class: ClassRoot
 
+var _pen_color_changed: bool = false
+var current_item_tree: TreeItem
+var select_item_index_disabled: bool = false
+var edit_subtitles := false
+var current_node: ClassNode
+
 @onready var menu_btn_edit: MenuButton = %EditMenuButton
 @onready var menu_btn_insert: MenuButton = %InsertMenuButton
-
-#@onready var btn_zoom: CheckButton = %ZoomButton
-
 @onready var tree_manager: TreeManagerEditor = %IndexTree
-
-@onready var pen_color_picker: ColorPickerButton = %ColorPickerButton
-var _pen_color_changed: bool = false
-var _pending_pen_color: Color = Color.WHITE
-
 @onready var pen_thickness_slider: HSlider = %PenThicknessSlider
-var _pending_pen_thickness: float = 3.0
-
+@onready var pen_color_picker: ColorPickerButton = %ColorPickerButton
 @onready var subtitles_box: TextEdit = %SubtitlesBox
 @onready var custom_color_popup: Popup = %CustomColorPopup
 @onready var color_picker: ColorPicker = %ColorPicker
 
-#var _current_node: ClassNode
-#var _class_index: ClassIndex
-var current_item_tree: TreeItem
-var select_item_index_disabled: bool = false
-
-# solo será true 1 vez con el primer trazo
-var _first_stroke: bool = true
-var _pen_color_changed_first: bool = false
-var _pen_thickness_changed_first: bool = false
 
 func _ready() -> void:
 	EditorManager.set_editor_ui(self)
@@ -140,7 +128,6 @@ func _add_pen_thickness(thickness: float) -> void:
 
 func add_image(path: String) -> void:
 	var entity := ImageEntity.new()
-	#var tmp_path := entity.save_resource(path)
 	var converted_path := start_image_conversion(entity, path)
 	prints("Converted path", converted_path)
 	entity.image_path = converted_path
@@ -148,9 +135,7 @@ func add_image(path: String) -> void:
 
 func add_video(path: String) -> void:
 	var entity := VideoEntity.new()
-	# TODO: convert video, wait for thread completion and assign the video
 	var converted_path := start_video_conversion(entity, path)
-	#var converted_path := ""
 	prints("Converted path", converted_path)
 	entity.video_path = converted_path
 	_add_entity(entity)
@@ -179,12 +164,10 @@ func _add_seek_video() -> void:
 	var entity := SeekVideoEntity.new()
 	_add_entity(entity)
 
-func _on_image_selected(status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
-	#EditorManager.add_image(selected_paths[0])
+func _on_image_selected(_status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
 	add_image(selected_paths[0])
 
-func _on_video_selected(status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
-	#EditorManager.add_video(selected_paths[0])
+func _on_video_selected(_status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
 	add_video(selected_paths[0])
 
 func start_video_conversion(entity: VideoEntity, input_video_path: String) -> String:
@@ -193,11 +176,16 @@ func start_video_conversion(entity: VideoEntity, input_video_path: String) -> St
 func start_image_conversion(entity: ImageEntity, input_image_path: String) -> String:
 	return EditorManager.convert_image(entity, input_image_path)
 
-
 func _on_confirm_subtitles() -> void:
 	var text := subtitles_box.text
-	_add_subtitles(text)
-	subtitles_box.clear()
+	if edit_subtitles:
+		var leaf := current_node as ClassLeaf
+		var entity := leaf.entity as SubtitleEntity
+		if not entity: return
+		entity.set_text(text)
+	else:
+		_add_subtitles(text)
+		subtitles_box.clear()
 
 # func _add_zoom():
 	# var entity_zoom = ZoomEntity.new()
@@ -342,29 +330,8 @@ func _on_multi_selected(item: TreeItem, column: int, selected: bool):
 	var node = item.get_metadata(0)
 	#_bus.class_node_selected.emit(node, selected)
 
-# Show or hide all the children of a group if it is collapsed
-#func _execute_after_rendering():
-	#if select_item_index_disabled:
-		#return
-	#if _current_node._node_controller is GroupController and current_item_tree.collapsed:
-		#_current_node._node_controller.skip_all_children()
-		#_bus.show_outlines.emit()
-	#else:
-		#get_tree().call_group(&"skipped_before_play", "clear_before_play")
-		#_bus.clear_outlines.emit()
-
 func _clear_selection():
 	tree_manager.deselect_all()
-
-#func _on_pen_thickness_changed():
-	#var entity := PenThicknessEntity.new()
-	#entity.thickness = _pending_pen_thickness
-	#_add_entity(entity)
-#
-#func _on_pen_color_changed(color: Color) -> void:
-	#var entity := PenColorEntity.new()
-	#entity.color = color
-	#_add_entity(entity)
 
 func _on_color_picker_changed(color: Color) -> void:
 	#_pending_pen_color = color
@@ -378,39 +345,29 @@ func _on_color_picker_closed() -> void:
 		_add_pen_color(WhiteboardManager.get_pen_color())
 		#_on_pen_color_changed(_pending_pen_color)
 		_pen_color_changed = false
-	
-func _on_thickness_slider_changed(changed: bool) -> void:
-	if not changed: return
-	_pending_pen_thickness = pen_thickness_slider.value
-	_pen_thickness_changed_first = true
-
-#func _on_pen_started_drawing() -> void:
-	#if _first_stroke:
-		#if _pen_color_changed_first and !_pen_thickness_changed_first:
-			#_add_pen_thickness(WhiteboardManager.get_pen_thickness())
-			##EditorManager.add_pen_thickness_change(_pending_pen_thickness)
-		#if _pen_thickness_changed_first and !_pen_color_changed_first:
-			#_add_pen_color(WhiteboardManager.get_pen_color())
-			##EditorManager.add_pen_color_change(pen_color_picker.color)
-		#if !_pen_thickness_changed_first and !_pen_color_changed_first:
-			##EditorManager.add_pen_color_change(pen_color_picker.color)
-			##EditorManager.add_pen_thickness_change(_pending_pen_thickness)
-			#_add_pen_color(WhiteboardManager.get_pen_color())
-			#_add_pen_thickness(WhiteboardManager.get_pen_thickness())
-		#_first_stroke = false
-
-func _on_pen_stopped_drawing() -> void:
-	_first_stroke = true
 
 #endregion
-
 
 func _on_index_tree_node_selected(node: ClassNode) -> void:
 	var root := WhiteboardManager.get_root_widget()
 	var widget := root.search_widget_by_class_node(node)
 	root.jump_to_widget(widget)
+	current_node = node
+	_check_special_behavior()
 	widget_selected.emit(widget)
 
+# Here we can check if the control panel has to do something special
+# after an item is selected, like changing to "edit mode" for an entity
+func _check_special_behavior() -> void:
+	if not current_node.is_leaf(): return
+	var leaf := current_node as ClassLeaf
+	var entity := leaf.entity
+	if entity is SubtitleEntity:
+		edit_subtitles = true
+		subtitles_box.text = (entity as SubtitleEntity).text
+	else:
+		edit_subtitles = false
+		subtitles_box.text = ""
 
 func _on_index_tree_updated() -> void:
 	updated.emit()
@@ -418,24 +375,6 @@ func _on_index_tree_updated() -> void:
 func _change_pen_thickness(thickness: PenThickness) -> void:
 	WhiteboardManager.set_pen_thickness(thickness)
 	_add_pen_thickness(thickness)
-	#_pen_thickness_changed_first = true
-
-func _on_pen_thickness_s_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		_change_pen_thickness(PenThickness.S)
-
-func _on_pen_thickness_m_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		_change_pen_thickness(PenThickness.M)
-
-func _on_pen_thickness_l_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		_change_pen_thickness(PenThickness.L)
-
-func _on_pen_thickness_xl_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		_change_pen_thickness(PenThickness.XL)
-
 
 func _on_pen_thickness_options_item_selected(index: int) -> void:
 	match index:
@@ -445,7 +384,6 @@ func _on_pen_thickness_options_item_selected(index: int) -> void:
 		3: _change_pen_thickness(PenThickness.L)
 		4: _change_pen_thickness(PenThickness.XL)
 		5: _change_pen_thickness(PenThickness.XXL)
-
 
 func _on_pen_color_options_item_selected(index: int) -> void:
 	match index:

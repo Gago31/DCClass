@@ -74,7 +74,7 @@ func _compute_end_time() -> float:
 func search_widget_by_entity(value: Entity) -> Widget:
 	return widget.search_widget_by_entity(value)
 
-func search_widget_by_class_node(value: ClassNode) -> Widget:
+func search_widget_by_class_node(value: ClassNode) -> ClassNodeWidget:
 	if get_class_node() == value:
 		return self
 	return null

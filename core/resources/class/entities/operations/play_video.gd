@@ -4,12 +4,11 @@ extends NodeReferenceEntity
 
 @export var until_position: float = 0.0
 var video_id: String = ""
-var _tree_item: TreeItem
 var entity: VideoEntity
 
 func _init() -> void:
 	print("Init called")
-	entity_id = "Play Video"
+	#entity_id = "Play Video"
 	if node_reference:
 		set_reference(node_reference)
 

@@ -11,6 +11,7 @@ extends Control
 @onready var load_error_dialog: AcceptDialog = %LoadErrorDialog
 
 func _ready():
+	ClassResourceLoader.is_editor = true
 	btn_create_class.pressed.connect(_create_class)
 	btn_load_class.pressed.connect(_select_file)
 
