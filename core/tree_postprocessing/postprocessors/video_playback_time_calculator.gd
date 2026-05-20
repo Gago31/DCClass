@@ -1,6 +1,10 @@
 class_name VideoPlaybackPostprocessor
 extends TreePostprocessor
 
+## A [TreePostprocessor] that determines the actual duration of video playback
+## operations, to allow an accurate timing during the class playback.
+
+
 var video_positions: Dictionary[VideoEntity, float] = {}
 
 func reset() -> void:

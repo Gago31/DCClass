@@ -1,6 +1,8 @@
 class_name SubtitleWidget
 extends OperationWidget
 
+## Widget that represents a change in the subtitles of the class.
+
 
 func _on_started_playing() -> void:
 	WhiteboardManager.update_subtitles(get_entity().text)

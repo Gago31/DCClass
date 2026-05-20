@@ -4,3 +4,4 @@
 
 [node name="ExternalResourceLoader" type="Node" unique_id=1741297059]
 script = ExtResource("1_13qdw")
+is_editor = true

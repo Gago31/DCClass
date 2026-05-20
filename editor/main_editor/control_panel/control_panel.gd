@@ -1,8 +1,8 @@
 class_name ControlPanel
 extends MarginContainer
 
-@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
-@onready var _bus: EditorEventBus = Engine.get_singleton(&"EditorSignals")
+#@onready var _bus_core: CoreEventBus = Engine.get_singleton(&"CoreSignals")
+#@onready var _bus: EditorEventBus = Engine.get_singleton(&"EditorSignals")
 
 @onready var menu_btn_edit: MenuButton = %EditMenuButton
 @onready var menu_btn_insert: MenuButton = %InsertMenuButton

@@ -43,6 +43,9 @@ func _ready():
 	time_slider.value_changed.connect(_on_time_slider_value_changed)
 	debouncer_timer.timeout.connect(_on_debouncer_timer_timeout)
 	time_slider.drag_ended.connect(_on_time_slider_drag_ended)
+	
+	await get_tree().process_frame
+	WhiteboardManager.reprocess_tree()
 
 func _process(_delta: float):
 	if class_root.is_playing():

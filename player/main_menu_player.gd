@@ -12,6 +12,7 @@ func _select_file():
 	select_file_dialog.popup()
 
 func _on_file_selected(path: String) -> void:
+	prints("Loading file", path)
 	if not path.ends_with(".dcc"):
 		printerr("Invalid file type: ", path)
 		return

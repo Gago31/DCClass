@@ -6,8 +6,8 @@ var record_stream: AudioEffectRecord = AudioServer.get_bus_effect(AudioServer.ge
 var record_data: AudioStreamWAV
 var audio_index: int = 1
 
-@onready var mic_stream := %AudioRecordStream
-@onready var audio_stream_player := %AudioStreamPlayer
+@onready var mic_stream: AudioStreamPlayer = %AudioRecordStream
+@onready var audio_stream_player: AudioStreamPlayer = %AudioStreamPlayer
 
 
 func start_recording() -> void:

@@ -1,6 +1,10 @@
 class_name VideoWidget
 extends VisualEntityWidget
 
+## [VisualEntityWidget] that displays a video in the whiteboard.
+##
+## This widget only contains the video. To actually play it you have to use
+## [PlayVideoWidget] and [SeekVideoWidget] and set this widget as its reference.
 
 signal reached_target_time
 

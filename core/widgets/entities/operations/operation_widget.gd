@@ -2,12 +2,7 @@
 class_name OperationWidget
 extends EntityWidget
 
-
-#func _on_skip() -> void:
-	#_on_started_playing()
-
-#func _on_reset() -> void:
-	#hide()
+## Base class for [EntityWidget]s that represent an instant operation.
 
 func _calculate_duration() -> float:
 	return 0.0

@@ -239,7 +239,7 @@ func _on_children_cleared() -> void:
 		#child.queue_free()
 		child.free()
 
-func search_widget_by_entity(value: Entity) -> Widget:
+func search_widget_by_entity(value: Entity) -> EntityWidget:
 	for child in get_children() as Array[ClassNodeWidget]:
 		var child_res := child.search_widget_by_entity(value)
 		if child_res:

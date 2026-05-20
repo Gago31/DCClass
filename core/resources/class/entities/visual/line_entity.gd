@@ -1,43 +1,29 @@
-# 1. class name: fill the class name
 class_name LineEntity
 extends VisualEntity
 
-# 2. docs: use docstring (##) to generate docs for this file
+
 ## An [Entity] that represents a line
 
-# 3. signals: define signals here
 
-# 4. enums: define enums here
+## The points that define the line.
+@export var points: PackedVector2Array:
+	set=set_points
 
-# 5. constants: define constants here
+## An optimized array of points
+## @experimental
+var points_opt: Array[Vector2i]:
+	set=set_points_opt
 
-# 6. export variables: define all export variables in groups here
+## The delays between each point in the line.
+var delays: Array[float]:
+	set=set_delays
 
-# The points that define the line.
-@export var points: PackedVector2Array
-
-# The delays between each point in the line.
-@export var delays: Array[float]
-
-# The color of the line
-#@export var pen_color: Color = Color.WHITE
-
-# The thickness of the line
-#@export var pen_thickness: float = 3.0
-
-# TODO: add property variables
-# 7. public variables: define all public variables here
-
-# 8. private variables: define all private variables here, use _ as preffix
-
-# 9. onready variables: define all onready variables here
+## An optimized array of delays, to store them more efficiently.
+## @experimental
+@export_storage var delays_opt: PackedInt32Array:
+	set=set_delays_opt
 
 
-# 10. init virtual methods: define _init, _enter_tree and _ready mothods here
-
-# 11. virtual methods: define other virtual methos here
-
-# 12. public methods: define all public methods here
 func get_class_name() -> String:
 	return "LineEntity"
 
@@ -46,45 +32,43 @@ func get_editor_name() -> String:
 
 func get_widget() -> PackedScene:
 	return preload("uid://dyh75vkj58pw3")
-	
 
-## Serialize to a dictionary format(.json) for saving.
-#func serialize() -> Dictionary:
-	#var points_array: Array = Array(points)
-	#return {
-		#"entity_id": entity_id,
-		#"entity_type": get_class_name(),
-		#"duration": duration,
-		#"points": points_array.map(func(v): return {"x": v.x, "y": v.y}),
-		#"delays": delays,
-		#"color_r": pen_color.r,
-		#"color_g": pen_color.g,
-		#"color_b": pen_color.b,
-		#"color_a": pen_color.a,
-		#"thickness": pen_thickness
-	#}
+## Sets the points of the line, and builds the optimized array in the process.
+## @experimental
+func set_points(value: PackedVector2Array) -> void:
+	points = value
+	points_opt.resize(points.size())
+	for i in points.size():
+		var v := points[i]
+		var opt_v := Vector2i(floori(v.x * 1000), floori(v.y * 1000))
+		points_opt[i] = opt_v
 
-# Load data from a dictionary format(.json) to resource(LineEntity).
-#func load_data(data: Dictionary) -> void:
-	#var points_array: Array = []
-	#for point in data["points"]:
-		#points_array.append(Vector2(point["x"], point["y"]))
-	#points = PackedVector2Array(points_array)
-	#delays = data["delays"]
-	#duration = compute_duration()
-	#
-	#if data.has("color_r"):
-		#pen_color = Color(
-			#data["color_r"],
-			#data["color_g"],
-			#data["color_b"],
-			#data["color_a"]
-		#)
-	#
-	#if data.has("pen_thickness"):
-		#pen_thickness = data["thickness"]
+## Sets the optimized array of points, and builds the normal points.
+## @experimental
+func set_points_opt(value: Array[Vector2i]) -> void:
+	points_opt = value.duplicate()
+	points.resize(points_opt.size())
+	for i in points_opt.size():
+		points[i].x = points_opt[i].x * 0.001
+		points[i].y = points_opt[i].y * 0.001
 
-# Compute the total real duration of the line based on the delays.
+## Sets the array of delays, and builds the optimized array.
+## @experimental
+func set_delays(value: Array[float]) -> void:
+	delays = value
+	delays_opt.resize(delays.size())
+	for i in delays.size():
+		delays_opt[i] = floori(delays[i] * 1000)
+
+## Sets the optimized array of points, and builds the normal array.
+## @experimental
+func set_delays_opt(value: PackedInt32Array) -> void:
+	delays_opt = value
+	delays.resize(delays_opt.size())
+	for i in delays_opt.size():
+		delays[i] = delays_opt[i] * 0.001
+
+## Computes the total real duration of the line based on the delays.
 func compute_duration() -> float:
 	var total_duration: float = 0.0
 	for delay in delays:
@@ -93,7 +77,3 @@ func compute_duration() -> float:
 
 func config_editor_tree_item(item: TreeItem) -> void:
 	item.set_text(0, get_editor_name())
-
-# 13. private methods: define all private methods here, use _ as preffix
-
-# 14. subclasses: define all subclasses here

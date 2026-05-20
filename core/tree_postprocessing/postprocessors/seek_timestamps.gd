@@ -1,6 +1,10 @@
 class_name SeekTimestampPostprocessor
 extends TreePostprocessor
 
+## A [TreePostprocessor] that calculates the start and end times for all nodes
+## in the class tree, to make seeking easier.
+
+
 var current_time: float = 0.0
 var max_time: float = 0.0
 

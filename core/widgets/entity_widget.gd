@@ -4,9 +4,13 @@ extends Widget
 
 ## The way in which this node should be played. 
 @export var play_mode: PlayMode
+
+## The widget's associated [Entity].
 var entity: Entity:
 	get=get_entity, set=set_entity
 
+## Returns the widget's entity. You should override it and specify the
+## return type to get accurate code completion and static typing.
 @abstract
 func get_entity() -> Entity;
 
@@ -17,7 +21,7 @@ func set_entity(value: Entity) -> void:
 func get_play_mode() -> PlayMode:
 	return play_mode
 
-func search_widget_by_entity(value: Entity) -> Widget:
+func search_widget_by_entity(value: Entity) -> EntityWidget:
 	if get_entity() == value:
 		return self
 	return null

@@ -20,7 +20,7 @@ func _on_started_playing() -> void:
 	widget.play(_play_speed)
 
 func _on_unpaused() -> void:
-	widget.play()
+	widget.play(_play_speed)
 
 func _on_paused() -> void:
 	widget.pause()
@@ -71,7 +71,7 @@ func _compute_start_time() -> float:
 func _compute_end_time() -> float:
 	return 0.0
 
-func search_widget_by_entity(value: Entity) -> Widget:
+func search_widget_by_entity(value: Entity) -> EntityWidget:
 	return widget.search_widget_by_entity(value)
 
 func search_widget_by_class_node(value: ClassNode) -> ClassNodeWidget:

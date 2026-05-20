@@ -30,7 +30,7 @@ func _build_node(node: ClassNode, parent: TreeItem = null) -> void:
 	for child in (node as ClassGroup).children:
 		_build_node(child, item)
 
-func add_node(node: ClassNode, nest := true) -> TreeItem:
+func add_node(node: ClassNode, nest := true, select := true) -> TreeItem:
 	var new_item: TreeItem 
 	var selected := get_next_selected(null)
 	if not selected:
@@ -51,7 +51,8 @@ func add_node(node: ClassNode, nest := true) -> TreeItem:
 	var parent_node := parent.get_metadata(0) as ClassNode
 	var index := new_item.get_index()
 	node_added.emit(node, parent_node, index)
-	set_current_item(new_item)
+	if select:
+		set_current_item(new_item)
 	return new_item
 
 func rectify_class_tree() -> void:
@@ -87,19 +88,20 @@ func _group_selected(item: TreeItem) -> void:
 	var selected := get_next_selected(null)
 	while selected:
 		var parent := selected.get_parent()
+		var next := get_next_selected(selected)
 		parent.remove_child(selected)
 		item.add_child(selected)
-		selected = get_next_selected(selected)
+		selected = next
 	deselect_all()
 	item.select(0)
 	updated.emit()
 
 func make_group() -> void:
-	var item := add_node(ClassGroup.new(), false)
+	var item := add_node(ClassGroup.new(), false, false)
 	_group_selected(item)
 
 func make_slide() -> void:
-	var item := add_node(ClassSlide.new(), false)
+	var item := add_node(ClassSlide.new(), false, false)
 	_group_selected(item)
 
 ## Reset the colors of all items in the tree to a default color.
@@ -133,10 +135,13 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	var item := get_item_at_position(at_position)
 	if not item: return null
 	# TODO: Replace D&D icon
+	#var icon := ColorPickerButton.new()
 	var icon := TextureRect.new()
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
-	icon.scale = Vector2(0.05, 0.05)
-	icon.texture = preload("uid://dsgbxa6x62b5m")
+	#icon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	#icon.size = Vector2(16,16)
+	#icon.scale = Vector2(0.05, 0.05)
+	#icon.texture = preload("uid://dsgbxa6x62b5m")
+	icon.texture = preload("uid://cijlhghlhiyht")
 	set_drag_preview(icon)
 	return item
 
@@ -253,10 +258,12 @@ func _paste() -> void:
 		selected = get_root()
 	var node := selected.get_metadata(0) as ClassNode
 	var parent := selected.get_parent()
+	var last_added := selected
 	for item in clipboard:
 		if node.is_leaf():
 			var copied := _copy_item(item, parent)
-			copied.move_after(selected)
+			copied.move_after(last_added)
+			last_added = copied
 		else:
 			_copy_item(item, selected)
 	updated.emit()

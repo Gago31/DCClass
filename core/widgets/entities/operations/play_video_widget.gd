@@ -16,7 +16,6 @@ func _on_started_playing() -> void:
 	#video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
 	if not video_widget: return
 	# TODO: Get video widget from entity video id
-	print("a")
 	_connect_to_widget()
 	video_widget.play_video_until(get_entity().until_position)
 	# Call play until function with entity until position

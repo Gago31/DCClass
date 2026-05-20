@@ -8,6 +8,7 @@
 script = ExtResource("1_j0vtf")
 
 [node name="ClassWindow" parent="." unique_id=106168562 instance=ExtResource("2_0jrey")]
+unique_name_in_owner = true
 process_mode = 3
 
 [node name="TreePostprocessing" parent="." unique_id=1588888408 instance=ExtResource("6_tk4tt")]

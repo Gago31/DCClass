@@ -48,22 +48,22 @@ func _status_playback_stop(active: bool) -> void:
 func _on_class_node_selected(node: ClassNode, selected: bool) -> void:
 	if node == current_node:
 		return
-	var controller = node._node_controller
-	if node is ClassLeaf: # Case ClassLeaf
-		if selected:
-			# If is already outlined
-			if node in outline_nodes.keys(): 
-				return
-			
-			# Render selected nodes that appears after current node on tree
-			if not controller.leaf_value or &"widget_finished" not in controller.leaf_value.get_groups():
-				controller.skip_to_end()
-				controller.add_to_group(&"skipped_before_play")
-			add_widget_outline(node, false)
-		else:
-			remove_widget_outline(node)
-			if &"skipped_before_play" in controller.get_groups():
-				controller.clear_before_play()
+	#var controller = node._node_controller
+	#if node is ClassLeaf: # Case ClassLeaf
+		#if selected:
+			## If is already outlined
+			#if node in outline_nodes.keys(): 
+				#return
+			#
+			## Render selected nodes that appears after current node on tree
+			#if not controller.leaf_value or &"widget_finished" not in controller.leaf_value.get_groups():
+				#controller.skip_to_end()
+				#controller.add_to_group(&"skipped_before_play")
+			#add_widget_outline(node, false)
+		#else:
+			#remove_widget_outline(node)
+			#if &"skipped_before_play" in controller.get_groups():
+				#controller.clear_before_play()
 
 
 # Add an outline to a Class Node
@@ -74,26 +74,26 @@ func add_widget_outline(node:=current_node, recursive:=true) -> void:
 	if not node:
 		return
 	
-	# Groups case (add to children)
-	if node._node_controller is GroupController and recursive:
-		for child in node._node_controller._childrens:
-			add_widget_outline(child, false)
-		return
-	if node._node_controller is not LeafController:
-		return
+	## Groups case (add to children)
+	#if node._node_controller is GroupController and recursive:
+		#for child in node._node_controller._childrens:
+			#add_widget_outline(child, false)
+		#return
+	#if node._node_controller is not LeafController:
+		#return
 
-	var widget = node._node_controller.leaf_value
-	if not widget:
-		return
+	#var widget = node._node_controller.leaf_value
+	#if not widget:
+		#return
 	
 	if node in outline_nodes:
 		return
 
-	var outline = _create_outline(widget)
-	if not outline:
-		return
-	widget.add_child(outline)
-	outline_nodes[node] = outline
+	#var outline = _create_outline(widget)
+	#if not outline:
+		#return
+	#widget.add_child(outline)
+	#outline_nodes[node] = outline
 
 	_update_group_outline()
 

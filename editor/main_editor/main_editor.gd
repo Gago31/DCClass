@@ -30,19 +30,21 @@ func _ready() -> void:
 	control_panel._setup()
 	#audio_record._setup()
 	#control_panel._bus.audio_record.connect(_on_request_audio_record)
-	_on_request_detach()
-	_on_tree_updated()
+	WhiteboardManager.detach_whiteboard()
+	WhiteboardManager.reprocess_tree()
+	#_on_request_detach()
+	#_on_tree_updated()
 
 
-func _on_request_detach() -> void:
-	if _window_whiteboard and is_instance_valid(_window_whiteboard):
-		return
-	_window_whiteboard = window_whiteboard.instantiate() as WindowWhiteboard
-	get_tree().root.add_child(_window_whiteboard)
-	_window_whiteboard.close_requested.connect(_on_window_close_requested)
-	await get_tree().process_frame
-	#PersistenceEditor._epilog()
-	#editor_signals.seek_node.emit(PersistenceEditor.resources_class._current_node)
+#func _on_request_detach() -> void:
+	#if _window_whiteboard and is_instance_valid(_window_whiteboard):
+		#return
+	#_window_whiteboard = window_whiteboard.instantiate() as WindowWhiteboard
+	#get_tree().root.add_child(_window_whiteboard)
+	#_window_whiteboard.close_requested.connect(_on_window_close_requested)
+	#await get_tree().process_frame
+	##PersistenceEditor._epilog()
+	##editor_signals.seek_node.emit(PersistenceEditor.resources_class._current_node)
 	
 
 func _on_window_close_requested() -> void:
@@ -57,5 +59,5 @@ func _on_window_close_requested() -> void:
 	#audio_record.record()
 
 
-func _on_tree_updated() -> void:
-	tree_postprocessing.postprocess(WhiteboardManager.get_root_widget())
+#func _on_tree_updated() -> void:
+	#tree_postprocessing.postprocess(WhiteboardManager.get_root_widget())

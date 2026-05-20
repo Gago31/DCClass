@@ -2,6 +2,11 @@
 class_name VisualEntityWidget
 extends EntityWidget
 
+## Base class for widgets for [VisualEntity]s.
+## 
+## It has methods that allow the teacher to manipulate the transform of the
+## widget inside the editor.
+
 
 const SELECTION_AREA = preload("uid://n1s02t8kd0hl")
 

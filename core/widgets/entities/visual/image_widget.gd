@@ -1,8 +1,11 @@
 class_name ImageWidget
 extends VisualEntityWidget
 
+## [VisualEntityWidget] that displays an image in the whiteboard.
+
 
 @onready var image: TextureRect = %Image
+
 
 func setup() -> void:
 	super.setup()
@@ -36,5 +39,5 @@ func _compute_bounds() -> Rect2:
 		return Rect2(Vector2.ZERO, image.size)
 	return Rect2()
 
-func _on_image_converted(err: bool) -> void:
+func _on_image_converted(_err: bool) -> void:
 	image.texture = ClassResourceLoader.load_image(get_entity().image_path)

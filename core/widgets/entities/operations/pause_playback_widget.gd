@@ -1,6 +1,8 @@
 class_name PausePlaybackWidget
 extends OperationWidget
 
+## Widget that represents a forced pause in the class.
+
 
 func _on_started_playing() -> void:
 	WhiteboardManager.set_playing(false)

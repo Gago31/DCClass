@@ -1,14 +1,18 @@
 class_name SeekVideoEntity
 extends NodeReferenceEntity
 
+## An [Entity] that represents a seek operation for a video.
+##
+## This means that the video will jump to a specific time and the next time
+## it is played it will begin from there.
 
-var video_id: String = ""
+## The time in seconds to which the video will seek to.
 @export var seek_position: float = 0.0
+var video_id: String = ""
 var entity: VideoEntity
 
 
 func _init() -> void:
-	#entity_id = "Seek Video"
 	if node_reference:
 		set_reference(node_reference)
 
@@ -31,17 +35,11 @@ func get_widget() -> PackedScene:
 func config_editor_tree_item(item: TreeItem) -> void:
 	_tree_item = item
 	item.set_text(0, get_editor_name())
-	#item.set_cell_mode(1, TreeItem.CELL_MODE_RANGE)
 	item.set_cell_mode(1, TreeItem.CELL_MODE_STRING)
 	_set_item_time_string()
-	#item.set_range(1, seek_position)
 	item.set_editable(1, entity != null)
-	#if entity:
-		#item.set_range_config(1, 0, entity.duration, 1)
 
 func _on_value_updated_from_editor(item: TreeItem) -> void:
-	#var value := item.get_range(1)
-	#seek_position = value
 	var time_string := item.get_text(1)
 	_set_time_from_string(time_string)
 

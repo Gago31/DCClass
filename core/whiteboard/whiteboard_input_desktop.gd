@@ -1,6 +1,11 @@
 class_name WhiteboardInputDesktop
 extends WhiteboardInputController
 
+## Distance from the viewport's margin at which the mouse will wrap around
+## while dragging.
+const WARP_OFFSET := -10
+var _warped: bool = false
+
 
 func _handle_screen_dragging(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:

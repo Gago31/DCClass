@@ -1,8 +1,9 @@
 class_name LineWidget
 extends VisualEntityWidget
 
+## [VisualEntityWidget] that represents a line in the whiteboard.
 
-var tween: Tween
+
 var bound = null
 var _original_bound: Rect2
 var _current_point: int = 0
@@ -65,8 +66,8 @@ func _load_point_data(smoothing: int = 0) -> void:
 	for i in n:
 		_points[i] = e.points[i]
 		if i == 0: continue
-		_delays[i] = total_delay
 		total_delay += e.delays[i]
+		_delays[i] = total_delay
 	
 	for i in smoothing:
 		print("smoothing ", i)
@@ -74,39 +75,6 @@ func _load_point_data(smoothing: int = 0) -> void:
 		var d = _expand_delays(_delays)
 		_points = p
 		_delays = d
-	
-	#e.points
-	#_points.resize(final_size)
-	#_delays.resize(final_size)
-	
-	#var skip := 2 ** smoothing - 1
-	## 0 -> 0 | 0 - 1 - 2 - 3 - 4
-	## 1 -> 1 | 0 - 2 - 4 - 6 - 8
-	## 2 -> 3 | 0 - 4 - 8 - 12 - 16
-	## 3 -> 7 | 0 - 8 - 16 - 24 - 32
-	#for i in n:
-		#_points[i + i * skip] = e.points[i]
-		#if i == 0: continue
-		#_delays[i + i * skip] = total_delay
-		#total_delay += e.delays[i]
-	#
-	#for s in smoothing + 1:
-		#skip = 2 ** (smoothing - s) - 1
-		#for i in range(0, final_size - 1, skip + 1):
-			##var im := (2 * i + 1) * (skip + 1) / 2
-			#var im := (2 * i + skip + 1) / 2
-			##var p1 := _points[i * (skip + 1)]
-			#var p1 := _points[i]
-			##var p2 := _points[(i + 1) * (skip + 1)]
-			#var p2 := _points[i + skip + 1]
-			#var pm := (p1 + p2) * 0.5
-			#_points[im] = pm
-			##var d1 := _delays[i * (skip + 1)]
-			#var d1 := _delays[i]
-			##var d2 := _delays[(i + 1) * (skip + 1)]
-			#var d2 := _delays[i + skip + 1]
-			#var dm := (d1 + d2) * 0.5
-			#_delays[im] = dm
 
 func _set_width_and_color() -> void:
 	line.default_color = WhiteboardManager.get_pen_color()
@@ -228,40 +196,40 @@ func _compute_bounds() -> Rect2:
 
 	return Rect2(origin, size)
 
-func _on_property_updated(property: EntityProperty) -> void:
-	if property is PositionEntityProperty:
-		position = property.position
-	elif property is SizeEntityProperty:
-		# Guardar el bound original si no existe
-		if _original_bound == Rect2():
-			_original_bound = get_rect_bound()
-		
-		# Si el bound original es válido, transformar los puntos
-		if _original_bound.size.x > 0 and _original_bound.size.y > 0:
-			var new_bound = Rect2(_original_bound.position, property.size)
-			
-			# Calcular la escala
-			var scale_x = new_bound.size.x / _original_bound.size.x
-			var scale_y = new_bound.size.y / _original_bound.size.y
-			 
-			# Transformar cada punto
-			var new_points: PackedVector2Array = []
-			for point in entity.points:
-				# Normalizar punto respecto al bound original
-				var normalized = (point - _original_bound.position) / _original_bound.size
-				# Aplicar al nuevo bound
-				var new_point = new_bound.position + (normalized * new_bound.size)
-				new_points.append(new_point)
-			
-			# Actualizar entity y visual
-			entity.points = new_points
-			line.points = new_points
-			
-			# Invalidar bound cacheado
-			bound = null
-			
-			# Actualizar el original bound para futuros resizes
-			_original_bound = new_bound
+#func _on_property_updated(property: EntityProperty) -> void:
+	#if property is PositionEntityProperty:
+		#position = property.position
+	#elif property is SizeEntityProperty:
+		## Guardar el bound original si no existe
+		#if _original_bound == Rect2():
+			#_original_bound = get_rect_bound()
+		#
+		## Si el bound original es válido, transformar los puntos
+		#if _original_bound.size.x > 0 and _original_bound.size.y > 0:
+			#var new_bound = Rect2(_original_bound.position, property.size)
+			#
+			## Calcular la escala
+			#var scale_x = new_bound.size.x / _original_bound.size.x
+			#var scale_y = new_bound.size.y / _original_bound.size.y
+			 #
+			## Transformar cada punto
+			#var new_points: PackedVector2Array = []
+			#for point in entity.points:
+				## Normalizar punto respecto al bound original
+				#var normalized = (point - _original_bound.position) / _original_bound.size
+				## Aplicar al nuevo bound
+				#var new_point = new_bound.position + (normalized * new_bound.size)
+				#new_points.append(new_point)
+			#
+			## Actualizar entity y visual
+			#entity.points = new_points
+			#line.points = new_points
+			#
+			## Invalidar bound cacheado
+			#bound = null
+			#
+			## Actualizar el original bound para futuros resizes
+			#_original_bound = new_bound
 
 func get_entity() -> LineEntity:
 	return entity as LineEntity

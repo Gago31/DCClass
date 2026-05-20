@@ -24,6 +24,7 @@ run/main_scene.dcclass-editor="uid://d3ahyg18n5ed2"
 config/name.dcclass-editor="DCClass Editor"
 run/main_scene.dcclass-mobile="uid://dmdj1fy3hd6q7"
 config/name.dcclass-mobile="DCClass Mobile"
+run/main_scene.dcclass-desktop="uid://qu518x450dvs"
 
 [audio]
 
@@ -33,9 +34,9 @@ driver/enable_input=true
 [autoload]
 
 ClassManager="*uid://dfnmw45d24d28"
+WhiteboardManager="*uid://dmb6dskn667n5"
 EditorManager="*uid://wse7166srx2l"
 ClassResourceLoader="*uid://dn6iavhp7alb5"
-WhiteboardManager="*uid://ca1gmqme4n2y3"
 AudioRecorder="*uid://b8b7b7inj4sva"
 
 [debug]
@@ -59,6 +60,8 @@ display_server/driver.macos="macos"
 window/handheld/orientation=4
 window/stretch/scale.android=2.0
 whiteboard/size=Vector2i(2400, 1274)
+window/size/viewport_width.dcclass-desktop=1920
+window/size/viewport_height.dcclass-desktop=1080
 
 [editor_plugins]
 

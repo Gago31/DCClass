@@ -1,18 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://njv5m467c4cn"]
+[gd_scene format=3 uid="uid://njv5m467c4cn"]
 
 [ext_resource type="Script" uid="uid://bl5ehr8uk2w6n" path="res://editor/main_editor/whiteboard/player_screen/background/background.gd" id="1_gccdx"]
 
-[node name="ParallaxBackground" type="ParallaxBackground"]
+[node name="ParallaxBackground" type="ParallaxBackground" unique_id=1666272829]
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+[node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=564610022]
 motion_mirroring = Vector2(3240, 2160)
 
-[node name="Background" type="Node2D" parent="ParallaxLayer"]
+[node name="Background" type="Node2D" parent="ParallaxLayer" unique_id=852178077]
 texture_repeat = 2
 script = ExtResource("1_gccdx")
 grid_size = 30
 
-[node name="ColorRect" type="ColorRect" parent="ParallaxLayer/Background"]
+[node name="ColorRect" type="ColorRect" parent="ParallaxLayer/Background" unique_id=382189313]
 visible = false
 show_behind_parent = true
 anchors_preset = 15
@@ -22,3 +22,4 @@ offset_right = 1080.0
 offset_bottom = 720.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2

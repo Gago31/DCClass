@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://chua3ehkajj2r"]
 
 [ext_resource type="Script" uid="uid://dudfcdw21c7iv" path="res://player/player_whiteboard_ui.gd" id="1_8ma2g"]
-[ext_resource type="Script" uid="uid://dppoh7xugsiss" path="res://core/whiteboard_input_desktop.gd" id="2_la4bq"]
+[ext_resource type="Script" uid="uid://dppoh7xugsiss" path="res://core/whiteboard/whiteboard_input_desktop.gd" id="2_la4bq"]
 [ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="5_4yo7g"]
 [ext_resource type="Texture2D" uid="uid://cs5m6p5kwdhoy" path="res://assets/sprites/ui/subtitles.png" id="6_8ma2g"]
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="6_13k2a"]
@@ -58,7 +58,7 @@ stretch = true
 unique_name_in_owner = true
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(1280, 612)
+size = Vector2i(400, 400)
 render_target_update_mode = 4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=1755758519]

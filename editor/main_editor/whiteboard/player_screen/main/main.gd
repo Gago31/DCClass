@@ -1,7 +1,7 @@
 class_name ClassUIEditor
 extends Whiteboard
 
-@onready var window: ClassWindowEditor = $ClassWindow
+@onready var window: ClassWindowEditor = %ClassWindow
 @onready var tree_postprocessing: TreePostprocessing = %TreePostprocessing
 
 

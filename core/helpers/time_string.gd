@@ -2,9 +2,9 @@ class_name TimeString
 extends Object
 
 ## Helper class to convert a duration in seconds to a string
-## with the `HH:MM:SS` format, and viceversa.
+## with the [code]HH:MM:SS[/code] format, and viceversa.
 
-## Returns wether a given string `s` can be converted to seconds.
+## Returns wether a given string [code]s[/code] can be converted to seconds.
 static func is_valid(s: String) -> bool:
 	var t := s.split(":")
 	var n := t.size()
@@ -18,9 +18,9 @@ static func is_valid(s: String) -> bool:
 			return false
 	return true
 
-## Returns a string with the format `HH:MM:SS` from the total of
-## seconds `t`, optionally adding decimals to the seconds if
-## `decimal_seconds` is `true`.
+## Returns a string with the format [code]HH:MM:SS[/code] from the total 
+## of seconds [code]t[/code], optionally adding decimals to the seconds 
+## if [code]decimal_seconds[/code] is [code]true[/code].
 static func from_seconds(t: float, decimal_seconds := true) -> String:
 	var total_seconds := snappedf(t, 0.01)
 	var seconds := fmod(total_seconds, 60)
@@ -34,8 +34,9 @@ static func from_seconds(t: float, decimal_seconds := true) -> String:
 		s = "%02d:%02d:%02d" % [hours, minutes, int(seconds)]
 	return s
 
-## Returns the total of seconds corresponding to a string `s` formatted
-## by [TimeString]. If `s` is not a valid string, returns `0.0`.
+## Returns the total of seconds corresponding to a string [code]s[/code]
+## formatted by [TimeString]. If [code]s[/code] is not a valid string, 
+## returns [code]0.0[/code].
 static func to_seconds(s: String) -> float:
 	var t := s.split(":")
 	var n := t.size()

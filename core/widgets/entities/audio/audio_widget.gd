@@ -10,7 +10,7 @@ var crossfade_tween: Tween
 func setup() -> void:
 	crossfade_tween = null
 	
-	if get_entity().resource_ready:
+	if ClassResourceLoader.audio_exists(get_entity().audio_path):
 		load_audio_stream()
 	else:
 		get_entity().audio_converted.connect(load_audio_stream)
@@ -56,9 +56,10 @@ func _on_seek() -> void:
 	#audio.stop()
 
 func _calculate_duration() -> float:
-	if entity.duration == 0.0:
-		return audio.stream.get_length()
-	return entity.duration
+	if not audio.stream:
+		#if entity.duration == 0.0:
+		return entity.duration
+	return audio.stream.get_length()
 
 func crossfade_in(_seek_time: float = -1):
 	var fade_in_db = 0.0
@@ -123,28 +124,6 @@ func load_audio_stream() -> void:
 	var stream_path := get_entity().audio_path
 	var stream := ClassResourceLoader.load_audio(stream_path)
 	audio.stream = stream
-	# Case: Keep data in the .dcc file
-	# This is intended to be used only for reproducing the class.
-	#if zip_file != null:
-		#if !zip_file.file_exists(entity.audio_path):
-			#push_error("Audio file not found: " + entity.audio_path)
-			#return
-		#data = zip_file.read_file(entity.audio_path)
-		
-	# Case: Decompress the .dcc file
-	# This is intended to be used only for editing the class.
-	#else:
-		#var relative_path: String = entity.audio_path
-		#var audio_disk_path: String = dir_class.path_join(relative_path)
-		#if not FileAccess.file_exists(audio_disk_path):
-			#push_error("Audio file not found: " + audio_disk_path)
-			#return
-		#var f := FileAccess.open(audio_disk_path, FileAccess.READ)
-		#if f == null:
-			#push_error("No se pudo abrir: " + audio_disk_path)
-			#return
-		#data = f.get_buffer(f.get_length())
-		#f.close()
 
 func _on_audio_finished() -> void:
 	finish_playing()
