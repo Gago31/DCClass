@@ -15,7 +15,7 @@ func setup() -> void:
 func _on_started_playing() -> void:
 	#video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
 	if not video_widget: 
-		print("No widget lmao")
+		#print("No widget lmao")
 		return
 	video_widget.seek_video(get_entity().seek_position)
 	finish_playing()

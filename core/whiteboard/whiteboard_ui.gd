@@ -11,7 +11,7 @@ var was_playing: bool = false
 
 @onready var viewport: SubViewport = %SubViewport
 @onready var zoom_slider: HSlider = %ZoomSlider
-@onready var zoom_button: TextureButton = %ZoomButton
+@onready var zoom_button: Button = %ZoomButton
 @onready var slide_size: Vector2 = ProjectSettings.get_setting("display/whiteboard/size") as Vector2
 @onready var label_time_current: Label = %TimeCurrent
 @onready var time_slider: HSlider = %TimeSlider
@@ -66,6 +66,7 @@ func build_class_tree(root: ClassRoot) -> void:
 	class_root.set_class_node(root)
 	viewport.add_child(class_root)
 	class_root.setup()
+	WhiteboardManager.set_root_widget(class_root)
 
 func _zoom_slider_value_selected(value: float) -> void:
 	camera.zoom = Vector2(value, value)
@@ -97,9 +98,9 @@ func _disabled_toggle_stop_button(active: bool) -> void:
 
 # Setup the time slider and label based on the complete duration of the class.
 func _setup_timeline():
-	print("setup timeline")
+	#print("setup timeline")
 	final_time = class_root.end_time
-	print(final_time)
+	#print(final_time)
 	time_slider.max_value = final_time
 	time_slider.set_value_no_signal(class_root.play_time)
 	final_time_str = TimeString.from_seconds(final_time, false)
@@ -123,11 +124,11 @@ func _on_time_slider_drag_ended(_value_changed: bool) -> void:
 
 func _on_time_slider_value_changed(_value: float) -> void:
 	if time_slider_drag and debouncer_timer.is_stopped():
-		print("Timeline changed")
+		#print("Timeline changed")
 		debouncer_timer.start()
 
 func _on_debouncer_timer_timeout() -> void:
-	print("Seek timer ended")
+	#print("Seek timer ended")
 	class_root.seek(time_slider.value, class_root.is_playing())
 	_update_time_control()
 

@@ -26,6 +26,7 @@ enum PenMode {
 var current_group: ClassGroup
 var _gui: EditorUI:
 	set=set_editor_ui
+var _main_ui: Control
 var _project_dir: DirAccess
 var _temp_dir: DirAccess
 var changed := false
@@ -37,12 +38,24 @@ var zip: ZIPPacker
 @onready var tree_preprocessor: TreePreprocessor = $TreePreprocessor
 
 
+func _ready() -> void:
+	pen_mode_changed.connect(_on_pen_mode_changed)
+
 func set_editor_ui(gui: EditorUI) -> void:
 	_gui = gui
 
-func add_entity(entity: Entity) -> void:
+func set_ui_theme(theme: Theme) -> void:
+	if not _main_ui: return
+	print("setting gui theme")
+	_main_ui.theme = theme
+
+func add_entity(entity: Entity, nest := true, select := true) -> void:
 	if not _gui: return
-	_gui._add_entity(entity)
+	_gui._add_entity(entity, nest, select)
+
+func delete_entity(entity: Entity) -> void:
+	if not _gui: return
+	_gui._delete_entity(entity)
 
 func record_audio() -> void:
 	AudioRecorder.start_recording()
@@ -154,76 +167,6 @@ func _store_res(file_name: String) -> void:
 	zip.write_file(data)
 	zip.close_file()
 
-#func zip_folder(source_dir: String, zip_path: String) -> Error:
-	#var zipper := ZIPPacker.new()
-	#var err := zipper.open(zip_path)
-	#if err != OK:
-		#push_error("Can't open the file to write:: %s (Error %d)" % [zip_path, err])
-		#return err
-#
-	#_add_folder_to_zip(zipper, source_dir, "")
-	#zipper.close()
-	#return OK
-#
-#func _add_folder_to_zip(zipper: ZIPPacker, current_dir: String, relative_path: String) -> void:
-	#for file_name in DirAccess.get_files_at(current_dir):
-		#var file_path := current_dir.path_join(file_name)
-		#var path_in_zip := relative_path + file_name
-		#
-		#var f := FileAccess.open(file_path, FileAccess.READ)
-		#if f == null:
-			#push_error("Can't open the file to read: %s" % file_path)
-			#continue
-		#var data := f.get_buffer(f.get_length())
-		#f.close()
-#
-		#var err_start := zipper.start_file(path_in_zip)
-		#if err_start != OK:
-			#push_error("Error Zip: %s (Error %d)" % [path_in_zip, err_start])
-			#continue
-#
-		#zipper.write_file(data)
-		#zipper.close_file()
-#
-	#for subdir in DirAccess.get_directories_at(current_dir):
-		#var subdir_path := current_dir.path_join(subdir) + "/"
-		#var new_relative := relative_path + subdir + "/"
-#
-		#_add_folder_to_zip(zipper, subdir_path, new_relative)
-
-# Decompress a zip file to a temporary directory.
-#func decompress_zip(__zip_path: String, __dir_tmp: String) -> bool:
-	#var reader: ZIPReader = ZIPReader.new()
-	#var err = reader.open(__zip_path)
-	#if err != OK:
-		#return false
-#
-	#if not __dir_tmp.ends_with("/"):
-		#__dir_tmp += "/"
-#
-	#if DirAccess.dir_exists_absolute(__dir_tmp):
-		#_remove_dir_recursively(__dir_tmp)
-#
-	#DirAccess.make_dir_recursive_absolute(__dir_tmp)
-#
-	#for internal_path in reader.get_files():
-		#var absolute_path := __dir_tmp + internal_path
-		#if internal_path.ends_with("/"):
-			#DirAccess.make_dir_recursive_absolute(absolute_path)
-			#continue
-#
-		#DirAccess.make_dir_recursive_absolute(absolute_path.get_base_dir())
-#
-		#var file := FileAccess.open(absolute_path, FileAccess.WRITE)
-		#if not file:
-			#reader.close()
-			#return false
-		#file.store_buffer(reader.read_file(internal_path))
-		#file.close()
-#
-	#reader.close()
-	#return true
-
 # Remove a directory and all its contents recursively.
 # This function is used to clean up temporary directories created during the parsing process.
 func _remove_dir_recursively(path_del: String) -> void:
@@ -238,12 +181,6 @@ func _remove_dir_recursively(path_del: String) -> void:
 func set_pen_mode(value: PenMode) -> void:
 	pen_mode = value
 	pen_mode_changed.emit(pen_mode)
-
-#func save_asset(data, folder: String, file_name: String) -> void:
-	#pass
-#
-#func save_asset_temp(data, file_name: String) -> void:
-	#pass
 
 func save_resource(path: String) -> String:
 	var filename = path.split("/")[-1]
@@ -260,14 +197,23 @@ func save_resource(path: String) -> String:
 	DirAccess.copy_absolute(path, full_path + salted_name)
 	return path_images + salted_name
 
-## Starts a thread converting the audio file in `input_path`
-## to an `*.ogg` file. Notifies `entity` when the conversion finishes.[/b]
+## Starts a thread converting the audio file in [param input_path] to an 
+## [code]*.ogg[/code] file. Notifies [param entity] when the conversion 
+## finishes.[br][br]
+##
 ## Returns the name of the output file.
 func convert_audio(input_path: String, entity: AudioEntity) -> String:
 	var assets_path := get_assets_path()
 	var file_name := "%03d.ogg" % audio_index
 	var path_ogg := "%s/audio/%s" % [assets_path, file_name]
-	var args := ["-y", "-i", input_path, "-c:a", "libvorbis", path_ogg]
+	var args := [
+		"-i", input_path, 
+		"-y", 
+		"-c:a", "libvorbis",
+		"-b:a", "16k",
+		"-ar", 11025,
+		path_ogg
+	]
 	var thread_notifier := ThreadNotifier.new()
 	add_child(thread_notifier)
 	thread_notifier.thread_finished.connect(entity._on_audio_converted)
@@ -275,8 +221,10 @@ func convert_audio(input_path: String, entity: AudioEntity) -> String:
 	audio_index += 1
 	return file_name
 
-## Starts a thread converting the video file in `input_path`
-## to a `*.webm` file. Notifies `entity` when the conversion finishes.[/b]
+## Starts a thread converting the video file in [param input_path] to a 
+## [code]*.webm[/code] file. Notifies [param entity] when the conversion 
+## finishes.[br][br]
+##
 ## Returns the name of the output file.
 func convert_video(entity: VideoEntity, input_path: String) -> String:
 	print("Loading file ", input_path)
@@ -307,7 +255,7 @@ func convert_video(entity: VideoEntity, input_path: String) -> String:
 func convert_image(entity: ImageEntity, input_path: String) -> String:
 	print("Loading file ", input_path)
 	var extension := input_path.split(".")[-1]
-	var output_name := "%02d.%s" % [video_index, extension]
+	var output_name := "%02d.%s" % [image_index, extension]
 	var output_path := "%s/images/%s" % [get_assets_path(), output_name]
 	prints("Input path:", )
 	prints("Output path:", output_path)
@@ -332,19 +280,12 @@ func get_assets_path() -> String:
 
 func load_audio(file_name: String) -> AudioStreamOggVorbis:
 	var file_path := get_assets_path()+ "/audio/" + file_name
-	#var file := FileAccess.open(file_path, FileAccess.READ)
-	#if not file: return null
-	#var data := file.get_buffer(file.get_length())
 	var data := FileAccess.get_file_as_bytes(file_path)
 	var sound := AudioStreamOggVorbis.load_from_buffer(data)
 	return sound
 
 func load_image(file_name: String) -> Texture2D:
 	var file_path := get_assets_path()+ "/images/" + file_name
-	#var file := FileAccess.open(file_path, FileAccess.READ)
-	#if not file: return null
-	#var data := file.get_buffer(file.get_length())
-	#var data := FileAccess.get_file_as_bytes(file_path)
 	var image := Image.load_from_file(file_path)
 	var texture := ImageTexture.create_from_image(image)
 	return texture
@@ -364,3 +305,30 @@ func image_exists(image_name: String) -> bool:
 func audio_exists(file_name: String) -> bool:
 	var file_path := get_assets_path() + "/audio/" + file_name
 	return FileAccess.file_exists(file_path)
+
+func _on_pen_mode_changed(pen_mode: PenMode) -> void:
+	var whiteboard := WhiteboardManager.input_controller as EditorWhiteboardInput
+	match pen_mode:
+		PenMode.SELECT, PenMode.DRAW:
+			whiteboard._clear_widget_selection()
+		PenMode.DRAG, PenMode.RESIZE:
+			if whiteboard._selected_widgets.is_empty():
+				var selection := _get_selected_visual_widgets()
+				whiteboard.set_selected_widgets(selection)
+
+func _get_selected_visual_widgets() -> Array[VisualEntityWidget]:
+	var res: Array[VisualEntityWidget] = []
+	var tree := _gui.tree_manager
+	var class_root := WhiteboardManager.get_root_widget()
+	var selected = tree.get_next_selected(null)
+	while selected:
+		var node = selected.get_metadata(0) as ClassNode
+		if node.is_leaf():
+			var leaf := node as ClassLeaf
+			if leaf.entity is VisualEntity:
+				var widget = class_root.search_widget_by_entity(leaf.entity) as VisualEntityWidget
+				widget.select()
+				res.append(widget)
+		selected = tree.get_next_selected(selected)
+	return res
+	

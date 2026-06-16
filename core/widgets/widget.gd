@@ -40,7 +40,7 @@ enum PlayMode {
 	PLAY_AND_WAIT
 }
 
-## Emitted when the widget starts playing from a `STOPPED` state.
+## Emitted when the widget starts playing from a [enum PlayState.STOPPED] state.
 signal started_playing
 ## Emitted when the widget finishes playing.
 signal finished_playing
@@ -48,6 +48,7 @@ signal finished_playing
 signal paused
 ## Emitted when the widget starts playing from a `PAUSED` state.
 signal resumed
+signal play_state_changed(state: PlayState)
 ## Emitted when a widget is modified from the editor.[br]
 ## This signal propagates up the tree until reaching the [ClassRootWidget].
 signal updated
@@ -142,7 +143,7 @@ func stop() -> void:
 ## be reset, and if the time is after it has to finish playing, it will skip
 ## to its end state.[br][br]
 ##
-## If [param playing] is [code]fals[/code], the class will pause after seeking,
+## If [param playing] is [code]false[/code], the class will pause after seeking,
 ## if it is [code]true[/code], it will start playing from [param time].[br][br]
 ##
 ## To define the specific behavior of a widget when seeking to a time in the
@@ -161,18 +162,18 @@ func seek(time: float, playing: bool = false) -> void:
 	_set_play_state(PlayState.PLAYING if playing else PlayState.PAUSED)
 	_on_seek()
 
-## Resets the widget to its initial state.
+## Resets the widget to its initial state.[br][br]
 ##
 ## [color=indian_red][b]You shouldn't override this method.[/b][/color][br][br]
 ##
 ## To define how the widget should reset itself, override [method _on_reset].
 func reset() -> void:
 	play_time = 0.0
-	_set_play_state(PlayState.STOPPED)
 	_on_reset()
+	_set_play_state(PlayState.STOPPED)
 
 ## Skips until the end of the widget, setting it to the state that it should
-## have after it has finished playing.
+## have after it has finished playing.[br][br]
 ##
 ## [color=indian_red][b]You shouldn't override this method.[/b][/color][br][br]
 ##
@@ -271,6 +272,7 @@ func _on_skip() -> void:
 
 func _set_play_state(play_state: PlayState) -> void:
 	_play_state = play_state
+	play_state_changed.emit(_play_state)
 	match _play_state:
 		PlayState.PLAYING:
 			process_mode = Node.PROCESS_MODE_ALWAYS

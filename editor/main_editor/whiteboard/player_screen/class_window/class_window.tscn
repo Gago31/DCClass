@@ -7,10 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://njv5m467c4cn" path="res://editor/main_editor/whiteboard/player_screen/background/background.tscn" id="4_pfx3t"]
 [ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="6_q4reb"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uioh1"]
-atlas = ExtResource("3_jqomu")
-region = Rect2(50, 150, 50, 50)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_mcb8p"]
 atlas = ExtResource("3_jqomu")
 region = Rect2(350, 350, 50, 50)
@@ -52,7 +48,8 @@ stretch = true
 unique_name_in_owner = true
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(1280, 612)
+msaa_2d = 2
+size = Vector2i(1280, 720)
 render_target_update_mode = 4
 
 [node name="ParallaxBackground" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=993345449 instance=ExtResource("4_pfx3t")]
@@ -88,13 +85,15 @@ theme_override_font_sizes/bold_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
-text = "Subtitles lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet"
+bbcode_enabled = true
+text = "Subtitles [b]lorem ipsum[/b] dolor [i]sit amet[/i] [code]lorem ipsum dolor sit amet[/code] lorem [u]ipsum dolor[/u] sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BottomPanel" type="PanelContainer" parent="VBoxContainer" unique_id=884434107]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 8
@@ -141,10 +140,9 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ZoomButton" type="TextureButton" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=757593890]
+[node name="ZoomButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=720930822]
 unique_name_in_owner = true
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_uioh1")
 
 [node name="ZoomSlider" type="HSlider" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=184085393]
 unique_name_in_owner = true

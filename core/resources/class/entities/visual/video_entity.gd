@@ -29,4 +29,5 @@ func _on_video_converted(_result: Variant, _path: String) -> void:
 	conversion_finished.emit(true)
 
 func config_editor_tree_item(item: TreeItem) -> void:
+	_tree_item = item
 	item.set_text(0, get_editor_name())

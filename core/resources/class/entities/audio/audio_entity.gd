@@ -25,6 +25,7 @@ func get_widget() -> PackedScene:
 	return load("uid://biha46ac5k722") as PackedScene
 
 func config_editor_tree_item(item: TreeItem) -> void:
+	_tree_item = item
 	item.set_text(0, "Audio: %s" % audio_path)
 	var time_string := TimeString.from_seconds(duration)
 	item.set_text(1, "Duration: %s" % time_string)

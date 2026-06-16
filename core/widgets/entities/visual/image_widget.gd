@@ -41,3 +41,5 @@ func _compute_bounds() -> Rect2:
 
 func _on_image_converted(_err: bool) -> void:
 	image.texture = ClassResourceLoader.load_image(get_entity().image_path)
+	image.size = image.texture.get_size()
+	size_updated.emit()

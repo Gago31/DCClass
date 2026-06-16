@@ -4,6 +4,33 @@ extends Control
 
 signal updated
 signal widget_selected(widget: Widget)
+signal save_pressed
+signal export_pressed
+
+enum FileMenuItem {
+	SAVE,
+	EXPORT
+}
+
+enum EditMenuItem {
+	COPY = 1,
+	CUT = 2,
+	PASTE = 3,
+	DELETE = 5
+}
+
+enum InsertMenuItem {
+	ADD_GROUP,
+	ADD_SLIDE,
+	MAKE_GROUP,
+	MAKE_SLIDE,
+	PAUSE,
+	CLEAR,
+	ADD_IMAGE,
+	ADD_VIDEO,
+	PLAY_VIDEO,
+	SEEK_VIDEO
+}
 
 enum PenThickness {
 	XS = 1,
@@ -14,14 +41,13 @@ enum PenThickness {
 	XXL = 32
 }
 
-@export var test_class: ClassRoot
-
 var _pen_color_changed: bool = false
 var current_item_tree: TreeItem
 var select_item_index_disabled: bool = false
 var edit_subtitles := false
 var current_node: ClassNode
 
+@onready var menu_btn_file: MenuButton = %FileMenuButton
 @onready var menu_btn_edit: MenuButton = %EditMenuButton
 @onready var menu_btn_insert: MenuButton = %InsertMenuButton
 @onready var tree_manager: TreeManagerEditor = %IndexTree
@@ -30,6 +56,14 @@ var current_node: ClassNode
 @onready var subtitles_box: TextEdit = %SubtitlesBox
 @onready var custom_color_popup: Popup = %CustomColorPopup
 @onready var color_picker: ColorPicker = %ColorPicker
+@onready var play_button: Button = %PlayButton
+@onready var stop_button: Button = %StopButton
+@onready var time_label: Label = %TimeCurrent
+@onready var zoom_slider: HSlider = %ZoomSlider
+@onready var play_icon: Texture2D = get_theme_icon("play", stop_button.theme_type_variation)
+@onready var pause_icon: Texture2D = get_theme_icon("pause", stop_button.theme_type_variation)
+@onready var pen_color_options: OptionButton = %PenColorOptions
+@onready var pen_thickness_options: OptionButton = %PenThicknessOptions
 
 
 func _ready() -> void:
@@ -38,9 +72,49 @@ func _ready() -> void:
 	#WhiteboardManager.pen_lifted.connect(_on_pen_stopped_drawing)
 	menu_btn_edit.get_popup().id_pressed.connect(_on_menu_btn_edit)
 	menu_btn_insert.get_popup().id_pressed.connect(_on_menu_btn_insert)
+	menu_btn_file.get_popup().id_pressed.connect(_on_menu_btn_file)
+	_setup_shortcuts()
 	tree_manager.build(EditorManager.root)
-	#if test_class:
-		#tree_manager.build(test_class)
+	WhiteboardManager.play_state_changed.connect(_on_play_state_changed)
+
+func _process(_delta: float) -> void:
+	var root := WhiteboardManager.get_root_widget()
+	var current_time_str := TimeString.from_seconds(root.play_time, false)
+	var total_time_str := TimeString.from_seconds(root.end_time, false)
+	time_label.text = "%s / %s" % [current_time_str, total_time_str]
+
+func _setup_shortcuts() -> void:
+	_setup_file_menu_shortcuts()
+	_setup_edit_menu_shortcuts()
+	_setup_insert_menu_shortcuts()
+
+func _set_menu_item_shortcut(menu_btn: MenuButton, id: int, key: Key, ctrl := false, shift := false) -> void:
+	var shortcut := Shortcut.new()
+	var input := InputEventKey.new()
+	input.keycode = key
+	if ctrl:
+		input.ctrl_pressed = true
+		input.command_or_control_autoremap = true
+	if shift:
+		input.shift_pressed = true
+	shortcut.events = [input]
+	menu_btn.get_popup().set_item_shortcut(id, shortcut)
+
+func _setup_file_menu_shortcuts() -> void:
+	_set_menu_item_shortcut(menu_btn_file, FileMenuItem.SAVE, KEY_S, true)
+	_set_menu_item_shortcut(menu_btn_file, FileMenuItem.EXPORT, KEY_E, true)
+
+func _setup_edit_menu_shortcuts() -> void:
+	_set_menu_item_shortcut(menu_btn_edit, EditMenuItem.COPY, KEY_C, true)
+	_set_menu_item_shortcut(menu_btn_edit, EditMenuItem.CUT, KEY_X, true)
+	_set_menu_item_shortcut(menu_btn_edit, EditMenuItem.PASTE, KEY_V, true)
+	_set_menu_item_shortcut(menu_btn_edit, EditMenuItem.DELETE, KEY_DELETE)
+
+func _setup_insert_menu_shortcuts() -> void:
+	_set_menu_item_shortcut(menu_btn_insert, InsertMenuItem.ADD_GROUP, KEY_G, true, true)
+	_set_menu_item_shortcut(menu_btn_insert, InsertMenuItem.ADD_SLIDE, KEY_L, true, true)
+	_set_menu_item_shortcut(menu_btn_insert, InsertMenuItem.MAKE_GROUP, KEY_G, true)
+	_set_menu_item_shortcut(menu_btn_insert, InsertMenuItem.MAKE_SLIDE, KEY_L, true)
 
 # Setup the control panel with the current resources class
 func _setup():
@@ -50,14 +124,15 @@ func _setup():
 #region Menu Edit
 
 func _on_menu_btn_edit(id: int) -> void:
-	if id == 1:
-		tree_manager._copy()
-	if id == 2:
-		tree_manager._cut()
-	if id == 3:
-		tree_manager._paste()
-	if id == 4:
-		tree_manager._delete()
+	match id:
+		EditMenuItem.COPY:
+			tree_manager._copy()
+		EditMenuItem.CUT:
+			tree_manager._cut()
+		EditMenuItem.PASTE:
+			tree_manager._paste()
+		EditMenuItem.DELETE:
+			tree_manager._delete()
 
 func _disabled_toggle_edit_button(active: bool) -> void:
 	menu_btn_edit.disabled = active
@@ -66,33 +141,50 @@ func _disabled_toggle_edit_button(active: bool) -> void:
 
 # Handle the insert menu button actions
 func _on_menu_btn_insert(id: int) -> void:
-	if id == 1:
-		_add_group()
-	if id == 2:
-		_add_group()
-	if id == 3:
-		_make_group()
-	if id == 4:
-		_add_clear()
-	if id == 5:
-		_add_pause()
-	if id == 6:
-		_add_slide()
-	if id == 7:
-		_push_slide()
-	if id == 8:
-		_add_image()
-	if id == 9:
-		_add_video()
-	if id == 10:
-		_add_play_video()
-	if id == 11:
-		_add_seek_video()
+	match id:
+		InsertMenuItem.ADD_GROUP:
+			_add_group()
+		InsertMenuItem.ADD_SLIDE:
+			_add_slide()
+		InsertMenuItem.MAKE_GROUP:
+			_make_group()
+		InsertMenuItem.MAKE_SLIDE:
+			_make_slide()
+		InsertMenuItem.PAUSE:
+			_add_pause()
+		InsertMenuItem.CLEAR:
+			_add_clear()
+		InsertMenuItem.ADD_IMAGE:
+			_add_image()
+		InsertMenuItem.ADD_VIDEO:
+			_add_video()
+		InsertMenuItem.PLAY_VIDEO:
+			_add_play_video()
+		InsertMenuItem.SEEK_VIDEO:
+			_add_seek_video()
 
-func _add_entity(entity: Entity) -> void:
+func _on_menu_btn_file(id: int) -> void:
+	if id == 0:
+		save_pressed.emit()
+	elif id == 1:
+		export_pressed.emit()
+
+func _add_entity(entity: Entity, nest := true, select := true) -> void:
 	var node := ClassLeaf.new()
 	node.entity = entity
-	tree_manager.add_node(node)
+	tree_manager.add_node(node, nest, select)
+
+func _delete_entity(entity: Entity) -> void:
+	var item := entity._tree_item
+	if not item:
+		print("No item assigned")
+		return
+	var parent := item.get_parent()
+	var prev := item.get_prev_in_tree()
+	parent.remove_child(item)
+	entity.delete()
+	prev.select(0)
+	prev.select(1)
 
 func _add_group() -> void:
 	var node := ClassGroup.new()
@@ -105,7 +197,7 @@ func _add_slide() -> void:
 	var node := ClassSlide.new()
 	tree_manager.add_node(node)
 
-func _push_slide() -> void:
+func _make_slide() -> void:
 	tree_manager.make_slide()
 
 func _add_clear() -> void:
@@ -211,7 +303,7 @@ func _on_toggle_audio_pressed(active: bool) -> void:
 
 # Toggle pen mode
 func _on_button_pen_toggled(active: bool) -> void:
-	print("Pen: ", active)
+	#print("Pen: ", active)
 	if active:
 		EditorManager.set_pen_mode(EditorManager.PenMode.DRAW)
 	else:
@@ -223,7 +315,7 @@ func _on_button_detach_pressed() -> void:
 
  #Toggle drag mode
 func _on_button_drag_toggled(active: bool) -> void:
-	print("Drag: ", active)
+	#print("Drag: ", active)
 	if active:
 		EditorManager.set_pen_mode(EditorManager.PenMode.DRAG)
 	else:
@@ -231,7 +323,7 @@ func _on_button_drag_toggled(active: bool) -> void:
 
 # Toggle resize mode
 func _on_button_resize_toggled(active: bool) -> void:
-	print("Resize: ", active)
+	#print("Resize: ", active)
 	if active:
 		EditorManager.set_pen_mode(EditorManager.PenMode.RESIZE)
 	else:
@@ -243,107 +335,28 @@ func _on_select_button_toggled(active: bool) -> void:
 	else:
 		EditorManager.set_pen_mode(EditorManager.PenMode.DISABLED)
 
-func _whiteboard_nodes_selection(nodes: Array[ClassLeaf]):
-	if select_item_index_disabled or nodes.size() == 0:
-		return
-	
-	var t_items: Array[TreeItem] = []
-	for node in nodes:
-		var t_item = tree_manager.find_item_by_node(node)
-		if t_item:
-			t_items.append(t_item)
-	
-	if t_items.size() > 0:
-		tree_manager.deselect_all()
-		# Set first on rendering order as current node an others as selected
-		var last = t_items.pop_back()
-		var node = last.get_metadata(0)
-		#_bus_core.current_node_changed.emit(node)		
-		for t_item: TreeItem in t_items:
-			t_item.select(0)
-			tree_manager.multi_selected.emit(t_item, 0, true)
-	
 #endregion
 
 
 #region Tree Index
 
-
-# Select an item in the tree and update the current node
-func _on_item_activated() -> void:
-	if select_item_index_disabled:
-		return
-	var item = tree_manager.get_selected()
-	var node = item.get_metadata(0)
-	#_bus_core.current_node_changed.emit(node)
-	#_bus.seek_node.emit(node)
-	#PersistenceEditor._epilog_events(PersistenceEditor.Events.SEEK_PANEL, [node] )
-	
 func _disabled_toggle_select_item_index(active: bool) -> void:
 	select_item_index_disabled = active
-
-# Update the current node
-func _current_node_changed(current_node):
-	#get_tree().call_group(&"skipped_before_play", "clear_before_play")
-	if current_item_tree != null:
-		current_item_tree.set_custom_color(0, Color.GRAY)
-	current_item_tree = tree_manager.find_item_by_node(current_node)
-	tree_manager.scroll_to_item(current_item_tree, true)
-	current_item_tree.set_custom_color(0, Color.LIME_GREEN)
-	#_current_node = current_node
-	_update_pen_settings_from_node(current_node)
-
-func _update_pen_settings_from_node(node: ClassNode):
-	if not is_instance_valid(node):
-		return
-
-	if node is ClassLeaf:
-		var entity = node.entity
-		if not is_instance_valid(entity):
-			return
-
-		if entity is LineEntity:
-			_set_colorpicker_silently(entity.pen_color)
-			_set_thickness_silently(entity.pen_thickness)
-		elif entity is PenColorEntity:
-			_set_colorpicker_silently(entity.color)
-		elif entity is PenThicknessEntity:
-			_set_thickness_silently(entity.thickness)
 
 ## Sets the color without adding a new node
 func _set_colorpicker_silently(color: Color):
 	pen_color_picker.color = color
 
-## Sets a value for the slider without adding a new node
-func _set_thickness_silently(value: float):
-	pen_thickness_slider.value = value
-
-# Show or hide items from a group if it is collapsed
-#func _on_item_collapse(item: TreeItem) -> void:
-	#if item == current_item_tree:
-		#_execute_after_rendering()
-
-# Emit class selected nodes from panel items
-func _on_multi_selected(item: TreeItem, column: int, selected: bool):
-	if select_item_index_disabled:
-		return
-	var node = item.get_metadata(0)
-	#_bus.class_node_selected.emit(node, selected)
-
 func _clear_selection():
 	tree_manager.deselect_all()
 
 func _on_color_picker_changed(color: Color) -> void:
-	#_pending_pen_color = color
 	WhiteboardManager.set_pen_color(color)
 	_add_pen_color(WhiteboardManager.get_pen_color())
-	#_pen_color_changed = true
-	#_pen_color_changed_first = true
 	
 func _on_color_picker_closed() -> void:
 	if _pen_color_changed:
 		_add_pen_color(WhiteboardManager.get_pen_color())
-		#_on_pen_color_changed(_pending_pen_color)
 		_pen_color_changed = false
 
 #endregion
@@ -355,6 +368,7 @@ func _on_index_tree_node_selected(node: ClassNode) -> void:
 	current_node = node
 	_check_special_behavior()
 	widget_selected.emit(widget)
+	_reflect_context()
 
 # Here we can check if the control panel has to do something special
 # after an item is selected, like changing to "edit mode" for an entity
@@ -398,5 +412,80 @@ func _on_pen_color_options_item_selected(index: int) -> void:
 		8: _on_color_picker_changed(Color.WEB_GRAY)
 		9: custom_color_popup.popup()
 
+func get_index_from_thickness() -> int:
+	match int(WhiteboardManager.get_pen_thickness()):
+		PenThickness.XS: 
+			return 0 
+		PenThickness.S: 
+			return 1 
+		PenThickness.M: 
+			return 2 
+		PenThickness.L: 
+			return 3 
+		PenThickness.XL: 
+			return 4 
+		PenThickness.XXL: 
+			return 5
+		_:
+			return 1
+
+func get_id_from_color() -> int:
+	match WhiteboardManager.get_pen_color():
+		Color.WHITE:
+			return 0
+		Color.RED:
+			return 1
+		Color.BLUE:
+			return 2
+		Color.LIME:
+			return 3
+		Color.YELLOW:
+			return 4
+		Color.FUCHSIA:
+			return 5
+		Color.ORANGE:
+			return 6
+		Color.AQUA:
+			return 7
+		Color.WEB_GRAY:
+			return 8
+		_:
+			return 9
+
 func _on_custom_color_popup_hide() -> void:
 	_on_color_picker_changed(color_picker.color)
+
+#region Whiteboard control
+
+func _zoom_slider_value_selected(value: float) -> void:
+	WhiteboardManager.set_zoom(value)
+
+func _zoom_reset() -> void:
+	zoom_slider.value = WhiteboardManager.get_base_zoom()
+
+# Toggle playback stop button.
+# If the button is pressed, it will toggle between playing and stopping.
+# When playing, the visual widget will begin 
+# When stopped, the current  visual widget will be stopped and show his final state.
+func _toggle_playback_pause() -> void:
+	WhiteboardManager.toggle_play_pause()
+	_update_play_button()
+
+func _stop_playback() -> void:
+	WhiteboardManager.stop_playback()
+	_update_play_button()
+
+func _update_play_button() -> void:
+	play_button.icon = pause_icon if WhiteboardManager.get_root_widget().is_playing() else play_icon
+
+#endregion
+
+func _on_play_state_changed(_state: Widget.PlayState) -> void:
+	_update_play_button()
+
+func _reflect_context() -> void:
+	pen_color_options.selected = get_id_from_color()
+	pen_thickness_options.selected = get_index_from_thickness()
+
+func _on_fullscreen_button_pressed() -> void:
+	WhiteboardManager.toggle_fullscreen()

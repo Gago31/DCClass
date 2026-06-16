@@ -52,7 +52,10 @@ func _on_unpaused() -> void:
 
 func _on_seek() -> void:
 	#audio.play()
-	audio.seek(play_time)
+	audio.stop()
+	crossfade_in(play_time)
+	#if is_playing():
+		#audio.seek(play_time)
 	#audio.stop()
 
 func _calculate_duration() -> float:
@@ -124,6 +127,8 @@ func load_audio_stream() -> void:
 	var stream_path := get_entity().audio_path
 	var stream := ClassResourceLoader.load_audio(stream_path)
 	audio.stream = stream
+	#print("Audio ", get_entity().audio_path, ": te = ", get_entity().duration, "; ts = ", audio.stream.get_length())
+	#get_entity().duration = audio.stream.get_length()
 
 func _on_audio_finished() -> void:
 	finish_playing()

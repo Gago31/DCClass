@@ -23,6 +23,7 @@ func get_widget() -> PackedScene:
 	return preload("uid://bfyhdkl1lp68k")
 
 func config_editor_tree_item(item: TreeItem) -> void:
+	_tree_item = item
 	item.set_text(0, get_editor_name())
 
 func _on_image_converted(_result: Variant, _path: String) -> void:

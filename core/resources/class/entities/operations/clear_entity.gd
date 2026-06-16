@@ -16,4 +16,5 @@ func get_widget() -> PackedScene:
 	return preload("uid://b8obtgkbi1jwp")
 
 func config_editor_tree_item(item: TreeItem) -> void:
+	_tree_item = item
 	item.set_text(0, get_editor_name())

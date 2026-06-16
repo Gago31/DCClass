@@ -20,6 +20,8 @@ signal children_cleared
 ## The nodes inside this group. They can be other groups or [ClassLeaf]s.
 @export var children: Array[ClassNode] = []
 
+func _init() -> void:
+	_name = "New Group"
 
 ## Adds a child node to the group. If [code]index[/code] is positive or 0,
 ## inserts the child at that index, otherwise it is added at the end.

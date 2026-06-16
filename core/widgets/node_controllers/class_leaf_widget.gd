@@ -17,6 +17,7 @@ func setup() -> void:
 	widget.updated.connect(_on_widget_updated)
 
 func _on_started_playing() -> void:
+	super._on_started_playing()
 	widget.play(_play_speed)
 
 func _on_unpaused() -> void:
@@ -90,7 +91,16 @@ func unclear() -> void:
 	widget.show()
 
 func jump_to_widget(target_widget: Widget) -> bool:
-	jump_to_end()
 	if target_widget == self or widget == target_widget:
+		match get_play_mode():
+			PlayMode.INSTANT, PlayMode.SYNC:
+				jump_to_end()
+			PlayMode.PLAY_AND_ADVANCE, PlayMode.PLAY_AND_WAIT:
+				reset()
 		return true
-	return false
+	else:
+		jump_to_end()
+		return false
+
+func _get_current_entity_widget() -> EntityWidget:
+	return widget

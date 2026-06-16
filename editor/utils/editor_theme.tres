@@ -2,6 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="1_dvj3a"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d7kba"]
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ai0gx"]
 atlas = ExtResource("1_dvj3a")
 region = Rect2(300, 150, 50, 50)
@@ -43,7 +46,12 @@ bg_color = Color(0.121569, 0.2, 0.109804, 1)
 border_width_bottom = 2
 border_color = Color(0.121569, 0.2, 0.109804, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvj3a"]
+bg_color = Color(0.09985284, 0.09985284, 0.09985284, 1)
+
 [resource]
+BottomPanel/base_type = &"PanelContainer"
+BottomPanel/styles/panel = SubResource("StyleBoxFlat_d7kba")
 FullscreenIconButton/icons/enter = SubResource("AtlasTexture_ai0gx")
 FullscreenIconButton/icons/exit = SubResource("AtlasTexture_rmpqr")
 PlayerIconButton/base_type = &"Button"
@@ -60,3 +68,6 @@ TabBar/styles/button_highlight = SubResource("StyleBoxFlat_c821a")
 TabBar/styles/tab_selected = SubResource("StyleBoxFlat_0hpmv")
 TextEdit/colors/background_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
 Tree/colors/drop_position_color = Color(1.8770993e-06, 0.521912, 0.5219668, 1)
+Tree/colors/font_color = Color(0.7, 0.7, 0.7, 1)
+WhiteboardBackground/base_type = &"Panel"
+WhiteboardBackground/styles/panel = SubResource("StyleBoxFlat_dvj3a")

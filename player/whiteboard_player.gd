@@ -16,5 +16,5 @@ func get_class_root_widget() -> ClassRootWidget:
 	return window.class_root
 
 func reprocess_tree() -> void:
-	print("postprocess")
+	#print("postprocess")
 	tree_postprocessing.postprocess(get_class_root_widget())

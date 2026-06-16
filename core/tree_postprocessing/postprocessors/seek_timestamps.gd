@@ -10,10 +10,10 @@ var max_time: float = 0.0
 
 
 func reset() -> void:
-	print("Resetting Timestamp postprocessor")
+	#print("Resetting Timestamp postprocessor")
 	current_time = 0.0
 	max_time = 0.0
-	print("Current time: ", current_time, "; Max time: ", max_time)
+	#print("Current time: ", current_time, "; Max time: ", max_time)
 
 func is_widget_valid(widget: Widget) -> bool:
 	if widget.get_play_mode() == Widget.PlayMode.SYNC:
@@ -27,9 +27,9 @@ func _process_widget(widget: Widget) -> void:
 		_process_leaf(widget as ClassLeafWidget)
 	else:
 		_update_times(widget)
-	var time_str := "%02f~%02f" % [widget.start_time, widget.end_time]
-	if widget is ClassNodeWidget:
-		prints((widget as ClassNodeWidget).get_class_node().get_editor_name(), time_str)
+	#var time_str := "%02f~%02f" % [widget.start_time, widget.end_time]
+	#if widget is ClassNodeWidget:
+		#prints((widget as ClassNodeWidget).get_class_node().get_editor_name(), time_str)
 
 func _process_group(group: ClassGroupWidget) -> void:
 	var i: int = 0
@@ -53,9 +53,13 @@ func _process_group(group: ClassGroupWidget) -> void:
 		group.end_time = 0.0
 		return
 	var first_child := group.get_child(0) as Widget
-	var last_child := group.get_child(-1) as Widget
 	group.start_time = first_child.start_time
-	group.end_time = last_child.end_time
+	
+	var end_time: float = 0.0
+	for child in group.get_children() as Array[ClassNodeWidget]:
+		end_time = maxf(end_time, child.end_time)
+	#var last_child := group.get_child(-1) as Widget
+	group.end_time = end_time
 
 func _process_leaf(widget: ClassLeafWidget) -> void:
 	var child := widget.get_child(0) as EntityWidget

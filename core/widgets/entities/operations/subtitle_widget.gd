@@ -9,7 +9,7 @@ func _on_started_playing() -> void:
 	finish_playing()
 
 func _on_skip() -> void:
-	print("Skip subtitles: " + get_entity().text)
+	#print("Skip subtitles: " + get_entity().text)
 	WhiteboardManager.update_subtitles(get_entity().text)
 
 func _on_unpaused() -> void:

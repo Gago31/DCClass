@@ -4,7 +4,7 @@ extends Node
 
 var record_stream: AudioEffectRecord = AudioServer.get_bus_effect(AudioServer.get_bus_index("ClassRecord"), 0)
 var record_data: AudioStreamWAV
-var audio_index: int = 1
+#var audio_index: int = 1
 
 @onready var mic_stream: AudioStreamPlayer = %AudioRecordStream
 @onready var audio_stream_player: AudioStreamPlayer = %AudioStreamPlayer
@@ -27,9 +27,9 @@ func play_recording() -> void:
 
 func save_recording(_record_data: AudioStreamWAV) -> void:
 	var temp_path := EditorManager.get_temp_path()
-	var path_wav := "%s/%03d.wav" % [temp_path, audio_index]
+	var path_wav := "%s/%03d.wav" % [temp_path, EditorManager.audio_index]
 	print("Saving audio from ", path_wav)
-	audio_index += 1
+	#audio_index += 1
 	_record_data.save_to_wav(path_wav)
 	var audio_entity := AudioEntity.new("", _record_data.get_length())
 	var file_path := EditorManager.convert_audio(path_wav, audio_entity)

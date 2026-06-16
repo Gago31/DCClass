@@ -3,6 +3,8 @@ extends Control
 
 
 signal updated
+signal save_pressed
+signal export_pressed
 
 @export var metadata: ClassMetadata
 @onready var name_input: LineEdit = %Name

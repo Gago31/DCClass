@@ -32,13 +32,19 @@ func _build_child(child: ClassNode, index: int = -1) -> ClassNodeWidget:
 	return node
 
 func _on_started_playing() -> void:
-	#show()
-	#WhiteboardManager.push_context()
+	super._on_started_playing()
+	show()
 	_play_next()
 
 func _on_finished_playing() -> void:
-	if is_seeking(): return
-	#WhiteboardManager.pop_context()
+	#if is_seeking(): return
+	WhiteboardManager.pop_context()
+
+#func _while_playing(_delta: float) -> void:
+	#if play_time > duration:
+		#print("forced ending")
+		#jump_to_end()
+		
 
 func _on_paused() -> void:
 	if not _current_node: return
@@ -47,18 +53,25 @@ func _on_paused() -> void:
 			child.pause()
 
 func _on_unpaused() -> void:
+	#print(get_class_node()._name, " unpaused")
 	for child in get_children() as Array[ClassNodeWidget]:
 		if child.is_paused():
+			#print(get_class_node()._name, " unpaused - playing ", child)
 			child.play(_play_speed)
+	if not _current_node:
+		_find_current()
 	if _current_node and _current_node.is_finished():
+		#print(get_class_node()._name, " unpaused - play next")
 		_play_next()
 	if _current_node and _current_node.is_stopped():
+		#print(get_class_node()._name, " unpaused - play current")
 		_play_current()
 
 func _on_reset() -> void:
-	#hide()
 	unclear()
+	#hide()
 	_disconnect_current()
+	_disconnect_all()
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.reset()
 	_current_node = null
@@ -67,38 +80,47 @@ func seek(time: float, playing: bool = false) -> void:
 	unclear()
 	super.seek(time, playing)
 	_disconnect_current()
+	_disconnect_all()
 	_current_node = null
 	#WhiteboardManager.push_context()
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.seek(time, playing)
+	if not is_playing() and not is_paused():
+		return
 	for child in get_children() as Array[ClassNodeWidget]:
 		if child.is_playing() or child.is_paused():
 			_current_node = child
+			#prints(get_class_node()._name, "set current node:", _current_node)
 	if _current_node:
 		_connect_current()
+	#else:
+		#print("No current node")
 	#show()
 
 func jump_to_widget(target_widget: Widget) -> bool:
-	print("Jump to widget")
-	reset()
+	#print("Jump to widget")
+	#reset()
+	#print("Jump reset")
 	_disconnect_current()
+	_disconnect_all()
 	_current_node = null
+	WhiteboardManager.push_context()
 	if target_widget == self:
 		return true
 	for child in get_children() as Array[ClassNodeWidget]:
 		var stop_search := child.jump_to_widget(target_widget)
 		if not stop_search: continue
-		if child.is_leaf():
-			play_time = child.end_time - start_time
-		else:
-			play_time = child.start_time + child.play_time - start_time
+		#if child.is_leaf():
+			#play_time = child.end_time - start_time
+		#else:
+		play_time = child.start_time + child.play_time - start_time
 		_current_node = child
 		_connect_current()
 		pause()
 		#_set_play_state(PlayState.PAUSED)
 		return true
 	play_time = duration
-	_set_play_state(PlayState.FINISHED)
+	finish_playing()
 	return false
 
 func _on_skip() -> void:
@@ -108,7 +130,12 @@ func _on_skip() -> void:
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.jump_to_end()
 
-# Meant to be used by [ClassRoot]'s `jump_to_node()`
+func _on_seek() -> void:
+	WhiteboardManager.push_context()
+	show()
+
+## Meant to be used by [ClassRoot.jump_to_node()]
+## @deprecated
 func _jump_to_node(node: ClassNode) -> bool:
 	if node == get_class_node():
 		reset()
@@ -157,6 +184,19 @@ func _get_sync_nodes_after(child: ClassNodeWidget) -> Array[ClassNodeWidget]:
 			break
 	return sync_nodes
 
+func _get_instant_nodes_after(child: ClassNodeWidget) -> Array[ClassNodeWidget]:
+	var instant_nodes: Array[ClassNodeWidget] = []
+	var index_i := child.get_index() + 1
+	
+	for i in range(index_i, get_child_count()):
+		var node := get_child(i) as ClassNodeWidget
+		var node_play_mode := node.get_play_mode()
+		if node_play_mode == PlayMode.INSTANT:
+			instant_nodes.append(node)
+		elif node_play_mode in [PlayMode.PLAY_AND_ADVANCE, PlayMode.PLAY_AND_WAIT]:
+			break
+	return instant_nodes
+
 # This determines how much we need to accelerate the playback speed of
 # the following nodes to match the duration of the reference node
 func _calculate_sync_speed(nodes: Array[ClassNodeWidget], reference_time: float) -> void:
@@ -171,6 +211,14 @@ func _calculate_sync_speed(nodes: Array[ClassNodeWidget], reference_time: float)
 		return
 	_sync_speed = total_duration / reference_time
 
+func _find_current() -> void:
+	#print("find current")
+	if _current_node: return
+	for child in get_children() as Array[ClassNodeWidget]:
+		if child.is_paused() or child.is_playing():
+			_current_node = child
+	_connect_current()
+
 func _connect_current() -> void:
 	if not _current_node: return
 	if _current_node.finished_playing.is_connected(_play_next): return
@@ -181,6 +229,11 @@ func _disconnect_current() -> void:
 	if _current_node.finished_playing.is_connected(_play_next):
 		_current_node.finished_playing.disconnect(_play_next)
 	_current_node = null
+
+func _disconnect_all() -> void:
+	for child in get_children() as Array[ClassNodeWidget]:
+		if child.finished_playing.is_connected(_play_next):
+			child.finished_playing.disconnect(_play_next)
 
 func _play_current() -> void:
 	#_play_state = PlayState.PLAYING
@@ -198,6 +251,9 @@ func _play_current() -> void:
 			var reference_time = _current_node.duration
 			var sync_nodes := _get_sync_nodes_after(_current_node)
 			if sync_nodes.is_empty():
+				var instant_nodes := _get_instant_nodes_after(_current_node)
+				for node in instant_nodes:
+					node.play(_play_speed)
 				_connect_current()
 				_current_node.play(_play_speed)
 			else:
@@ -217,6 +273,7 @@ func _play_next() -> void:
 		finish_playing()
 		return
 	_current_node = get_child(next_index) as ClassNodeWidget
+	#print(get_class_node()._name, " playing next node: ", _current_node)
 	_play_current()
 
 func _on_child_finished_playing() -> void:
@@ -278,6 +335,12 @@ func unclear() -> void:
 	show()
 	for child in get_children() as Array[ClassNodeWidget]:
 		child.unclear()
+
+func _get_current_entity_widget() -> EntityWidget:
+	if not _current_node:
+		var first_child := get_child(0) as ClassNodeWidget
+		return first_child._get_current_entity_widget()
+	return _current_node._get_current_entity_widget()
 
 func _on_child_updated() -> void:
 	#print("child updated")

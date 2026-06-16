@@ -8,6 +8,9 @@ extends EntityWidget
 ## widget inside the editor.
 
 
+signal size_updated
+
+
 const SELECTION_AREA = preload("uid://n1s02t8kd0hl")
 
 
@@ -56,17 +59,24 @@ func get_rect_bound() -> Rect2:
 
 func select() -> void:
 	modulate = Color.AQUA
+	get_entity()._tree_item.set_custom_color(0, Color.DODGER_BLUE)
+	get_entity()._tree_item.set_custom_color(1, Color.DODGER_BLUE)
 	#_on_select()
 
 func deselect() -> void:
 	modulate = Color.WHITE
+	var theme := load(ProjectSettings.get_setting("gui/theme/custom", null)) as Theme
+	var theme_color := theme.get_color(&"font_color", &"Tree")
+	get_entity()._tree_item.set_custom_color(0, theme_color)
+	get_entity()._tree_item.set_custom_color(1, theme_color)
 	#_on_deselect()
 
 func get_entity() -> VisualEntity:
 	return entity as VisualEntity
 
 func setup() -> void:
-	transform = get_entity().transform
+	global_transform = get_entity().transform
+	#print(get_entity().get_editor_name(), ": ", global_transform)
 	_prev_pos = global_position
 	_prev_scale = global_scale
 	#_prev_transform = get_entity().transform

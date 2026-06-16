@@ -13,7 +13,11 @@ func set_class_node(node: ClassNode) -> void:
 func get_class_node() -> ClassNode:
 	return null
 
+func _on_started_playing() -> void:
+	get_class_node().select_own_item()
+
 @abstract func is_leaf() -> bool;
+## @deprecated
 @abstract func _jump_to_node(node: ClassNode) -> bool;
 @abstract func _compute_start_time() -> float;
 @abstract func _compute_end_time() -> float;
@@ -21,3 +25,4 @@ func get_class_node() -> ClassNode:
 @abstract func unclear() -> void;
 @abstract func search_widget_by_class_node(node: ClassNode) -> ClassNodeWidget;
 @abstract func jump_to_widget(target_widget: Widget) -> bool;
+@abstract func _get_current_entity_widget() -> EntityWidget;

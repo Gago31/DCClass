@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://chua3ehkajj2r"]
 
 [ext_resource type="Script" uid="uid://dudfcdw21c7iv" path="res://player/player_whiteboard_ui.gd" id="1_8ma2g"]
+[ext_resource type="Theme" uid="uid://m3cwg0uvxfau" path="res://editor/utils/editor_theme.tres" id="2_bof1a"]
 [ext_resource type="Script" uid="uid://dppoh7xugsiss" path="res://core/whiteboard/whiteboard_input_desktop.gd" id="2_la4bq"]
+[ext_resource type="Theme" uid="uid://w0c74fpyack0" path="res://editor/utils/editor_theme_light.tres" id="3_4yo7g"]
+[ext_resource type="Script" uid="uid://do2mxbck1mavg" path="res://core/whiteboard/whiteboard_background.gd" id="3_8ma2g"]
 [ext_resource type="Script" uid="uid://bqe50cx23asfy" path="res://editor/main_editor/whiteboard/player_screen/camera/class_camera.gd" id="5_4yo7g"]
 [ext_resource type="Texture2D" uid="uid://cs5m6p5kwdhoy" path="res://assets/sprites/ui/subtitles.png" id="6_8ma2g"]
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="6_13k2a"]
+[ext_resource type="Texture2D" uid="uid://3jj5dvsnagyh" path="res://assets/sprites/ui/icon_light_mode_2.png" id="9_13k2a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efjkl"]
 bg_color = Color(0.07284262, 0.072842635, 0.072842576, 1)
@@ -13,13 +17,17 @@ bg_color = Color(0.07284262, 0.072842635, 0.072842576, 1)
 atlas = ExtResource("6_13k2a")
 region = Rect2(0, 200, 50, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uioh1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_la4bq"]
 atlas = ExtResource("6_13k2a")
 region = Rect2(50, 150, 50, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mcb8p"]
 atlas = ExtResource("6_13k2a")
 region = Rect2(350, 350, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bof1a"]
+atlas = ExtResource("6_13k2a")
+region = Rect2(300, 150, 50, 50)
 
 [node name="ClassWindow" type="Control" unique_id=225664527]
 layout_mode = 3
@@ -29,6 +37,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8ma2g")
+dark_mode_theme = ExtResource("2_bof1a")
+light_mode_theme = ExtResource("3_4yo7g")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1986111757]
 layout_mode = 1
@@ -37,6 +47,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
 [node name="Whiteboard" type="Control" parent="VBoxContainer" unique_id=1393762601]
 unique_name_in_owner = true
@@ -58,20 +69,24 @@ stretch = true
 unique_name_in_owner = true
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(400, 400)
+msaa_2d = 2
+msaa_3d = 2
+screen_space_aa = 1
+size = Vector2i(1280, 616)
 render_target_update_mode = 4
 
 [node name="CanvasLayer" type="CanvasLayer" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=1755758519]
 layer = -100
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport/CanvasLayer" unique_id=763574757]
+[node name="WhiteboardBackground" type="Panel" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport/CanvasLayer" unique_id=715462472]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.1, 0.1, 0.1, 1)
+theme_type_variation = &"WhiteboardBackground"
+script = ExtResource("3_8ma2g")
 
 [node name="Camera2D" type="Camera2D" parent="VBoxContainer/Whiteboard/SubViewportContainer/SubViewport" unique_id=1299586417]
 unique_name_in_owner = true
@@ -152,6 +167,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 8
+theme_type_variation = &"BottomPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/BottomPanel" unique_id=19361940]
 layout_mode = 2
@@ -195,10 +211,12 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ZoomButton" type="TextureButton" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=757593890]
+[node name="ZoomButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=1878536546]
 unique_name_in_owner = true
 layout_mode = 2
-texture_normal = SubResource("AtlasTexture_uioh1")
+icon = SubResource("AtlasTexture_la4bq")
+flat = true
+icon_alignment = 1
 
 [node name="ZoomSlider" type="HSlider" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/CameraZoom" unique_id=184085393]
 unique_name_in_owner = true
@@ -228,13 +246,25 @@ icon = SubResource("AtlasTexture_mcb8p")
 [node name="Spacer2" type="Control" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=150323129]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
+size_flags_stretch_ratio = 1.5
 
 [node name="SubtitlesButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=2094222288]
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("6_8ma2g")
 
+[node name="ThemeButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=556692711]
+layout_mode = 2
+toggle_mode = true
+icon = ExtResource("9_13k2a")
+
+[node name="FullscreenButton" type="Button" parent="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow" unique_id=74423489]
+layout_mode = 2
+toggle_mode = true
+icon = SubResource("AtlasTexture_bof1a")
+
 [connection signal="item_selected" from="VBoxContainer/Whiteboard/Control/IndexTreePanel/MarginContainer/IndexTree" to="." method="_on_index_tree_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Whiteboard/Control/MarginContainer/IndexButton" to="." method="_on_index_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/SubtitlesButton" to="." method="_on_subtitles_button_toggled"]
+[connection signal="toggled" from="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/ThemeButton" to="." method="_on_theme_button_toggled"]
+[connection signal="toggled" from="VBoxContainer/BottomPanel/MarginContainer/VBoxContainer/ControlRow/FullscreenButton" to="." method="_on_fullscreen_button_toggled"]

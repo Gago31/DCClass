@@ -1,37 +1,37 @@
 [gd_scene format=3 uid="uid://bkt85dfs5q52u"]
 
 [ext_resource type="Script" uid="uid://chdvlucbsrdn0" path="res://editor/main_editor/editor_ui.gd" id="1_8c1hf"]
-[ext_resource type="Resource" uid="uid://sjnr4t8cxq1d" path="res://test_class.tres" id="2_trjv5"]
 [ext_resource type="Script" uid="uid://cqighbl4pvak0" path="res://editor/utils/tree_manager.gd" id="2_vyrmg"]
 [ext_resource type="Texture2D" uid="uid://jws2w5wpfvw7" path="res://assets/sprites/ui/sheet_white1x.png" id="3_8c1hf"]
 [ext_resource type="Texture2D" uid="uid://o6w8p0jepmvn" path="res://assets/sprites/ui/pen_sizes_2.png" id="4_0gpha"]
+[ext_resource type="PackedScene" uid="uid://cloco28062l0a" path="res://editor/drag_icons/class_node_drag_single_icon.tscn" id="5_0gpha"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2omcq"]
+atlas = ExtResource("3_8c1hf")
+region = Rect2(350, 350, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gpha"]
+atlas = ExtResource("3_8c1hf")
+region = Rect2(100, 400, 50, 50)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2omcq"]
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04d5a"]
+atlas = ExtResource("3_8c1hf")
+region = Rect2(50, 150, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qd7se"]
+atlas = ExtResource("3_8c1hf")
+region = Rect2(300, 150, 50, 50)
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_8c1hf"]
 allow_unpress = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mexuc"]
-atlas = ExtResource("4_0gpha")
-region = Rect2(0, 0, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3yjun"]
-atlas = ExtResource("4_0gpha")
-region = Rect2(0, 32, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mmepp"]
-atlas = ExtResource("4_0gpha")
-region = Rect2(0, 64, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_upcgy"]
-atlas = ExtResource("4_0gpha")
-region = Rect2(0, 96, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_exwmu"]
-atlas = ExtResource("4_0gpha")
-region = Rect2(0, 128, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yrg0m"]
-atlas = ExtResource("4_0gpha")
-region = Rect2(0, 160, 64, 32)
 
 [sub_resource type="Gradient" id="Gradient_0gpha"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
@@ -114,6 +114,30 @@ gradient = SubResource("Gradient_75e8j")
 width = 32
 height = 32
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mexuc"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3yjun"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 32, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mmepp"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 64, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upcgy"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 96, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exwmu"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 128, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrg0m"]
+atlas = ExtResource("4_0gpha")
+region = Rect2(0, 160, 64, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_trjv5"]
 atlas = ExtResource("3_8c1hf")
 region = Rect2(200, 250, 50, 50)
@@ -130,20 +154,25 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 script = ExtResource("1_8c1hf")
-test_class = ExtResource("2_trjv5")
 metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=424354054]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=832524518]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="HBoxContainerAdd" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=568406761]
+[node name="HBoxContainerAdd" type="HBoxContainer" parent="VBoxContainer" unique_id=568406761]
 layout_mode = 2
 
-[node name="EditMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/HBoxContainerAdd" unique_id=1362568015]
+[node name="FileMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainerAdd" unique_id=79971756]
+unique_name_in_owner = true
+layout_mode = 2
+text = "File"
+item_count = 2
+popup/item_0/text = "Save"
+popup/item_0/id = 0
+popup/item_1/text = "Export"
+popup/item_1/id = 1
+
+[node name="EditMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainerAdd" unique_id=1362568015]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Edit"
@@ -162,39 +191,131 @@ popup/item_4/id = 0
 popup/item_4/disabled = true
 popup/item_4/separator = true
 popup/item_5/text = "Delete"
-popup/item_5/id = 4
+popup/item_5/id = 5
 
-[node name="InsertMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer/HBoxContainerAdd" unique_id=493285497]
+[node name="InsertMenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainerAdd" unique_id=493285497]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Insert"
-item_count = 11
+item_count = 10
 popup/item_0/text = "Add Group"
-popup/item_0/id = 1
-popup/item_1/text = "Push Group"
-popup/item_1/id = 2
+popup/item_0/id = 0
+popup/item_1/text = "Add Slide"
+popup/item_1/id = 1
 popup/item_2/text = "Make Group"
-popup/item_2/id = 3
-popup/item_3/text = "Clear"
-popup/item_3/id = 4
+popup/item_2/id = 2
+popup/item_3/text = "Make Slide"
+popup/item_3/id = 3
 popup/item_4/text = "Pause"
-popup/item_4/id = 5
-popup/item_5/text = "Add Slide"
-popup/item_5/id = 6
-popup/item_6/text = "Push Slide"
-popup/item_6/id = 7
-popup/item_7/text = "Add Image"
-popup/item_7/id = 8
-popup/item_8/text = "Add Video"
-popup/item_8/id = 9
-popup/item_9/text = "Play Video"
-popup/item_9/id = 10
-popup/item_10/text = "Seek video"
-popup/item_10/id = 11
+popup/item_4/id = 4
+popup/item_5/text = "Clear"
+popup/item_5/id = 5
+popup/item_6/text = "Add Image"
+popup/item_6/id = 6
+popup/item_7/text = "Add Video"
+popup/item_7/id = 7
+popup/item_8/text = "Play Video"
+popup/item_8/id = 8
+popup/item_9/text = "Seek video"
+popup/item_9/id = 9
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/HBoxContainer" unique_id=1527272184]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainerAdd" unique_id=1286365340]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2" unique_id=82747302]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer" unique_id=1361191979]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="PlaybackControls" type="HBoxContainer" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer/MarginContainer" unique_id=2085849841]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer/MarginContainer/PlaybackControls" unique_id=1909565972]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"PlayerIconButton"
+icon = SubResource("AtlasTexture_2omcq")
+icon_alignment = 1
+expand_icon = true
+
+[node name="StopButton" type="Button" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer/MarginContainer/PlaybackControls" unique_id=176503651]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_type_variation = &"PlayerIconButton"
+icon = SubResource("AtlasTexture_0gpha")
+icon_alignment = 1
+expand_icon = true
+
+[node name="TimeCurrent" type="Label" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer/MarginContainer/PlaybackControls" unique_id=1203262311]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00:00:00 / 00:00:00"
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2" unique_id=1916578943]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2" unique_id=949896556]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="CameraZoom" type="HBoxContainer" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer" unique_id=539959908]
+layout_mode = 2
+alignment = 1
+
+[node name="ZoomButton" type="Button" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer/CameraZoom" unique_id=1915443406]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_2omcq")
+icon = SubResource("AtlasTexture_04d5a")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="ZoomSlider" type="HSlider" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer/CameraZoom" unique_id=1229428710]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 3.0
+step = 0.1
+value = 1.0
+
+[node name="FullscreenButton" type="Button" parent="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer/CameraZoom" unique_id=500003898]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+icon = SubResource("AtlasTexture_qd7se")
+icon_alignment = 1
+expand_icon = true
+
+[node name="DetachButton" type="Button" parent="VBoxContainer/HBoxContainerAdd" unique_id=2102941294]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Detach Whiteboard"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=832524518]
+layout_mode = 2
+size_flags_vertical = 4
 
 [node name="HBoxContainerControl" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=187808462]
 layout_mode = 2
@@ -225,58 +346,20 @@ layout_mode = 2
 button_group = SubResource("ButtonGroup_8c1hf")
 text = "Pen"
 
-[node name="PenThicknessContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=2046301407]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=1058101731]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/separation = 16
+
+[node name="PenColorContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1979543517]
 layout_mode = 2
 
-[node name="PenThicknessLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=1288559471]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-text = "Thickness"
-horizontal_alignment = 1
-
-[node name="PenThicknessSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=152533038]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-size_flags_vertical = 4
-min_value = 3.0
-max_value = 40.0
-value = 3.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=1560476340]
-visible = false
-layout_mode = 2
-
-[node name="PenThicknessOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer" unique_id=191751171]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-selected = 1
-item_count = 6
-popup/item_0/icon = SubResource("AtlasTexture_mexuc")
-popup/item_0/id = 0
-popup/item_1/icon = SubResource("AtlasTexture_3yjun")
-popup/item_1/id = 1
-popup/item_2/icon = SubResource("AtlasTexture_mmepp")
-popup/item_2/id = 2
-popup/item_3/icon = SubResource("AtlasTexture_upcgy")
-popup/item_3/id = 3
-popup/item_4/icon = SubResource("AtlasTexture_exwmu")
-popup/item_4/id = 4
-popup/item_5/icon = SubResource("AtlasTexture_yrg0m")
-popup/item_5/id = 5
-
-[node name="PenColorContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=1979543517]
-layout_mode = 2
-
-[node name="ColorPickerLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=1624843006]
-custom_minimum_size = Vector2(60, 0)
+[node name="ColorPickerLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenColorContainer" unique_id=1624843006]
 layout_mode = 2
 text = "Color"
 horizontal_alignment = 1
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=469385742]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenColorContainer" unique_id=469385742]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(100, 0)
@@ -286,9 +369,17 @@ color = Color(1, 1, 1, 1)
 edit_alpha = false
 edit_intensity = false
 
-[node name="PenColorOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer" unique_id=216889024]
+[node name="PenColorOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenColorContainer" unique_id=216889024]
+unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.4)
 selected = 0
+allow_reselect = true
 item_count = 10
 popup/item_0/icon = SubResource("GradientTexture2D_04d5a")
 popup/item_0/id = 0
@@ -311,9 +402,54 @@ popup/item_8/id = 8
 popup/item_9/icon = SubResource("GradientTexture2D_dt5dy")
 popup/item_9/id = 9
 
-[node name="DetachButton" type="Button" parent="VBoxContainer/HBoxContainer/HBoxContainerControl" unique_id=2102941294]
+[node name="PenThicknessContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=2046301407]
 layout_mode = 2
-text = "Detach Whiteboard"
+
+[node name="PenThicknessLabel" type="Label" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenThicknessContainer" unique_id=1288559471]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Size"
+horizontal_alignment = 1
+
+[node name="PenThicknessSlider" type="HSlider" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenThicknessContainer" unique_id=152533038]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 3.0
+max_value = 40.0
+value = 3.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenThicknessContainer" unique_id=1560476340]
+visible = false
+layout_mode = 2
+
+[node name="PenThicknessOptions" type="OptionButton" parent="VBoxContainer/HBoxContainer/HBoxContainer/PenThicknessContainer" unique_id=191751171]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+selected = 1
+allow_reselect = true
+item_count = 6
+popup/item_0/icon = SubResource("AtlasTexture_mexuc")
+popup/item_0/id = 0
+popup/item_1/icon = SubResource("AtlasTexture_3yjun")
+popup/item_1/id = 1
+popup/item_2/icon = SubResource("AtlasTexture_mmepp")
+popup/item_2/id = 2
+popup/item_3/icon = SubResource("AtlasTexture_upcgy")
+popup/item_3/id = 3
+popup/item_4/icon = SubResource("AtlasTexture_exwmu")
+popup/item_4/id = 4
+popup/item_5/icon = SubResource("AtlasTexture_yrg0m")
+popup/item_5/id = 5
 
 [node name="IndexClass" type="PanelContainer" parent="VBoxContainer" unique_id=620122109]
 unique_name_in_owner = true
@@ -323,10 +459,16 @@ size_flags_vertical = 3
 [node name="IndexTree" type="Tree" parent="VBoxContainer/IndexClass" unique_id=269725524]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/v_separation = 2
+theme_override_constants/item_margin = 12
+theme_override_constants/draw_guides = 1
+theme_override_constants/draw_relationship_lines = 1
+theme_override_constants/parent_hl_line_width = 3
 columns = 2
-hide_root = true
+allow_search = false
 select_mode = 2
 script = ExtResource("2_vyrmg")
+drag_icon = ExtResource("5_0gpha")
 metadata/_custom_type_script = "uid://cqighbl4pvak0"
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" unique_id=1121578482]
@@ -375,19 +517,25 @@ edit_intensity = false
 can_add_swatches = false
 color_modes_visible = false
 
+[connection signal="pressed" from="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer/MarginContainer/PlaybackControls/PlayButton" to="." method="_toggle_playback_pause"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer/MarginContainer/PlaybackControls/StopButton" to="." method="_stop_playback"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer/CameraZoom/ZoomButton" to="." method="_zoom_reset"]
+[connection signal="value_changed" from="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer/CameraZoom/ZoomSlider" to="." method="_zoom_slider_value_selected"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerAdd/HBoxContainer2/PanelContainer2/MarginContainer/CameraZoom/FullscreenButton" to="." method="_on_fullscreen_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerAdd/DetachButton" to="." method="_on_button_detach_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/SelectButton" to="." method="_on_select_button_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/ResizeButton" to="." method="_on_button_resize_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/DragButton" to="." method="_on_button_drag_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/AudioButton" to="." method="_on_toggle_audio_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenButton" to="." method="_on_button_pen_toggled"]
-[connection signal="drag_ended" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/PenThicknessSlider" to="." method="_on_thickness_slider_changed"]
-[connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenThicknessContainer/PenThicknessOptions" to="." method="_on_pen_thickness_options_item_selected"]
-[connection signal="color_changed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_changed"]
-[connection signal="popup_closed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_closed"]
-[connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainerControl/PenColorContainer/PenColorOptions" to="." method="_on_pen_color_options_item_selected"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/HBoxContainerControl/DetachButton" to="." method="_on_button_detach_pressed"]
+[connection signal="color_changed" from="VBoxContainer/HBoxContainer/HBoxContainer/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_changed"]
+[connection signal="popup_closed" from="VBoxContainer/HBoxContainer/HBoxContainer/PenColorContainer/ColorPickerButton" to="." method="_on_color_picker_closed"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainer/PenColorContainer/PenColorOptions" to="." method="_on_pen_color_options_item_selected"]
+[connection signal="drag_ended" from="VBoxContainer/HBoxContainer/HBoxContainer/PenThicknessContainer/PenThicknessSlider" to="." method="_on_thickness_slider_changed"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/HBoxContainer/PenThicknessContainer/PenThicknessOptions" to="." method="_on_pen_thickness_options_item_selected"]
 [connection signal="button_clicked" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_button_clicked"]
-[connection signal="item_activated" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_item_activated"]
+[connection signal="cell_selected" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_cell_selected"]
+[connection signal="item_collapsed" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_item_collapsed"]
 [connection signal="item_edited" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_item_edited"]
 [connection signal="multi_selected" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_multi_selected"]
 [connection signal="node_added" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_node_added"]

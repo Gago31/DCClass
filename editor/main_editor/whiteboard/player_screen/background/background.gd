@@ -1,5 +1,5 @@
 class_name BackgroundEditor
-extends Node2D
+extends Control
 
 const MULTIPLIER = 4
 
@@ -20,12 +20,11 @@ var SCREEN_SIZE: Vector2i
 func _enter_tree():
 	SCREEN_SIZE = _load_whiteboard_size()
 
-		
 func _ready():
 	get_parent().motion_mirroring = SCREEN_SIZE * MULTIPLIER
-	$ColorRect.size = SCREEN_SIZE * MULTIPLIER
-	$ColorRect.show()
-	set_background_color(Color(0.1, 0.1, 0.1))
+	#$ColorRect.size = SCREEN_SIZE * MULTIPLIER
+	#$ColorRect.show()
+	#set_background_color(Color(0.1, 0.1, 0.1))
 	set_background_variant_color(Color(0.5, 0.5, 0.5))
 
 func _load_whiteboard_size() -> Vector2i:
@@ -50,8 +49,8 @@ func _generate_lines() -> PackedVector2Array:
 	return points
 
 ## Set the background color of the scene.
-func set_background_color(color: Color) -> void:
-	$ColorRect.modulate = color
+#func set_background_color(color: Color) -> void:
+	#$ColorRect.modulate = color
 
 ## Set the background variants color of the scene.
 func set_background_variant_color(color: Color) -> void:

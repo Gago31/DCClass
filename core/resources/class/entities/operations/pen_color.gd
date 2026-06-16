@@ -20,6 +20,7 @@ func get_editor_name() -> String:
 	return "Color: " + str(color)
 
 func config_editor_tree_item(item: TreeItem) -> void:
+	_tree_item = item
 	item.set_text(0, "Pen Color")
 	item.set_cell_mode(1, TreeItem.CELL_MODE_CUSTOM)
 	item.set_custom_as_button(1, true)

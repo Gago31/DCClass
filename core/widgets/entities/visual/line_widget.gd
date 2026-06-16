@@ -9,6 +9,7 @@ var _original_bound: Rect2
 var _current_point: int = 0
 var _points: PackedVector2Array
 var _delays: Array[float]
+var _is_default_color := false
 @onready var line: Line2D = %Line
 
 
@@ -19,7 +20,7 @@ func setup() -> void:
 	super.setup()
 	#var e := get_entity()
 	_set_width_and_color()
-	_load_point_data(0)
+	_load_point_data(2)
 	#_points = e.points
 	#_delays = []
 	#_delays.resize(e.delays.size())
@@ -70,19 +71,26 @@ func _load_point_data(smoothing: int = 0) -> void:
 		_delays[i] = total_delay
 	
 	for i in smoothing:
-		print("smoothing ", i)
+		#print("smoothing ", i)
 		var p = _smooth_curve(_points)
 		var d = _expand_delays(_delays)
 		_points = p
 		_delays = d
 
 func _set_width_and_color() -> void:
-	line.default_color = WhiteboardManager.get_pen_color()
+	var color := WhiteboardManager.get_pen_color() as Color
+	if color == Color.WHITE:
+		_is_default_color = true
+		WhiteboardManager.theme_changed.connect(_on_theme_changed)
+		return WhiteboardManager.get_default_line_color()
+	line.default_color = color
 	line.width = WhiteboardManager.get_pen_thickness()
 
 func _on_started_playing() -> void:
 	#_set_width_and_color()
 	show()
+	if duration == 0.0:
+		jump_to_end()
 
 func _on_seek() -> void:
 	_clear_points()
@@ -148,8 +156,7 @@ func _update_bounds() -> void:
 # This means hiding the line and clearing its points.
 func _on_reset():
 	_current_point = 0
-	#print("Line reset")
-	hide()
+	#hide()
 	_clear_points()
 
 # Clear the line widget.
@@ -233,6 +240,10 @@ func _compute_bounds() -> Rect2:
 
 func get_entity() -> LineEntity:
 	return entity as LineEntity
+
+func _on_theme_changed(_theme: Theme) -> void:
+	if not _is_default_color: return
+	line.default_color = WhiteboardManager.get_default_line_color()
 
 #func seek(time: float, playing: bool = false) -> void:
 	#super.seek(time, playing)

@@ -67,4 +67,8 @@ func _draw():
 	draw_rect(rect, border_color, false, border_width)
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
-	_selected_widgets.append((area as SelectionArea).get_widget())
+	var selection_area := area as SelectionArea
+	var widget := selection_area.get_widget()
+	if not widget.is_visible_in_tree(): return
+	if widget.is_stopped(): return
+	_selected_widgets.append(widget)

@@ -14,8 +14,8 @@ func _jump_to_node(node: ClassNode) -> bool:
 #func _on_reset() -> void:
 	#show()
 
-func jump_to_end() -> void:
-	hide()
+#func jump_to_end() -> void:
+	#hide()
 
 func _on_finished_playing() -> void:
 	hide()

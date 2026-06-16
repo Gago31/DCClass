@@ -8,9 +8,10 @@ var _warped: bool = false
 
 
 func _handle_screen_dragging(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		get_viewport().set_input_as_handled()
-		_dragging = event.is_pressed()
+	if event is InputEventMouseButton:
+		if event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_MIDDLE]:
+			get_viewport().set_input_as_handled()
+			_dragging = event.is_pressed()
 	elif event is InputEventMouseMotion and _dragging:
 		get_viewport().set_input_as_handled()
 

@@ -66,8 +66,8 @@ func _on_video_converted(_err: bool) -> void:
 	converting_panel.hide()
 	video_player.show()
 	play_button.disabled = false
-	print("Initializing playback")
-	prints("file_path", video_player.file_name)
+	#print("Initializing playback")
+	#prints("file_path", video_player.file_name)
 	video_player.init_playback()
 	#video_player.play()
 	#await get_tree().process_frame
@@ -78,10 +78,10 @@ func _on_video_converted(_err: bool) -> void:
 	#video_player.play()
 
 func play_video() -> void:
-	print("play video")
+	#print("play video")
 	video_player.play()
 	if not is_equal_approx(video_player.playback_position, _current_time):
-		print("Rectifying position")
+		#print("Rectifying position")
 		seek_video(_current_time)
 		#video_player.stop()
 		#await get_tree().process_frame
@@ -92,7 +92,7 @@ func play_video() -> void:
 	icon.region.position.y = 350
 
 func pause_video() -> void:
-	print("pause video")
+	#print("pause video")
 	var icon := play_button.icon as AtlasTexture
 	video_player.pause()
 	icon.region.position.x = 350
@@ -108,7 +108,7 @@ func play_video_until(until: float) -> void:
 	play_video()
 
 func seek_video(time: float) -> void:
-	print("Seeking to ", time)
+	#print("Seeking to ", time)
 	#video_player.stop()
 	#video_player.playback_position = 0.0
 	#await get_tree().process_frame
@@ -119,7 +119,7 @@ func seek_video(time: float) -> void:
 	_current_time = time
 	video_player.playback_position = time
 	#await get_tree().process_frame
-	print("New time: ", video_player.playback_position)
+	#print("New time: ", video_player.playback_position)
 	#video_player.pause()
 
 func seek_video_deferred(time: float) -> void:

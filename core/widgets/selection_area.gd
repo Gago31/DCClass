@@ -11,14 +11,15 @@ var _widget: VisualEntityWidget
 ## based on its bounds.
 func setup_for_widget(widget: VisualEntityWidget):
 	_widget = widget
-	_update_collision_shape(widget)
+	widget.size_updated.connect(_update_collision_shape)
+	_update_collision_shape()
 
 ## Returns the [VisualEntityWidget] associated to this selection area.
 func get_widget() -> VisualEntityWidget:
 	return _widget
 
-func _update_collision_shape(widget: VisualEntityWidget):
-	var rect := widget.get_rect_bound()
+func _update_collision_shape():
+	var rect := _widget.get_rect_bound()
 	if rect.size == Vector2.ZERO: return
 	var shape := RectangleShape2D.new()
 	shape.size = rect.size

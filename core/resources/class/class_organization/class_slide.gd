@@ -7,6 +7,9 @@ extends ClassGroup
 ## Most of its behavior is inherited from [ClassGroup] and for consistency
 ## it shouldn't be overriden.
 
+func _init() -> void:
+	_name = "New Slide"
+
 func get_class_name() -> String:
 	return "ClassSlide"
 

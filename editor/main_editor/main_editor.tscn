@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ctbhart5orqu0" path="res://editor/main_editor/whiteboard/window_whiteboard.tscn" id="2_35r6u"]
 [ext_resource type="PackedScene" uid="uid://bdspal4chhhh5" path="res://editor/main_editor/file/file.tscn" id="3_0im0g"]
 [ext_resource type="PackedScene" uid="uid://bkt85dfs5q52u" path="res://editor/main_editor/control_panel/control_panel.tscn" id="4_4yc00"]
+[ext_resource type="PackedScene" uid="uid://cmpxe4arlrgl8" path="res://editor/main_editor/control_panel/settings_panel.tscn" id="5_b3ri8"]
 [ext_resource type="PackedScene" uid="uid://ca0ens8jsu8yq" path="res://core/tree_postprocessing/tree_postprocessing.tscn" id="5_pxf3b"]
 
 [node name="EditorScreen" type="Control" unique_id=265593055]
@@ -28,7 +29,7 @@ grow_vertical = 2
 layout_mode = 2
 current_tab = 0
 
-[node name="File" parent="PanelContainer/TabContainer" unique_id=1069233294 instance=ExtResource("3_0im0g")]
+[node name="Info" parent="PanelContainer/TabContainer" unique_id=1069233294 instance=ExtResource("3_0im0g")]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 2
@@ -40,7 +41,18 @@ visible = false
 clip_contents = true
 layout_mode = 2
 
+[node name="Settings" parent="PanelContainer/TabContainer" unique_id=1528566679 instance=ExtResource("5_b3ri8")]
+visible = false
+layout_mode = 2
+
 [node name="TreePostprocessing" parent="." unique_id=1588888408 instance=ExtResource("5_pxf3b")]
 unique_name_in_owner = true
+
+[node name="ExportFileDialog" type="FileDialog" parent="." unique_id=849014434]
+unique_name_in_owner = true
+title = "Save class as..."
+access = 2
+filters = PackedStringArray("*.dcc")
+use_native_dialog = true
 
 [connection signal="updated" from="PanelContainer/TabContainer/Control Panel" to="." method="_on_tree_updated"]

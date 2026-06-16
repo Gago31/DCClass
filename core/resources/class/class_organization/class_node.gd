@@ -10,6 +10,8 @@ signal updated
 ## Emitted when the node has to be deleted. Used in the editor.
 signal deleted
 
+var tree_item: TreeItem
+
 ## Returns the name of this node's class in plain text.
 ## @deprecated
 func get_class_name() -> String:
@@ -36,6 +38,20 @@ func is_leaf() -> bool:
 func config_editor_tree_item(item: TreeItem) -> void:
 	_setup_editor_tree_item(item)
 	item.set_metadata(0, self)
+	tree_item = item
+
+func select_own_item() -> void:
+	if not tree_item: return
+	tree_item.get_tree().deselect_all()
+	var parent := tree_item.get_parent()
+	var nearest_visible := tree_item
+	while parent:
+		if parent.collapsed:
+			nearest_visible = parent
+		parent = parent.get_parent()
+	nearest_visible.select(0)
+	nearest_visible.select(1)
+	nearest_visible.get_tree().scroll_to_item(nearest_visible, true)
 
 ## Tells the node to update itself after a change in its [TreeItem].[br][br]
 ##
