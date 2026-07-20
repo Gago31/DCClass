@@ -29,7 +29,8 @@ enum InsertMenuItem {
 	ADD_IMAGE,
 	ADD_VIDEO,
 	PLAY_VIDEO,
-	SEEK_VIDEO
+	SEEK_VIDEO,
+	WAIT
 }
 
 enum PenThickness {
@@ -79,6 +80,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var root := WhiteboardManager.get_root_widget()
+	if not root or not is_instance_valid(root): return
 	var current_time_str := TimeString.from_seconds(root.play_time, false)
 	var total_time_str := TimeString.from_seconds(root.end_time, false)
 	time_label.text = "%s / %s" % [current_time_str, total_time_str]
@@ -162,6 +164,8 @@ func _on_menu_btn_insert(id: int) -> void:
 			_add_play_video()
 		InsertMenuItem.SEEK_VIDEO:
 			_add_seek_video()
+		InsertMenuItem.WAIT:
+			_add_wait()
 
 func _on_menu_btn_file(id: int) -> void:
 	if id == 0:
@@ -256,10 +260,17 @@ func _add_seek_video() -> void:
 	var entity := SeekVideoEntity.new()
 	_add_entity(entity)
 
+func _add_wait() -> void:
+	var entity := WaitEntity.new()
+	entity.duration = 1.0
+	_add_entity(entity)
+
 func _on_image_selected(_status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
+	if selected_paths.is_empty(): return
 	add_image(selected_paths[0])
 
 func _on_video_selected(_status: bool, selected_paths: PackedStringArray, _selected_filter_index: int) -> void:
+	if selected_paths.is_empty(): return
 	add_video(selected_paths[0])
 
 func start_video_conversion(entity: VideoEntity, input_video_path: String) -> String:
@@ -468,6 +479,9 @@ func _zoom_reset() -> void:
 # When playing, the visual widget will begin 
 # When stopped, the current  visual widget will be stopped and show his final state.
 func _toggle_playback_pause() -> void:
+	if tree_manager.dirty:
+		WhiteboardManager.reprocess_tree()
+		await get_tree().process_frame
 	WhiteboardManager.toggle_play_pause()
 	_update_play_button()
 

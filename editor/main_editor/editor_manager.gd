@@ -72,6 +72,9 @@ func save() -> void:
 	state.image_index = image_index
 	state.video_index = video_index
 	ResourceSaver.save(metadata, path_metadata, ResourceSaver.FLAG_COMPRESS)
+	if _gui and _gui.tree_manager.dirty:
+		WhiteboardManager.reprocess_tree()
+		await get_tree().process_frame
 	ResourceSaver.save(root, path_tree, ResourceSaver.FLAG_COMPRESS)
 	ResourceSaver.save(state, path_state, ResourceSaver.FLAG_COMPRESS)
 
@@ -119,11 +122,34 @@ func load_project(dir: String) -> Error:
 		video_index = state.video_index
 
 	_clear_temp_dir()
+	_clean_work_dir()
 	_project_dir.make_dir("temp")
 	_temp_dir = DirAccess.open(_project_dir.get_current_dir() + "/temp")
 	#_temp_dir = DirAccess.create_temp("temp")
 	_sync_whiteboard()
 	return OK
+
+func _clean_work_dir() -> void:
+	var used_resources := tree_preprocessor.collect_resources(root)
+	var audio_path := get_assets_path().path_join("audio")
+	var video_path := get_assets_path().path_join("video")
+	var images_path := get_assets_path().path_join("images")
+		
+	var dir := DirAccess.open(audio_path)
+	for file in dir.get_files():
+		if file not in used_resources.audio:
+			dir.remove(file)
+			prints("Removed unused audio:", file)
+	dir = DirAccess.open(images_path)
+	for file in dir.get_files():
+		if file not in used_resources.images:
+			dir.remove(file)
+			prints("Removed unused image:", file)
+	dir = DirAccess.open(video_path)
+	for file in dir.get_files():
+		if file not in used_resources.video:
+			dir.remove(file)
+			prints("Removed unused video:", file)
 
 func _clear_temp_dir() -> void:
 	#var dir = DirAccess.open("<path to folder>")
@@ -217,7 +243,7 @@ func convert_audio(input_path: String, entity: AudioEntity) -> String:
 	var thread_notifier := ThreadNotifier.new()
 	add_child(thread_notifier)
 	thread_notifier.thread_finished.connect(entity._on_audio_converted)
-	thread_notifier.run_thread(OS.execute.bind("ffmpeg", args, []))
+	thread_notifier.run_thread(OS.execute.bind("ffmpeg", args, thread_notifier.output, true))
 	audio_index += 1
 	return file_name
 
@@ -248,7 +274,7 @@ func convert_video(entity: VideoEntity, input_path: String) -> String:
 	add_child(thread_notifier)
 	thread_notifier.thread_finished.connect(entity._on_video_converted.bind(output_path))
 	#thread_notifier.thread_finished.connect()
-	thread_notifier.run_thread(OS.execute.bind("ffmpeg", command_args, thread_notifier._output))
+	thread_notifier.run_thread(OS.execute.bind("ffmpeg", command_args, thread_notifier.output))
 	video_index += 1
 	return output_name
 
@@ -268,7 +294,7 @@ func convert_image(entity: ImageEntity, input_path: String) -> String:
 	add_child(thread_notifier)
 	thread_notifier.thread_finished.connect(entity._on_image_converted.bind(output_path))
 	#thread_notifier.thread_finished.connect()
-	thread_notifier.run_thread(OS.execute.bind("ffmpeg", command_args, thread_notifier._output))
+	thread_notifier.run_thread(OS.execute.bind("ffmpeg", command_args, thread_notifier.output))
 	image_index += 1
 	return output_name
 
@@ -306,9 +332,9 @@ func audio_exists(file_name: String) -> bool:
 	var file_path := get_assets_path() + "/audio/" + file_name
 	return FileAccess.file_exists(file_path)
 
-func _on_pen_mode_changed(pen_mode: PenMode) -> void:
+func _on_pen_mode_changed(value: PenMode) -> void:
 	var whiteboard := WhiteboardManager.input_controller as EditorWhiteboardInput
-	match pen_mode:
+	match value:
 		PenMode.SELECT, PenMode.DRAW:
 			whiteboard._clear_widget_selection()
 		PenMode.DRAG, PenMode.RESIZE:

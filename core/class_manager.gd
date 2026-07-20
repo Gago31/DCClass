@@ -8,6 +8,3 @@ extends Node
 
 func get_version() -> String:
 	return metadata.app_version
-
-func _pool_sync_nodes() -> void:
-	pass

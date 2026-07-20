@@ -59,8 +59,10 @@ func set_points_opt(value: PackedByteArray) -> void:
 	if points_opt.size() == points.size() * 4: return
 	var real_points: PackedVector2Array = []
 	real_points.resize(points_opt.size() / 4)
+	real_points[0] = Vector2.ZERO
 	var acc := Vector2.ZERO
 	for i in real_points.size():
+		if i == 0: continue
 		var x := points_opt.decode_s16(4 * i) * 0.01
 		var y := points_opt.decode_s16(4 * i + 2) * 0.01
 		var diff := Vector2(x, y)

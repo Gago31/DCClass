@@ -22,10 +22,13 @@ signal children_cleared
 
 func _init() -> void:
 	_name = "New Group"
+	for child in children:
+		if not child.deleted.is_connected(_on_child_deleted):
+			child.deleted.connect(_on_child_deleted.bind(child))
 
 ## Adds a child node to the group. If [code]index[/code] is positive or 0,
 ## inserts the child at that index, otherwise it is added at the end.
-func add_child(child: ClassNode, index: int = -1):
+func add_child(child: ClassNode, index: int = -1) -> void:
 	if index >= 0:
 		children.insert(index, child)
 	else:

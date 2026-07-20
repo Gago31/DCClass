@@ -4,7 +4,7 @@ extends VisualEntityWidget
 ## [VisualEntityWidget] that represents a line in the whiteboard.
 
 
-var bound = null
+var bound: Rect2
 var _original_bound: Rect2
 var _current_point: int = 0
 var _points: PackedVector2Array
@@ -82,7 +82,7 @@ func _set_width_and_color() -> void:
 	if color == Color.WHITE:
 		_is_default_color = true
 		WhiteboardManager.theme_changed.connect(_on_theme_changed)
-		return WhiteboardManager.get_default_line_color()
+		color = WhiteboardManager.get_default_line_color()
 	line.default_color = color
 	line.width = WhiteboardManager.get_pen_thickness()
 

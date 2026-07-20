@@ -19,12 +19,12 @@ func _init() -> void:
 
 func set_reference(node: ClassNode) -> void:
 	print("Set reference")
-	prints("Node reference:", node_reference)
 	entity = (node as ClassLeaf).entity as VideoEntity
 	prints("entity:", entity)
 	video_id = entity.video_path
 	prints("video id:", video_id)
 	super.set_reference(node)
+	prints("Node reference:", node_reference)
 	if _tree_item:
 		config_editor_tree_item(_tree_item)
 

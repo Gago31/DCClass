@@ -3,7 +3,10 @@ extends ClassNode
 
 
 ## The entity that will be played by this node.
-@export var entity: Entity = null
+@export var entity: Entity = null:
+	set(value):
+		entity = value
+		entity.deleted.connect(delete, CONNECT_ONE_SHOT)
 
 
 func get_class_name():

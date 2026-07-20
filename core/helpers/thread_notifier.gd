@@ -12,7 +12,7 @@ signal thread_finished(result: Variant)
 
 var _thread: Thread
 var _auto_delete: bool
-var _output = []
+var output: Array[String] = []
 
 
 func _init(delete_on_finish := true) -> void:
@@ -26,8 +26,11 @@ func _process(_delta: float) -> void:
 	if not _thread.is_alive():
 		print("Thread finished")
 		var res = _thread.wait_to_finish()
-		prints("Output:", _output)
 		prints("Response:", res)
+		print("------ Thread output: ------")
+		for output_line in output:
+			print(output_line.strip_edges())
+		print("----------------------------")
 		thread_finished.emit(res)
 		if _auto_delete:
 			queue_free()

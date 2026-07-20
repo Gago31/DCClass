@@ -9,6 +9,7 @@ signal audio_converted
 
 ## The name of the audio file for this entity.
 @export var audio_path: String
+var converting := false
 
 
 func _init(path: String = "", audio_duration: float = 0.0) -> void:
@@ -32,4 +33,5 @@ func config_editor_tree_item(item: TreeItem) -> void:
 
 func _on_audio_converted(_result: Variant) -> void:
 	print("Audio converted")
+	converting = false
 	audio_converted.emit()

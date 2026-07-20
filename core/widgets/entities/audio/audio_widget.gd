@@ -10,7 +10,7 @@ var crossfade_tween: Tween
 func setup() -> void:
 	crossfade_tween = null
 	
-	if ClassResourceLoader.audio_exists(get_entity().audio_path):
+	if not get_entity().converting and ClassResourceLoader.audio_exists(get_entity().audio_path):
 		load_audio_stream()
 	else:
 		get_entity().audio_converted.connect(load_audio_stream)

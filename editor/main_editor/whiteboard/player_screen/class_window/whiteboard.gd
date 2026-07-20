@@ -206,6 +206,7 @@ func _buffer_line(line: Line2D, entity: LineEntity) -> void:
 func _undo_line() -> void:
 	if line_buffer.is_empty(): return
 	var last_line := line_buffer[-1]
+	last_line.line.clear_points()
 	last_line.line.free()
 	EditorManager.delete_entity(last_line.entity)
 	line_buffer.pop_back()
@@ -274,6 +275,7 @@ func _handle_node_dragging(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion and _dragging:
 		var current_drag_pos := _viewport.get_camera_2d().get_global_mouse_position()
 		for widget in _selected_widgets:
+			if not is_instance_valid(widget): return
 			var displacement := _get_drag_vector(current_drag_pos)
 			widget.temp_drag(displacement)
 
@@ -335,6 +337,7 @@ func _new_line() -> Line2D:
 
 func _clear_widget_selection() -> void:
 	for widget in _selected_widgets:
+		if not is_instance_valid(widget): continue
 		widget.deselect()
 	_selected_widgets.clear()
 

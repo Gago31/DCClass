@@ -14,14 +14,18 @@ func setup() -> void:
 
 func _on_started_playing() -> void:
 	#video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
-	if not video_widget: return
+	if not video_widget or not video_entity:
+		finish_playing()
+		return
 	# TODO: Get video widget from entity video id
 	_connect_to_widget()
-	video_widget.play_video_until(get_entity().until_position)
-	# Call play until function with entity until position
-	# if until position is 0 set video duration as until position
+	if is_zero_approx(get_entity().until_position):
+		video_widget.play_video_until(video_widget.video_duration)
+	else: 
+		video_widget.play_video_until(get_entity().until_position)
 
 func _connect_to_widget() -> void:
+	if not video_widget: return
 	if not video_widget.reached_target_time.is_connected(_on_target_reached):
 		video_widget.reached_target_time.connect(_on_target_reached, CONNECT_ONE_SHOT)
 
@@ -64,6 +68,7 @@ func get_entity() -> PlayVideoEntity:
 
 func _on_reference_changed() -> void:
 	video_entity = get_entity().entity as VideoEntity
+	video_widget = WhiteboardManager.search_widget_by_entity(video_entity) as VideoWidget
 
 func _on_target_reached() -> void:
 	finish_playing()

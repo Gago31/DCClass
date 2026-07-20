@@ -50,7 +50,8 @@ func select_own_item() -> void:
 			nearest_visible = parent
 		parent = parent.get_parent()
 	nearest_visible.select(0)
-	nearest_visible.select(1)
+	if tree_item.get_tree().columns > 1:
+		nearest_visible.select(1)
 	nearest_visible.get_tree().scroll_to_item(nearest_visible, true)
 
 ## Tells the node to update itself after a change in its [TreeItem].[br][br]

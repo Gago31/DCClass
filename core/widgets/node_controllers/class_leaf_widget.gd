@@ -15,6 +15,7 @@ func setup() -> void:
 	widget.setup()
 	widget.finished_playing.connect(_on_widget_finished)
 	widget.updated.connect(_on_widget_updated)
+	widget.entity.deleted.connect(free)
 
 func _on_started_playing() -> void:
 	super._on_started_playing()

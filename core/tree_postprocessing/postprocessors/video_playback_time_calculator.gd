@@ -5,7 +5,7 @@ extends TreePostprocessor
 ## operations, to allow an accurate timing during the class playback.
 
 
-var video_positions: Dictionary[VideoEntity, float] = {}
+var video_positions: Dictionary[String, float] = {}
 
 func reset() -> void:
 	video_positions.clear()
@@ -28,18 +28,20 @@ func _process_widget(widget: Widget) -> void:
 		_process_seek(widget as SeekVideoWidget)
 
 func _register_video(entity: VideoEntity) -> void:
-	video_positions[entity] = 0.0
+	video_positions[entity.video_path] = 0.0
 
 func _process_play_until(widget: PlayVideoWidget) -> void:
-	var from := video_positions[widget.video_entity]
+	if not widget or not widget.video_entity: return
+	var from := video_positions[widget.video_entity.video_path]
 	var until := widget.get_entity().until_position
 	#print("Play video from %02fs to %02fs" % [from, until])
 	if from > until: return
 	var duration := until - from
 	widget.get_entity().duration = duration
-	video_positions[widget.video_entity] = until
+	video_positions[widget.video_entity.video_path] = until
 
 func _process_seek(widget: SeekVideoWidget) -> void:
+	if not widget or not widget.video_entity: return
 	var new_position := widget.get_entity().seek_position
 	#print("Seeking to %02fs" % new_position)
-	video_positions[widget.video_entity] = new_position
+	video_positions[widget.video_entity.video_path] = new_position

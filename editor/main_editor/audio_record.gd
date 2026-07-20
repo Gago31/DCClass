@@ -34,6 +34,7 @@ func save_recording(_record_data: AudioStreamWAV) -> void:
 	var audio_entity := AudioEntity.new("", _record_data.get_length())
 	var file_path := EditorManager.convert_audio(path_wav, audio_entity)
 	audio_entity.audio_path = file_path
+	audio_entity.converting = true
 	EditorManager.add_entity(audio_entity)
 
 func load_audio(file_name: String) -> AudioStreamOggVorbis:

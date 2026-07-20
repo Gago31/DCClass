@@ -226,7 +226,7 @@ func is_seeking() -> bool:
 
 ## Tries to find an [EntityWidget] in the tree that has [param value] as its
 ## entity.
-@abstract func search_widget_by_entity(value: Entity) -> EntityWidget;
+@abstract func search_widget_by_entity(value: Entity) -> Widget;
 
 ## Computes how long the widget should play for, if it hasn't already.
 @abstract func _calculate_duration() -> float;

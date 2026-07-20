@@ -11,6 +11,7 @@ signal pen_pressed
 signal pen_lifted
 signal theme_changed(theme: Theme)
 signal play_state_changed(state: Widget.PlayState)
+signal tree_processed
 
 @export var whiteboard_scene: PackedScene
 @export var whiteboard_scene_desktop: PackedScene
@@ -160,6 +161,7 @@ func toggle_fullscreen() -> void:
 func reprocess_tree() -> void:
 	if not _whiteboard: return
 	_whiteboard.reprocess_tree()
+	tree_processed.emit()
 
 ## Tells the whiteboard manager to emit the signal [signal pen_pressed].
 func notify_started_drawing() -> void:

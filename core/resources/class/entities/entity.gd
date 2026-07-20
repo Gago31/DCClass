@@ -21,7 +21,7 @@ signal deleted
 ## This doesn't necessarily reflect the actual time that the entity will
 ## play for, in particular for [Widget]s that have their 
 ## [code]play_mode[/code] set to [enum Widget.PlayMode.SYNC].
-@export var duration: float = 0.0
+@export var duration: float = -1.0
 
 ## The corresponding item in the editor's control panel. You can use it to
 ## modify how the item is displayed after some change.
@@ -86,6 +86,7 @@ func delete() -> void:
 ## should return [code]audio/001.ogg[/code].[br][br]
 ##
 ## An entity without external resources should not define this method.
+## @deprecated
 func get_resource_path() -> String:
 	return ""
 

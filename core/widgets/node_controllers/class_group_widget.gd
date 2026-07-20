@@ -5,7 +5,7 @@ extends ClassNodeWidget
 signal child_added
 
 #var _reference_time: float = 0.0
-var _sync_speed: float = 0.0
+var _sync_speed: float = 1.0
 var _current_node: ClassNodeWidget
 
 
@@ -14,6 +14,7 @@ func setup() -> void:
 	node.child_added.connect(_on_child_added)
 	node.child_deleted.connect(_on_child_deleted)
 	node.children_cleared.connect(_on_children_cleared)
+	node.deleted.connect(free)
 	WhiteboardManager.push_context()
 	
 	for class_node in get_class_node().children:
@@ -280,7 +281,8 @@ func _on_child_finished_playing() -> void:
 	_play_next()
 
 func _on_child_added(child: ClassNode, index: int) -> void:
-	var node := _build_child(child, index)
+	#var node := 
+	_build_child(child, index)
 	#node.jump_to_end()
 	child_added.emit()
 

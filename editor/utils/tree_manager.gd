@@ -11,6 +11,7 @@ signal node_selected(node: ClassNode)
 
 var tree_manager_index: Tree
 var clipboard: Array[TreeItem] = []
+var dirty := false
 var _current_item: TreeItem
 
 
@@ -20,6 +21,7 @@ func _ready() -> void:
 	set_column_expand_ratio(1, 3)
 	set_column_expand(0, false)
 	set_column_expand(1, true)
+	WhiteboardManager.tree_processed.connect(_on_tree_processed)
 
 func build(root_node: ClassRoot) -> void:
 	clear()
@@ -59,6 +61,8 @@ func add_node(node: ClassNode, nest := true, select := true) -> TreeItem:
 	if select:
 		node_added.emit(node, parent_node, index)
 		set_current_item(new_item)
+	else:
+		dirty = true
 	scroll_to_item(new_item, true)
 	return new_item
 
@@ -258,6 +262,8 @@ func _deselect_children() -> void:
 			selected = get_next_selected(selected)
 
 func _cut() -> void:
+	if get_root().is_selected(0):
+		return
 	_clear_clipboard()
 	_deselect_children()
 	var selected := get_next_selected(null)
@@ -470,3 +476,6 @@ func _on_item_collapsed(item: TreeItem) -> void:
 	_select_item(item)
 	_on_item_activated(true)
 	#_on_multi_selected(item, 0, true)
+
+func _on_tree_processed() -> void:
+	dirty = false

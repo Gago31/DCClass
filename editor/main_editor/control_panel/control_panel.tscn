@@ -197,7 +197,7 @@ popup/item_5/id = 5
 unique_name_in_owner = true
 layout_mode = 2
 text = "Insert"
-item_count = 10
+item_count = 11
 popup/item_0/text = "Add Group"
 popup/item_0/id = 0
 popup/item_1/text = "Add Slide"
@@ -218,6 +218,8 @@ popup/item_8/text = "Play Video"
 popup/item_8/id = 8
 popup/item_9/text = "Seek video"
 popup/item_9/id = 9
+popup/item_10/text = "Add 1 second"
+popup/item_10/id = 10
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainerAdd" unique_id=1286365340]
 layout_mode = 2
@@ -540,7 +542,6 @@ color_modes_visible = false
 [connection signal="multi_selected" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_multi_selected"]
 [connection signal="node_added" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_node_added"]
 [connection signal="node_selected" from="VBoxContainer/IndexClass/IndexTree" to="." method="_on_index_tree_node_selected"]
-[connection signal="nothing_selected" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="_on_nothing_selected"]
 [connection signal="updated" from="VBoxContainer/IndexClass/IndexTree" to="VBoxContainer/IndexClass/IndexTree" method="rectify_class_tree"]
 [connection signal="pressed" from="VBoxContainer/PanelContainer/HBoxContainer/ConfirmSubtitles" to="." method="_on_confirm_subtitles"]
 [connection signal="popup_hide" from="CustomColorPopup" to="." method="_on_custom_color_popup_hide"]

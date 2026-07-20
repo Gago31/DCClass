@@ -8,8 +8,10 @@ var show_index_tree := false
 var subtitles_on := false
 var _subtitles_lookup: Array[SubtitleWidget] = []
 var _current_subtitle: SubtitleWidget
+var reset_group: ClassGroupWidget
 @onready var index_tree: Tree = %IndexTree
 @onready var index_tree_panel: PanelContainer = %IndexTreePanel
+@onready var index_container: HBoxContainer = %IndexContainer
 
 
 func _ready():
@@ -20,10 +22,13 @@ func _ready():
 	class_root.started_playing.connect(update_subtitles_visibility)
 	class_root.paused.connect(update_subtitles_visibility)
 	class_root.finished_playing.connect(update_subtitles_visibility)
+	#index_container.offset_transform_position = Vector2(-index_tree_panel.size.x, 0)
 	_collect_subtitles(class_root)
 
 func build_index_tree(root: ClassRoot) -> void:
 	_build_index_node(root, null)
+	var class_title := WhiteboardManager.metadata.name
+	index_tree.get_root().set_text(0, class_title)
 
 func _build_index_node(node: ClassNode, parent: TreeItem) -> void:
 	if node.is_leaf(): return
@@ -31,34 +36,52 @@ func _build_index_node(node: ClassNode, parent: TreeItem) -> void:
 	var group_node := node as ClassGroup
 	item.set_metadata(0, group_node)
 	item.set_text(0, group_node._name)
+	group_node.tree_item = item
 	for child in group_node.children:
 		_build_index_node(child, item)
 
-func _on_index_tree_item_selected() -> void:
+func _on_index_tree_item_selected(_mouse_position: Vector2, _mouse_button_index: int) -> void:
 	var selected_item := index_tree.get_selected()
 	var group_node := selected_item.get_metadata(0) as ClassGroup
 	var widget := class_root.search_widget_by_class_node(group_node)
-	class_root.jump_to_widget(widget)
+	if widget.get_child_count() > 0:
+		var last_child := widget.get_child(-1) as ClassNodeWidget
+		class_root.jump_to_widget(last_child)
+		reset_group = widget
+	else:
+		class_root.jump_to_widget(widget)
 
 func _on_index_button_pressed() -> void:
 	show_index_tree = !show_index_tree
 	if show_index_tree:
 		index_tree_panel.show()
+		#create_tween().tween_property(
+			#index_tree_panel, 
+			#"custom_minimum_size", 
+			#Vector2(250, 0), 
+			#0.2
+		#)
 		create_tween().tween_property(
-			index_tree_panel, 
-			"custom_minimum_size", 
-			Vector2(250, 0), 
+			index_container, 
+			"offset_transform_position", 
+			Vector2(-index_tree_panel.size.x, 0), 
 			0.2
 		)
 	else:
-		var tween := create_tween().tween_property(
-			index_tree_panel, 
-			"custom_minimum_size", 
+		#var tween := create_tween().tween_property(
+			#index_tree_panel, 
+			#"custom_minimum_size", 
+			#Vector2.ZERO, 
+			#0.2
+		#)
+		create_tween().tween_property(
+			index_container, 
+			"offset_transform_position", 
 			Vector2.ZERO, 
 			0.2
 		)
-		await tween.finished
-		index_tree_panel.hide()
+		#await tween.finished
+		#index_tree_panel.hide()
 
 func _set_current_item(item: TreeItem, is_current: bool) -> void:
 	item.set_custom_color(0, Color.LIME_GREEN if is_current else Color.GRAY)
@@ -112,13 +135,18 @@ func update_subtitles_visibility() -> void:
 	else:
 		subtitles.show()
 
-
 func _on_theme_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		WhiteboardManager.set_whiteboard_theme(light_mode_theme)
 	else:
 		WhiteboardManager.set_whiteboard_theme(dark_mode_theme)
 
-
 func _on_fullscreen_button_toggled(toggled_on: bool) -> void:
 	WhiteboardManager.toggle_fullscreen()
+
+func _toggle_playback_stop() -> void:
+	if class_root.is_playing():
+		reset_group = null
+	elif reset_group:
+		class_root.jump_to_widget(reset_group)
+	super._toggle_playback_stop()

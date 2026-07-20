@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dufk0t736w6fr"]
+
+[ext_resource type="Script" uid="uid://weyfueygo2y6" path="res://core/widgets/entities/operations/wait_widget.gd" id="1_pcj07"]
+
+[node name="WaitWidget" type="Node2D" unique_id=498946448]
+script = ExtResource("1_pcj07")
+play_mode = 3

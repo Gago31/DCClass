@@ -71,8 +71,8 @@ func deselect() -> void:
 	get_entity()._tree_item.set_custom_color(1, theme_color)
 	#_on_deselect()
 
-func get_entity() -> VisualEntity:
-	return entity as VisualEntity
+#func get_entity() -> VisualEntity:
+	#return entity as VisualEntity
 
 func setup() -> void:
 	global_transform = get_entity().transform
